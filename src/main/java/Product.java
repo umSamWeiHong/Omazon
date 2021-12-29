@@ -123,15 +123,15 @@ class prdct extends Product {    // PRODUCT
             status = "Active";
         else
             status = "Not Active";
-        return "Item Number\t: " + this.getItemNumber() + "\nmain.java.Product Name\t: " + this.getName() + "\nPrice\t: RM " + this.getPrice() + "\nIn Stock: " + this.getQuantity() + "\nSales\t: " + this.getSales() +"\nEstimated Total Profit Value\t:" + this.calculateValue() + "\nmain.java.Product Ratings\t: " + this.getRatings()+ "\nDescription\t:\n"
-                + this.getDescription()   +"\nmain.java.Product Status\t: " + status;
+        return "Item Number\t: " + this.getItemNumber() + "\nProduct Name\t: " + this.getName() + "\nPrice\t: RM " + this.getPrice() + "\nIn Stock: " + this.getQuantity() + "\nSales\t: " + this.getSales() +"\nEstimated Total Profit Value\t:" + this.calculateValue() + "\nProduct Ratings\t: " + this.getRatings()+ "\nDescription\t:\n"
+                + this.getDescription()   +"\nProduct Status\t: " + status;
     }
 }
 
 class ProductTester { // Class to test all the classes made
 
     public static void addProduct(int type, ArrayList<Product> inventory) { // Takes in the type of the product, and the
-        // inventory list and prompts main.java.user to enter
+        // inventory list and prompts user to enter
         // the details accordingly and adds it to
         // the ArrayList
         Scanner R = new Scanner(System.in);
@@ -158,7 +158,7 @@ class ProductTester { // Class to test all the classes made
     }
 
 
-    public static void main(String at[]) throws Exception { // main.java.Main program to test the above functions
+    public static void main(String at[]) throws Exception { // Main program to test the above functions
         Scanner R = new Scanner(System.in);
         System.out.println("---------------------------");
         System.out.println("\tOmazon\t\t");
@@ -168,10 +168,10 @@ class ProductTester { // Class to test all the classes made
         int numOfProducts = R.nextInt();
         System.out.println();
 
-        ArrayList<Product> inventory = new ArrayList<Product>(); // We will be using arraylist of main.java.Product type to store
+        ArrayList<Product> inventory = new ArrayList<Product>(); // We will be using arraylist of Product type to store
         // the inventory
 
-        for (int i = 0; i < numOfProducts; i++) { // Prompting the main.java.user for product type for each product
+        for (int i = 0; i < numOfProducts; i++) { // Prompting the user for product type for each product
             System.out.print("Type '1' to continue : ");
             int type = R.nextInt();
             System.out.println();
@@ -181,14 +181,14 @@ class ProductTester { // Class to test all the classes made
 
         System.out.println("\nInventory has been successfully updated.");
         int choice = 1;
-        while (choice != 0) { // A menu based loop that asks the main.java.user the operations that can be done with the
+        while (choice != 0) { // A menu based loop that asks the user the operations that can be done with the
             // Inventory
-            System.out.println("\n\t1. View Inventory\n\t2. Add Stock\n\t3. Deduct Stock\n\t4. Discontinue main.java.Product\n\t5. Transactions History\n\t6. Edit Existing main.java.Product\n\t0. Logout\n");
+            System.out.println("\n\t1. View Inventory\n\t2. Add Stock\n\t3. Deduct Stock\n\t4. Discontinue Product\n\t5. Transactions History\n\t6. Edit Existing Product\n\t0. Logout\n");
             System.out.print("Please enter a menu option: ");
             choice = R.nextInt();
 
             switch (choice) {
-                case 1: // If the main.java.user wants to view the inventory
+                case 1: // If the user wants to view the inventory
                     if (inventory.size() == 0) // For an empty inventory
                         System.out.println("The list is still empty, please add products to view the inventory.");
                     else {
@@ -200,13 +200,13 @@ class ProductTester { // Class to test all the classes made
                         }
                     }
                     break;
-                case 2: // if the main.java.user wants to add to the inventory
+                case 2: // if the user wants to add to the inventory
                     System.out.print("\nType '1' to continue : ");
                     int type = R.nextInt();
                     addProduct(type, inventory); // Using the previously defined function to add to the arraylist
-                    System.out.println("main.java.Product has been added successfully\n");
+                    System.out.println("Product has been added successfully\n");
                     break;
-                case 3: // If the main.java.user wants to delete from the inventory, takes the item name and item
+                case 3: // If the user wants to delete from the inventory, takes the item name and item
                     // number to find the product
                     System.out.print("Enter the name of the product to be deleted: ");
                     R.nextLine();
@@ -218,15 +218,15 @@ class ProductTester { // Class to test all the classes made
                         if (inventory.get(x).getName().equalsIgnoreCase(name)
                                 && inventory.get(x).getItemNumber() == itemNumber) {
                             System.out.println("Found the product, deleting it....");
-                            System.out.println("main.java.Product successfully deleted and removed from inventory.\n");
+                            System.out.println("Product successfully deleted and removed from inventory.\n");
                             inventory.remove(x);
                             break;
                         }
                     }
                     if (x == inventory.size() + 1) // If product not found, do nothing
-                        System.out.println("main.java.Product not found or does not exist.\n");
+                        System.out.println("Product not found or does not exist.\n");
                     break;
-                case 4: // If the main.java.user wants to discontinue a product, applies the same logic as before
+                case 4: // If the user wants to discontinue a product, applies the same logic as before
                     // to find the product
                     System.out.print("Enter the name of the product to be discontinued: ");
                     R.nextLine();
@@ -241,7 +241,7 @@ class ProductTester { // Class to test all the classes made
                         }
                     }
                     if (x == inventory.size() + 1)
-                        System.out.println("main.java.Product not found or does not exist.\n");
+                        System.out.println("Product not found or does not exist.\n");
                     break;
 
                 case 5 : //transactions history
