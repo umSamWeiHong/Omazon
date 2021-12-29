@@ -22,6 +22,7 @@ public class MainGUI extends Application {
     }
 
     public void loginScene(Stage stage) throws IOException {
+        @SuppressWarnings("ConstantConditions")
         Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene scene = new Scene(root);
 
