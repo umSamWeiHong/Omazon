@@ -93,6 +93,14 @@ public class Review {
         return sellerComment;
     }
 
+    /** Edit the review. */
+    public void editReview(Timestamp datetime, double rating, String subject, String description) {
+        this.datetime = datetime;
+        this.rating = rating;
+        this.subject = subject;
+        this.description = description;
+    }
+
     /** For seller to comment */
     public void setComment(String comment, Timestamp datetime) {
         sellerComment = comment;
@@ -106,9 +114,9 @@ public class Review {
         if (inDatabase) return;
 
         String insertQuery = String.format("INSERT INTO " +
-                        "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
+                        "Review (userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime) " +
                         "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
-                        userID, productID, datetime, rating, subject, description, sellerComment);
+                        userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime);
         Driver.updateDatabase(insertQuery);
         inDatabase = true;
     }
@@ -119,9 +127,9 @@ public class Review {
         if (!inDatabase) return;
 
         String updateQuery = String.format("UPDATE Review " +
-                        "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s' " +
+                        "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s', commentDatetime = '%s' " +
                         "WHERE reviewID = %d",
-                        datetime, rating, subject, description, sellerComment, reviewID);
+                        datetime, rating, subject, description, sellerComment, commentDatetime, reviewID);
         Driver.updateDatabase(updateQuery);
     }
 
@@ -130,7 +138,7 @@ public class Review {
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
 
-        String deleteQuery = "DELETE FROM Review" +
+        String deleteQuery = "DELETE FROM Review " +
                              "WHERE reviewID = " + reviewID;
         Driver.updateDatabase(deleteQuery);
     }
@@ -226,7 +234,7 @@ public class Review {
 //
 //        System.out.println(review.datetime);
 //
-        Review review1 = new Review(5);
+        Review review1 = new Review(3);
         System.out.println(review1);
 //        for (Review r : Review.getUserReviews(1))
 //            System.out.println(r);
@@ -238,5 +246,6 @@ public class Review {
             e.printStackTrace();
         }
         System.out.println(review1);
+
     }
 }
