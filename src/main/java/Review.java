@@ -125,6 +125,16 @@ public class Review {
         Driver.updateDatabase(updateQuery);
     }
 
+    public void deleteFromDatabase() throws SQLException {
+
+        // Do nothing if the review is not in database.
+        if (!inDatabase) return;
+
+        String deleteQuery = "DELETE FROM Review" +
+                             "WHERE reviewID = " + reviewID;
+        Driver.updateDatabase(deleteQuery);
+    }
+
     /** Return the N recent reviews from the user. */
     public static Review[] getUserReviews(int userID, int N) {
         String query = String.format("SELECT reviewID FROM Review " +
