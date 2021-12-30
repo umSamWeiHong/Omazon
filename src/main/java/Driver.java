@@ -31,7 +31,7 @@ public class Driver {
     }
 
     public static ResultSet queryDatabase(String query) throws SQLException {
-        Statement statement = connection.createStatement();
+        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         return statement.executeQuery(query);
     }
 
