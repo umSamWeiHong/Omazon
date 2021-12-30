@@ -57,6 +57,42 @@ public class Review {
         inDatabase = false;
     }
 
+    public int getReviewID() {
+        return reviewID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public Timestamp getDatetime() {
+        return datetime;
+    }
+
+    public Timestamp getCommentDatetime() {
+        return commentDatetime;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSellerComment() {
+        return sellerComment;
+    }
+
     /** For seller to comment */
     public void setComment(String comment, Timestamp datetime) {
         sellerComment = comment;
@@ -75,6 +111,18 @@ public class Review {
                         userID, productID, datetime, rating, subject, description, sellerComment);
         Driver.updateDatabase(insertQuery);
         inDatabase = true;
+    }
+
+    public void updateDatabase() throws SQLException {
+
+        // Do nothing if the review is not in database.
+        if (!inDatabase) return;
+
+        String updateQuery = String.format("UPDATE Review " +
+                        "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s' " +
+                        "WHERE reviewID = %d",
+                        datetime, rating, subject, description, sellerComment, reviewID);
+        Driver.updateDatabase(updateQuery);
     }
 
     /** Return the N recent reviews from the user. */
@@ -157,7 +205,7 @@ public class Review {
     }
 
     public static void main(String[] args) {
-//        Timestamp sqlTime = new Timestamp(Instant.now().toEpochMilli());
+        Timestamp sqlTime = new Timestamp(Instant.now().toEpochMilli());
 //
 //        Review review = new Review(1, 3, sqlTime, 5.0, "Yahoo", "Google");
 //        try {
@@ -168,9 +216,17 @@ public class Review {
 //
 //        System.out.println(review.datetime);
 //
-//        Review review1 = new Review(8);
-//        System.out.println(review1);
-        for (Review r : Review.getUserReviews(1))
-            System.out.println(r);
+        Review review1 = new Review(5);
+        System.out.println(review1);
+//        for (Review r : Review.getUserReviews(1))
+//            System.out.println(r);
+
+        review1.setComment("Very good!", sqlTime);
+        try {
+            review1.updateDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(review1);
     }
 }
