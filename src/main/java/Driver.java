@@ -7,8 +7,7 @@ public class Driver {
     public static void main(String[] args) {
 
         try {
-            Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery("select * from omazon.Product");
+            ResultSet result = queryDatabase("select * from Product");
 
             while (result.next())
                 System.out.println(result.getString(2));
@@ -18,11 +17,13 @@ public class Driver {
         }
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static ResultSet queryDatabase(String query) throws SQLException {
         String url = "jdbc:mysql://139.99.88.50:3306/omazon";
-        String username = "omazonremote";
+        String user = "omazonremote";
         String password = "f798SuFM";
 
-        return DriverManager.getConnection(url, username, password);
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(query);
     }
 }
