@@ -123,6 +123,7 @@ public class Review {
         inDatabase = true;
     }
 
+    /** Update this Review object in database. */
     public void updateDatabase() throws SQLException {
 
         // Do nothing if the review is not in database.
@@ -135,6 +136,7 @@ public class Review {
         Driver.updateDatabase(updateQuery);
     }
 
+    /** Delete this Review object in database. */
     public void deleteFromDatabase() throws SQLException {
 
         // Do nothing if the review is not in database.
