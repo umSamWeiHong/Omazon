@@ -1,0 +1,6 @@
+#middleButton {
+  -fx-font-size: 20;
+  -fx-font-family: "Montserrat";
+  -fx-text-fill: "white";
+  -fx-alignment:center;
+}
