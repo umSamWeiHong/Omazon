@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import main.java.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,21 +44,10 @@ public class MainGUI extends Application {
     @SuppressWarnings("ConstantConditions")
     public void profileScene(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Profile.fxml"));
-        System.out.println();
-        Image image = new Image("main/resources/img/icon.png");
-        System.out.println(image.getHeight());
         String css = this.getClass().getResource("Profile.css").toExternalForm();
         Scene profilePage = new Scene(root);
 
-        //Font.loadFont(MainGUI.class.getResourceAsStream("main/resources/fonts/Montserrat-Regular.otf"), 12);
-
-
         profilePage.getStylesheets().add(css);
-
-        stage.setScene(profilePage);
-
-        Button button = (Button) profilePage.lookup("#middleButton");
-        button.setTextFill(Color.RED);
 
         stage.setScene(profilePage);
     }

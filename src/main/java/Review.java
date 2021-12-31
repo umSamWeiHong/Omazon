@@ -86,6 +86,8 @@ public class Review {
     }
 
     public String getDescription() {
+        if (description == null) return null;
+        if (description.equals("null")) return "";
         return description;
     }
 
