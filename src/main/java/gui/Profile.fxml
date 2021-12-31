@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="446.0" prefWidth="373.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.ProfileController">
+   <children>
+      <Label prefHeight="33.0" prefWidth="87.0" text="Recent Reviews" />
+      <ScrollPane prefHeight="419.0" prefWidth="322.0">
+         <content>
+            <VBox fx:id="reviewBox" prefHeight="414.0" prefWidth="372.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>
