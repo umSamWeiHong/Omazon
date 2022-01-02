@@ -1,7 +1,4 @@
-package main.java.gui;
-
-import main.java.Driver;
-import main.java.Review;
+package main.java;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
