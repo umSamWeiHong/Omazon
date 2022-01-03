@@ -303,7 +303,7 @@ public class Product {
 
         } */
 
-        Product product[] = getProductsByCategory("Sports and Outdoor");
+        Product product[] = getProductsByCategory(Category.FASHION_ACCESSORIES.displayName());
         for(int i = 0; i < product.length;i++) {
             System.out.println(product[i]);
         }
