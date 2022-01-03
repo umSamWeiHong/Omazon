@@ -3,7 +3,6 @@ package main.java;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class Product {
 
     private int productID;
@@ -13,11 +12,10 @@ public class Product {
     private int sales;
     private double productRatings;
     private String description;
-    private String category;
+    private Category category;
     private String[] reviews;
     private boolean bestSelling;
     private boolean inDatabase;
-
 
     public Product() {
         productName = "";
@@ -26,7 +24,7 @@ public class Product {
         sales = 0;
         productRatings = 0.0;
         description = "";
-        category = "";
+        category = Category.valueOf("");
         reviews = new String[10];
     }
 
@@ -53,7 +51,7 @@ public class Product {
             sales = resultSet.getInt("sales");
             productRatings = resultSet.getDouble("productRatings");
             description = resultSet.getString("description");
-            category = resultSet.getString("category");
+            category = Category.valueOf(resultSet.getString("category"));
 
             inDatabase = true;
 
@@ -61,7 +59,6 @@ public class Product {
             e.printStackTrace();
         }
     }
-
 
     /** Create a new Product object with all parameters */
     public Product(int productID, String productName, Double price, int stock, int sales, Double productRatings, String description, String category) {
@@ -72,7 +69,7 @@ public class Product {
         this.sales = sales;
         this.productRatings = productRatings;
         this.description = description;
-        this.category = category;
+        this.category = Category.valueOf(category);
         inDatabase = false;
     }
 
@@ -114,9 +111,6 @@ public class Product {
         Driver.updateDatabase(deleteQuery);
     }
 
-
-
-
     public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category) {
         this.productName = productName;
         this.description = description;
@@ -124,7 +118,7 @@ public class Product {
         this.stock = stock;
         this.sales = sales;
         this.reviews = reviews;
-        this.category = category;
+        this.category = Category.valueOf(category);
     }
     // Accessor
     public String getDescription() {
@@ -148,7 +142,7 @@ public class Product {
     public String getProductName() {
         return productName;
     }
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
     public boolean isBestSelling() {
@@ -161,7 +155,7 @@ public class Product {
     public void setDecsription(String description) {
         this.description = description;
     }
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
     public void setPrice(double price) {
@@ -182,6 +176,7 @@ public class Product {
     public void setBestSelling(boolean bestSelling) {
         this.bestSelling = bestSelling;
     }
+
     @Override
     public String toString() {
         String details = "Product name:" + productName;
@@ -194,7 +189,7 @@ public class Product {
         return details;
     }
 
-    /** Method to get 3 best selling products based on salescount*/
+    /** Method to get 3 best-selling products based on salescount*/
     public static Product[] getBestSelling() {
         String query = String.format("SELECT * FROM Product " +
                         "ORDER BY sales DESC " +
@@ -262,7 +257,6 @@ public class Product {
                 "WHERE category = '%s'",
                 category);
 
-
         ResultSet resultSet = null;
         try {
             resultSet = Driver.queryDatabase(query);
@@ -271,7 +265,6 @@ public class Product {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         try {
             // Initialize the array with number of results.
@@ -316,6 +309,5 @@ public class Product {
         for(int i = 0; i < product.length;i++) {
             System.out.println(product[i]);
         }
-
     }
 }
