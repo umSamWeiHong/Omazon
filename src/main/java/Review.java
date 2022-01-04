@@ -13,7 +13,6 @@ public class Review extends StoredDB {
     private double rating;
 
     private String subject, description, sellerComment;
-    private boolean inDatabase;
 
     /** Create a Review object with data from database. */
     public Review(int reviewID) {

@@ -31,16 +31,15 @@ public class Database {
         }
     }
 
+    /** Query the database and return ResultSet if found, null otherwise. */
     public static ResultSet queryDatabase(String query) throws SQLException {
         Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        return statement.executeQuery(query);
+        ResultSet resultSet = statement.executeQuery(query);
+        if (resultSet.isBeforeFirst())
+            return resultSet;
+        else
+            return null;
     }
-
-//    @Deprecated
-//    public static void updateDatabase(String query) throws SQLException {
-//        Statement statement = connection.createStatement();
-//        statement.executeUpdate(query);
-//    }
 
     /** Return true if the database is updated, false otherwise. */
     private static boolean updateDatabase(String query) {
