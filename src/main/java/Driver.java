@@ -35,10 +35,37 @@ public class Driver {
         return statement.executeQuery(query);
     }
 
-    public static void updateDatabase(String query) throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(query);
+//    @Deprecated
+//    public static void updateDatabase(String query) throws SQLException {
+//        Statement statement = connection.createStatement();
+//        statement.executeUpdate(query);
+//    }
+
+    public static boolean updateDatabase(String query) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
+    public static boolean add(StoredDB dbObject) {
+        if (dbObject.inDatabase())
+            return false;
+        return updateDatabase(dbObject.insertQuery());
+    }
 
+    public static boolean update(StoredDB dbObject) {
+        if (!dbObject.inDatabase())
+            return false;
+        return updateDatabase(dbObject.updateQuery());
+    }
+    
+    public static boolean delete(StoredDB dbObject) {
+        if (!dbObject.inDatabase())
+            return false;
+        return updateDatabase(dbObject.deleteQuery());
+    }
 }
