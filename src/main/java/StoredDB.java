@@ -2,7 +2,7 @@ package main.java;
 
 public abstract class StoredDB {
 
-    protected boolean inDatabase;
+    private boolean inDatabase;
 
     protected void setInDatabase(boolean inDatabase) {
         this.inDatabase = inDatabase;

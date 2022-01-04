@@ -23,7 +23,7 @@ public class Favourite extends StoredDB{
             this.favouriteID = resultSet.getInt("favouriteID");
             userID = resultSet.getInt("userID");
             productID = resultSet.getInt("productID");
-            inDatabase = true;
+            setInDatabase(true);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,18 +61,22 @@ public class Favourite extends StoredDB{
                 ", userID=" + userID +
                 ", productID=" + productID +
                 ", dateAdded=" + dateAdded +
-                ", inDatabase=" + inDatabase +
+                ", inDatabase=" + inDatabase() +
                 '}';
     }
 
     public static void main(String[] args) {
 
 //        for (int i = 0; i < 3; i++) {
-//            Favourite favourite1 = new Favourite(1, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
+//            Favourite favourite1 = new Favourite(2, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
 //            Database.add(favourite1);
 //        }
 
-        for (StoredDB ff : Favourite.getUserFavourites(1)) {
+        Favourite toDelete = new Favourite(23);
+        System.out.println(toDelete);
+        Database.delete(toDelete);
+
+        for (StoredDB ff : Favourite.getUserFavourites(2)) {
             System.out.println(ff);
         }
     }

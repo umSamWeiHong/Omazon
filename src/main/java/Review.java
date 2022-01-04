@@ -31,7 +31,7 @@ public class Review extends StoredDB {
             subject = resultSet.getString("subject");
             description = resultSet.getString("description");
             sellerComment = resultSet.getString("sellerComment");
-            inDatabase = true;
+            setInDatabase(true);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,7 +143,7 @@ public class Review extends StoredDB {
                 ", subject='" + subject + '\'' +
                 ", description='" + description + '\'' +
                 ", sellerComment='" + sellerComment + '\'' +
-                ", inDatabase=" + inDatabase +
+                ", inDatabase=" + inDatabase() +
                 '}';
     }
 
