@@ -14,16 +14,9 @@ public class Favourite extends StoredDB{
     /** Create a Favourite object with data from database. */
     public Favourite(int favouriteID) {
         String query = "SELECT * FROM Favourite WHERE favouriteID = " + favouriteID;
-        ResultSet resultSet = null;
-
-        try {
-            resultSet = Database.queryDatabase(query);
-            // Throw exception when reviewID is not found.
-            if (!resultSet.isBeforeFirst())
-                throw new IllegalArgumentException("FavouriteID is not found.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            throw new IllegalArgumentException("FavouriteID is not found.");
 
         try {
             resultSet.next();
@@ -42,44 +35,22 @@ public class Favourite extends StoredDB{
         this.userID = userID;
         this.productID = productID;
         this.dateAdded = dateAdded;
-        inDatabase = false;
     }
 
     /** Return the N recent favourites from the user. */
-    public static Favourite[] getUserFavourites(int userID, int N) {
+    public static StoredDB[] getUserFavourites(int userID, int N) {
         String query = String.format("SELECT favouriteID FROM Favourite " +
                         "WHERE userID = %d " +
                         "ORDER BY dateAdded DESC",
                         userID);
 
-        if (N != -1) {
+        if (N != -1)
             query += " LIMIT " + N;
-        }
-
-        ResultSet resultSet = null;
-        try {
-            resultSet = Database.queryDatabase(query);
-            if (!resultSet.isBeforeFirst())
-                return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Favourite[] favourites = new Favourite[N];
-        try {
-            int favouriteCount = 0;
-            while (resultSet.next()) {
-                favourites[favouriteCount] = new Favourite(resultSet.getInt("favouriteID"));
-                favouriteCount++;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return favourites;
+        return Database.getDBObjects(query, Favourite.class, N);
     }
 
     /** Return all favourites from the user. */
-    public static Favourite[] getUserFavourites(int userID) {
+    public static StoredDB[] getUserFavourites(int userID) {
         return getUserFavourites(userID, -1);
     }
 
@@ -96,18 +67,18 @@ public class Favourite extends StoredDB{
 
     public static void main(String[] args) {
 
-        for (int i = 0; i < 3; i++) {
-            Favourite favourite1 = new Favourite(1, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
-            Database.add(favourite1);
-        }
+//        for (int i = 0; i < 3; i++) {
+//            Favourite favourite1 = new Favourite(1, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
+//            Database.add(favourite1);
+//        }
 
-        for (Favourite f : Favourite.getUserFavourites(1))
-            System.out.println(f);
+        for (StoredDB ff : Favourite.getUserFavourites(1)) {
+            System.out.println(ff);
+        }
     }
 
-
     public static String getPrimaryKey() {
-        return "";
+        return "favouriteID";
     }
 
     @Override

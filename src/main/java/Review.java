@@ -46,7 +46,6 @@ public class Review extends StoredDB {
         this.rating = rating;
         this.subject = subject;
         this.description = description;
-        inDatabase = false;
     }
 
     public int getReviewID() {
