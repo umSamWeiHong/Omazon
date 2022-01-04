@@ -130,7 +130,7 @@ public class Review extends StoredDB {
 
     /** Return all reviews of the product. */
     public static StoredDB[] getProductReviews(int productID) {
-        return getUserReviews(productID, -1);
+        return getProductReviews(productID, -1);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Review extends StoredDB {
 //        Timestamp sqlTime =
 //        StoredDB[] reviews = Database.generateObjects(Review.class, new int[]{9,10,11});
         StoredDB[] reviews = getUserReviews(3);
-        for (StoredDB i : reviews)
+        for (StoredDB i : getProductReviews(3))
             System.out.println(i);
 //        review1.userID = 2;
 //        review1.datetime = new Timestamp(Instant.now().toEpochMilli());
