@@ -38,16 +38,49 @@ public class Database {
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.isBeforeFirst())
                 return resultSet;
-            else
-                return null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /** Return all IDs of objects that satisfies the query */
+    public static int[] getID(String query, String label) {
+        return getID(query, label, -1);
+    }
+
+    /** Return the N IDs of recent objects that satisfies the query */
+    public static int[] getID(String query, String label, int N) {
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return null;
+
+        // If N is -1, initialize the array with length as number of results.
+        if (N == -1) {
+            try {
+                resultSet.last();
+                N = resultSet.getRow();
+                resultSet.beforeFirst();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int[] ID = new int[N];
+        try {
+            int count = 0;
+            while (resultSet.next())
+                ID[count++] = resultSet.getInt(label);
+            return ID;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /** Return true if the database is updated, false otherwise. */
-    private static boolean updateDatabase(String query) {
+    // TODO Change to private after all objects are updated.
+    public static boolean updateDatabase(String query) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
