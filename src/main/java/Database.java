@@ -2,13 +2,14 @@ package main.java;
 
 import java.sql.*;
 
-public class Driver {
+public class Database {
 
     private static final String url = "jdbc:mysql://139.99.88.50:3306/omazon",
                                 user = "omazonremote",
                                 password = "f798SuFM";
     private static Connection connection = null;
 
+    // TODO Retry Connection if failed
     static {
         try {
             connection = DriverManager.getConnection(url, user, password);

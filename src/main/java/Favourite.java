@@ -18,7 +18,7 @@ public class Favourite {
         ResultSet resultSet = null;
 
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             // Throw exception when reviewID is not found.
             if (!resultSet.isBeforeFirst())
                 throw new IllegalArgumentException("FavouriteID is not found.");
@@ -56,7 +56,7 @@ public class Favourite {
                         "Favourite (userID, productID, dateAdded) " +
                         "VALUES (%d, %d, '%s')",
                 userID, productID, dateAdded);
-        Driver.updateDatabase(insertQuery);
+        Database.updateDatabase(insertQuery);
         inDatabase = true;
     }
 
@@ -68,7 +68,7 @@ public class Favourite {
 
         String deleteQuery = "DELETE FROM Favourite " +
                 "WHERE favouriteID = " + favouriteID;
-        Driver.updateDatabase(deleteQuery);
+        Database.updateDatabase(deleteQuery);
     }
 
     /** Return the N recent favourites from the user. */
@@ -81,7 +81,7 @@ public class Favourite {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class Favourite {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {

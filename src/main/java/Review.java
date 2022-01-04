@@ -21,7 +21,7 @@ public class Review implements StoredDB {
         ResultSet resultSet = null;
 
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             // Throw exception when reviewID is not found.
             if (!resultSet.isBeforeFirst())
                 throw new IllegalArgumentException("ReviewID is not found.");
@@ -119,7 +119,7 @@ public class Review implements StoredDB {
                         "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
                         "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
                         userID, productID, datetime, rating, subject, description, sellerComment);
-        Driver.updateDatabase(insertQuery);
+        Database.updateDatabase(insertQuery);
         inDatabase = true;
     }
 
@@ -133,7 +133,7 @@ public class Review implements StoredDB {
                         "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s', commentDatetime = '%s' " +
                         "WHERE reviewID = %d",
                         datetime, rating, subject, description, sellerComment, commentDatetime, reviewID);
-        Driver.updateDatabase(updateQuery);
+        Database.updateDatabase(updateQuery);
     }
 
     /** Delete this Review object in database. */
@@ -144,7 +144,7 @@ public class Review implements StoredDB {
 
         String deleteQuery = "DELETE FROM Review " +
                              "WHERE reviewID = " + reviewID;
-        Driver.updateDatabase(deleteQuery);
+        Database.updateDatabase(deleteQuery);
     }
 
     /** Return the N recent reviews from the user. */
@@ -157,7 +157,7 @@ public class Review implements StoredDB {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
@@ -186,7 +186,7 @@ public class Review implements StoredDB {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
@@ -264,7 +264,6 @@ public class Review implements StoredDB {
                 "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
                 "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
                 userID, productID, datetime, rating, subject, description, sellerComment);
-
     }
 
     @Override
