@@ -32,13 +32,18 @@ public class Database {
     }
 
     /** Query the database and return ResultSet if found, null otherwise. */
-    public static ResultSet queryDatabase(String query) throws SQLException {
-        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet resultSet = statement.executeQuery(query);
-        if (resultSet.isBeforeFirst())
-            return resultSet;
-        else
-            return null;
+    public static ResultSet queryDatabase(String query) {
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.isBeforeFirst())
+                return resultSet;
+            else
+                return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /** Return true if the database is updated, false otherwise. */

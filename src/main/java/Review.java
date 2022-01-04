@@ -145,14 +145,8 @@ public class Review extends StoredDB {
                         "ORDER BY datetime DESC ",
                         userID);
 
-        ResultSet resultSet = null;
-        try {
-            resultSet = Database.queryDatabase(query);
-            if (!resultSet.isBeforeFirst())
-                return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ResultSet resultSet = Database.queryDatabase(query);
+
 
         try {
             // Initialize the array with number of results.
