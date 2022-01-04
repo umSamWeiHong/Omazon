@@ -42,7 +42,8 @@ public class Database {
 //        statement.executeUpdate(query);
 //    }
 
-    public static boolean updateDatabase(String query) {
+    /** Return true if the database is updated, false otherwise. */
+    private static boolean updateDatabase(String query) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
@@ -52,21 +53,31 @@ public class Database {
         }
     }
 
+    /** Add this object to database. */
     public static boolean add(StoredDB dbObject) {
+        // Return false if the object is already in database.
         if (dbObject.inDatabase())
             return false;
-        return updateDatabase(dbObject.insertQuery());
+        if (updateDatabase(dbObject.insertQuery()))
+            dbObject.setInDatabase(true);
+        return dbObject.inDatabase();
     }
 
+    /** Update this object in database. */
     public static boolean update(StoredDB dbObject) {
+        // Return false if the object is not in database.
         if (!dbObject.inDatabase())
             return false;
         return updateDatabase(dbObject.updateQuery());
     }
-    
+
+    /** Delete this object in database. */
     public static boolean delete(StoredDB dbObject) {
+        // Return false if the object is not in database.
         if (!dbObject.inDatabase())
             return false;
-        return updateDatabase(dbObject.deleteQuery());
+        if (updateDatabase(dbObject.deleteQuery()))
+            dbObject.setInDatabase(false);
+        return !dbObject.inDatabase();
     }
 }

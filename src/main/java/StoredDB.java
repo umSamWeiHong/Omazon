@@ -1,10 +1,18 @@
 package main.java;
 
-public interface StoredDB {
+public abstract class StoredDB {
 
-    boolean inDatabase();
+    protected boolean inDatabase;
 
-    String insertQuery();
-    String updateQuery();
-    String deleteQuery();
+    public void setInDatabase(boolean inDatabase) {
+        this.inDatabase = inDatabase;
+    }
+
+    public boolean inDatabase() {
+        return inDatabase;
+    }
+
+    public abstract String insertQuery();
+    public abstract String updateQuery();
+    public abstract String deleteQuery();
 }
