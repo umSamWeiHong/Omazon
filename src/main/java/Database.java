@@ -36,7 +36,7 @@ public class Database {
     /** Return the N recent objects whose ID satisfies the query.
      *  To get all objects, set N = -1.
      */
-    public static StoredDB[] getID(String query, Class<? extends StoredDB> objectClass, int N) {
+    public static StoredDB[] getDBObjects(String query, Class<? extends StoredDB> objectClass, int N) {
         ResultSet resultSet = Database.queryDatabase(query);
         if (resultSet == null)
             return null;

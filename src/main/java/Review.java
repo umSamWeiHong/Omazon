@@ -109,14 +109,28 @@ public class Review extends StoredDB {
                             userID);
         if (N != -1)
             query += " LIMIT " + N;
-
-        //int[] IDs = Database.getID(query, "reviewID", N);
-        return Database.getID(query, Review.class, N);
+        return Database.getDBObjects(query, Review.class, N);
     }
 
     /** Return all reviews from the user. */
     public static StoredDB[] getUserReviews(int userID) {
         return getUserReviews(userID, -1);
+    }
+
+    /** Return the N recent reviews of the product. */
+    public static StoredDB[] getProductReviews(int productID, int N) {
+        String query = String.format("SELECT reviewID FROM Review " +
+                        "WHERE productID = %d " +
+                        "ORDER BY datetime DESC",
+                        productID);
+        if (N != -1)
+            query += " LIMIT " + N;
+        return Database.getDBObjects(query, Review.class, N);
+    }
+
+    /** Return all reviews of the product. */
+    public static StoredDB[] getProductReviews(int productID) {
+        return getUserReviews(productID, -1);
     }
 
     @Override
