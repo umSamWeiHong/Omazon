@@ -17,16 +17,10 @@ public class Review extends StoredDB {
     /** Create a Review object with data from database. */
     public Review(int reviewID) {
         String query = "SELECT * FROM Review WHERE reviewID = " + reviewID;
-        ResultSet resultSet = null;
-
-        try {
-            resultSet = Database.queryDatabase(query);
-            // Throw exception when reviewID is not found.
-            if (!resultSet.isBeforeFirst())
-                throw new IllegalArgumentException("ReviewID is not found.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ResultSet resultSet = Database.queryDatabase(query);
+        // Throw exception when reviewID is not found.
+        if (resultSet == null)
+            throw new IllegalArgumentException("ReviewID is not found.");
 
         try {
             resultSet.next();
