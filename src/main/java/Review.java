@@ -3,7 +3,6 @@ package main.java;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 
 public class Review extends StoredDB {
 
@@ -103,7 +102,7 @@ public class Review extends StoredDB {
     }
 
     /** Return the N recent reviews from the user. */
-    public static Review[] getUserReviews(int userID, int N) {
+    public static StoredDB[] getUserReviews(int userID, int N) {
         String query = String.format("SELECT reviewID FROM Review " +
                             "WHERE userID = %d " +
                             "ORDER BY datetime DESC",
@@ -111,19 +110,12 @@ public class Review extends StoredDB {
         if (N != -1)
             query += " LIMIT " + N;
 
-        int[] IDs = Database.getID(query, "reviewID", N);
-
-        if (N == -1)
-            N = IDs.length;
-
-        Review[] reviews = new Review[N];
-        for (int i = 0; i < N; i++)
-            reviews[i] = new Review(IDs[i]);
-        return reviews;
+        //int[] IDs = Database.getID(query, "reviewID", N);
+        return Database.getID(query, Review.class, N);
     }
 
     /** Return all reviews from the user. */
-    public static Review[] getUserReviews(int userID) {
+    public static StoredDB[] getUserReviews(int userID) {
         return getUserReviews(userID, -1);
     }
 
@@ -144,13 +136,20 @@ public class Review extends StoredDB {
 
     public static void main(String[] args) {
 //        Timestamp sqlTime =
-        Review review1 = new Review(7);
-        review1.userID = 2;
-        review1.datetime = new Timestamp(Instant.now().toEpochMilli());
-        review1.rating = 4;
-        review1.inDatabase = false;
+//        StoredDB[] reviews = Database.generateObjects(Review.class, new int[]{9,10,11});
+        StoredDB[] reviews = getUserReviews(3);
+        for (StoredDB i : reviews)
+            System.out.println(i);
+//        review1.userID = 2;
+//        review1.datetime = new Timestamp(Instant.now().toEpochMilli());
+//        review1.rating = 4;
+//        review1.inDatabase = false;
+//
+//        Database.add(review1);
+    }
 
-        Database.add(review1);
+    public static String getPrimaryKey() {
+        return "reviewID";
     }
 
     @Override

@@ -1,5 +1,7 @@
 package main.java;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.sql.*;
 
 public class Database {
@@ -18,16 +20,6 @@ public class Database {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            ResultSet result = queryDatabase("select * from Product");
-            while (result.next())
-                System.out.println(result.getString(2));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     /** Query the database and return ResultSet if found, null otherwise. */
     public static ResultSet queryDatabase(String query) {
         try {
@@ -41,15 +33,15 @@ public class Database {
         return null;
     }
 
-    /** Return the N IDs of recent objects that satisfies the query
-     *  To get all IDs, set N = -1.
+    /** Return the N recent objects whose ID satisfies the query.
+     *  To get all objects, set N = -1.
      */
-    public static int[] getID(String query, String columnLabel, int N) {
+    public static StoredDB[] getID(String query, Class<? extends StoredDB> objectClass, int N) {
         ResultSet resultSet = Database.queryDatabase(query);
         if (resultSet == null)
-            return new int[0];
+            return null;
 
-        // If N is -1, initialize the array with length as number of results.
+        // If N is -1, set the array length, N as number of results.
         if (N == -1) {
             try {
                 resultSet.last();
@@ -60,15 +52,21 @@ public class Database {
             }
         }
 
-        int[] ID = new int[N];
+        StoredDB[] dbObjects = new StoredDB[N];
+
         try {
             int count = 0;
-            while (resultSet.next())
-                ID[count++] = resultSet.getInt(columnLabel);
-            return ID;
-        } catch (SQLException e) {
+            Method m = objectClass.getMethod("getPrimaryKey");
+            String primaryKey = (String) m.invoke(null);
+            Constructor<? extends StoredDB> constructor = objectClass.getConstructor(int.class);
+            while (resultSet.next()) {
+                int ID = resultSet.getInt(primaryKey);
+                dbObjects[count++] = constructor.newInstance(ID);
+            }
+            return dbObjects;
+        } catch (Exception e) {
             e.printStackTrace();
-            return new int[0];
+            return null;
         }
     }
 

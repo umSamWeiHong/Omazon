@@ -4,12 +4,16 @@ public abstract class StoredDB {
 
     protected boolean inDatabase;
 
-    public void setInDatabase(boolean inDatabase) {
+    protected void setInDatabase(boolean inDatabase) {
         this.inDatabase = inDatabase;
     }
 
-    public boolean inDatabase() {
+    protected boolean inDatabase() {
         return inDatabase;
+    }
+
+    protected static String getPrimaryKey() {
+        return null;
     }
 
     public abstract String insertQuery();
