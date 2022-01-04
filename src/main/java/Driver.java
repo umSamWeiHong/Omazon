@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class Driver {
 
-    private static String url = "jdbc:mysql://139.99.88.50:3306/omazon",
-                          user = "omazonremote",
-                          password = "f798SuFM";
+    private static final String url = "jdbc:mysql://139.99.88.50:3306/omazon",
+                                user = "omazonremote",
+                                password = "f798SuFM";
     private static Connection connection = null;
 
     static {
@@ -39,4 +39,6 @@ public class Driver {
         Statement statement = connection.createStatement();
         statement.executeUpdate(query);
     }
+
+
 }

@@ -254,6 +254,11 @@ public class Review implements StoredDB {
     }
 
     @Override
+    public boolean inDatabase() {
+        return inDatabase;
+    }
+
+    @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
                 "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
