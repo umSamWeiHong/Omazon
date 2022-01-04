@@ -47,7 +47,7 @@ public class Favourite {
     }
 
     /** Add this Favourite object to database. */
-    public void addToDatabase() throws SQLException {
+    public void addToDatabase() {
 
         // Do nothing if the favourite is already in database.
         if (inDatabase) return;
@@ -61,7 +61,7 @@ public class Favourite {
     }
 
     /** Delete this Favourite object in database. */
-    public void deleteFromDatabase() throws SQLException {
+    public void deleteFromDatabase() {
 
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
@@ -149,12 +149,8 @@ public class Favourite {
     public static void main(String[] args) {
 
         for (int i = 0; i < 3; i++) {
-            try {
-                Favourite favourite1 = new Favourite(1, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
-                favourite1.addToDatabase();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            Favourite favourite1 = new Favourite(1, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
+            favourite1.addToDatabase();
         }
 
         for (Favourite f : Favourite.getUserFavourites(1))

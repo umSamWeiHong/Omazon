@@ -74,7 +74,7 @@ public class Product {
     }
 
     /** Add this Product object to database. */
-    public void addToDatabase() throws SQLException {
+    public void addToDatabase() {
 
         // Do nothing if the review is already in database.
         if (inDatabase) return;
@@ -88,7 +88,7 @@ public class Product {
     }
 
     /** Update this Product object in database. */
-    public void updateDatabase() throws SQLException {
+    public void updateDatabase() {
 
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
@@ -101,7 +101,7 @@ public class Product {
     }
 
     /** Delete this Product object in database. */
-    public void deleteFromDatabase() throws SQLException {
+    public void deleteFromDatabase() {
 
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
