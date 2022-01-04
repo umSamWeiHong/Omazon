@@ -34,7 +34,7 @@ public class Product {
         ResultSet resultSet = null;
 
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             // Throw exception when productID is not found.
             if (!resultSet.isBeforeFirst())
                 throw new IllegalArgumentException("ProductID is not found.");
@@ -74,7 +74,7 @@ public class Product {
     }
 
     /** Add this Product object to database. */
-    public void addToDatabase() throws SQLException {
+    public void addToDatabase() {
 
         // Do nothing if the review is already in database.
         if (inDatabase) return;
@@ -83,12 +83,12 @@ public class Product {
                         "Product (productName, price, stock, sales, description, category) " +
                         "VALUES ('%s', %f, %d, %d, '%s', '%s')",
                 productName, price, stock, sales, description, category);
-        Driver.updateDatabase(insertQuery);
+        Database.updateDatabase(insertQuery);
         inDatabase = true;
     }
 
     /** Update this Product object in database. */
-    public void updateDatabase() throws SQLException {
+    public void updateDatabase() {
 
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
@@ -97,18 +97,18 @@ public class Product {
                         "SET productName = '%s', price = %f, stock = %d, sales = %d, description = '%s', category = '%s'" +
                         "WHERE productID = %d",
                 productName, price, stock, sales, description, category);
-        Driver.updateDatabase(updateQuery);
+        Database.updateDatabase(updateQuery);
     }
 
     /** Delete this Product object in database. */
-    public void deleteFromDatabase() throws SQLException {
+    public void deleteFromDatabase() {
 
         // Do nothing if the review is not in database.
         if (!inDatabase) return;
 
         String deleteQuery = "DELETE FROM Product " +
                 "WHERE productID = " + productID;
-        Driver.updateDatabase(deleteQuery);
+        Database.updateDatabase(deleteQuery);
     }
 
     public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category) {
@@ -197,7 +197,7 @@ public class Product {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
@@ -225,7 +225,7 @@ public class Product {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
@@ -259,7 +259,7 @@ public class Product {
 
         ResultSet resultSet = null;
         try {
-            resultSet = Driver.queryDatabase(query);
+            resultSet = Database.queryDatabase(query);
             if (!resultSet.isBeforeFirst())
                 return null;
         } catch (SQLException e) {
