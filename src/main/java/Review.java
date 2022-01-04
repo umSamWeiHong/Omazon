@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-public class Review {
+public class Review implements StoredDB {
 
     private int reviewID, userID, productID;
 
@@ -116,9 +116,9 @@ public class Review {
         if (inDatabase) return;
 
         String insertQuery = String.format("INSERT INTO " +
-                        "Review (userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime) " +
+                        "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
                         "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
-                        userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime);
+                        userID, productID, datetime, rating, subject, description, sellerComment);
         Driver.updateDatabase(insertQuery);
         inDatabase = true;
     }
@@ -251,5 +251,28 @@ public class Review {
         }
         System.out.println(review1);
 
+    }
+
+    @Override
+    public String insertQuery() {
+        return String.format("INSERT INTO " +
+                "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
+                "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
+                userID, productID, datetime, rating, subject, description, sellerComment);
+
+    }
+
+    @Override
+    public String updateQuery() {
+        return String.format("UPDATE Review " +
+                "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s', commentDatetime = '%s' " +
+                "WHERE reviewID = %d",
+                datetime, rating, subject, description, sellerComment, commentDatetime, reviewID);
+    }
+
+    @Override
+    public String deleteQuery() {
+        return "DELETE FROM Review " +
+               "WHERE reviewID = " + reviewID;
     }
 }
