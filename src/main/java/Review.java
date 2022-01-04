@@ -112,58 +112,25 @@ public class Review extends StoredDB {
     public static Review[] getUserReviews(int userID, int N) {
         String query = String.format("SELECT reviewID FROM Review " +
                             "WHERE userID = %d " +
-                            "ORDER BY datetime DESC " +
-                            "LIMIT %d",
-                            userID, N);
+                            "ORDER BY datetime DESC",
+                            userID);
+        if (N != -1)
+            query += " LIMIT " + N;
 
-        ResultSet resultSet = null;
-        try {
-            resultSet = Database.queryDatabase(query);
-            if (!resultSet.isBeforeFirst())
-                return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        int[] IDs = Database.getID(query, "reviewID", N);
+
+        if (N == -1)
+            N = IDs.length;
 
         Review[] reviews = new Review[N];
-        try {
-            int reviewCount = 0;
-            while (resultSet.next()) {
-                reviews[reviewCount] = new Review(resultSet.getInt("reviewID"));
-                reviewCount++;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        for (int i = 0; i < N; i++)
+            reviews[i] = new Review(IDs[i]);
         return reviews;
     }
 
     /** Return all reviews from the user. */
     public static Review[] getUserReviews(int userID) {
-        String query = String.format("SELECT reviewID FROM Review " +
-                        "WHERE userID = %d " +
-                        "ORDER BY datetime DESC ",
-                        userID);
-
-        ResultSet resultSet = Database.queryDatabase(query);
-
-
-        try {
-            // Initialize the array with number of results.
-            resultSet.last();
-            Review[] reviews = new Review[resultSet.getRow()];
-            resultSet.beforeFirst();
-
-            int reviewCount = 0;
-            while (resultSet.next()) {
-                reviews[reviewCount] = new Review(resultSet.getInt("reviewID"));
-                reviewCount++;
-            }
-            return reviews;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getUserReviews(userID, -1);
     }
 
     @Override
@@ -182,7 +149,14 @@ public class Review extends StoredDB {
     }
 
     public static void main(String[] args) {
-        Timestamp sqlTime = new Timestamp(Instant.now().toEpochMilli());
+//        Timestamp sqlTime =
+        Review review1 = new Review(7);
+        review1.userID = 2;
+        review1.datetime = new Timestamp(Instant.now().toEpochMilli());
+        review1.rating = 4;
+        review1.inDatabase = false;
+
+        Database.add(review1);
     }
 
     @Override

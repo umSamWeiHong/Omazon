@@ -19,13 +19,10 @@ public class Database {
     }
 
     public static void main(String[] args) {
-
         try {
             ResultSet result = queryDatabase("select * from Product");
-
             while (result.next())
                 System.out.println(result.getString(2));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -44,16 +41,13 @@ public class Database {
         return null;
     }
 
-    /** Return all IDs of objects that satisfies the query */
-    public static int[] getID(String query, String label) {
-        return getID(query, label, -1);
-    }
-
-    /** Return the N IDs of recent objects that satisfies the query */
-    public static int[] getID(String query, String label, int N) {
+    /** Return the N IDs of recent objects that satisfies the query
+     *  To get all IDs, set N = -1.
+     */
+    public static int[] getID(String query, String columnLabel, int N) {
         ResultSet resultSet = Database.queryDatabase(query);
         if (resultSet == null)
-            return null;
+            return new int[0];
 
         // If N is -1, initialize the array with length as number of results.
         if (N == -1) {
@@ -70,11 +64,11 @@ public class Database {
         try {
             int count = 0;
             while (resultSet.next())
-                ID[count++] = resultSet.getInt(label);
+                ID[count++] = resultSet.getInt(columnLabel);
             return ID;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return new int[0];
         }
     }
 
