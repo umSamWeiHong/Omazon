@@ -22,12 +22,8 @@ public class ProfileController {
 //        Review review = new Review(3);
 //        System.out.println(review);
 
-        logout.setOnAction(e -> {
-            MainGUI.loadScene(Page.LOGIN);
-        });
-
-        for (Review review : Review.getUserReviews(1))
-            reviewBox.getChildren().add(setButton(review));
+//        for (Review review : Review.getUserReviews(1))
+//            reviewBox.getChildren().add(setButton(review));
     }
 
     public Button setButton(Review review) {

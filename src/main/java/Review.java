@@ -3,9 +3,8 @@ package main.java;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 
-public class Review {
+public class Review extends StoredDB {
 
     private int reviewID, userID, productID;
 
@@ -13,21 +12,14 @@ public class Review {
     private double rating;
 
     private String subject, description, sellerComment;
-    private boolean inDatabase;
 
     /** Create a Review object with data from database. */
     public Review(int reviewID) {
         String query = "SELECT * FROM Review WHERE reviewID = " + reviewID;
-        ResultSet resultSet = null;
-
-        try {
-            resultSet = Driver.queryDatabase(query);
-            // Throw exception when reviewID is not found.
-            if (!resultSet.isBeforeFirst())
-                throw new IllegalArgumentException("ReviewID is not found.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ResultSet resultSet = Database.queryDatabase(query);
+        // Throw exception when reviewID is not found.
+        if (resultSet == null)
+            throw new IllegalArgumentException("ReviewID is not found.");
 
         try {
             resultSet.next();
@@ -39,7 +31,7 @@ public class Review {
             subject = resultSet.getString("subject");
             description = resultSet.getString("description");
             sellerComment = resultSet.getString("sellerComment");
-            inDatabase = true;
+            setInDatabase(true);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,7 +46,6 @@ public class Review {
         this.rating = rating;
         this.subject = subject;
         this.description = description;
-        inDatabase = false;
     }
 
     public int getReviewID() {
@@ -109,106 +100,36 @@ public class Review {
         commentDatetime = datetime;
     }
 
-    /** Add this Review object to database. */
-    public void addToDatabase() throws SQLException {
-
-        // Do nothing if the review is already in database.
-        if (inDatabase) return;
-
-        String insertQuery = String.format("INSERT INTO " +
-                        "Review (userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime) " +
-                        "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
-                        userID, productID, datetime, rating, subject, description, sellerComment, commentDatetime);
-        Driver.updateDatabase(insertQuery);
-        inDatabase = true;
-    }
-
-    /** Update this Review object in database. */
-    public void updateDatabase() throws SQLException {
-
-        // Do nothing if the review is not in database.
-        if (!inDatabase) return;
-
-        String updateQuery = String.format("UPDATE Review " +
-                        "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s', commentDatetime = '%s' " +
-                        "WHERE reviewID = %d",
-                        datetime, rating, subject, description, sellerComment, commentDatetime, reviewID);
-        Driver.updateDatabase(updateQuery);
-    }
-
-    /** Delete this Review object in database. */
-    public void deleteFromDatabase() throws SQLException {
-
-        // Do nothing if the review is not in database.
-        if (!inDatabase) return;
-
-        String deleteQuery = "DELETE FROM Review " +
-                             "WHERE reviewID = " + reviewID;
-        Driver.updateDatabase(deleteQuery);
-    }
-
     /** Return the N recent reviews from the user. */
-    public static Review[] getUserReviews(int userID, int N) {
+    public static StoredDB[] getUserReviews(int userID, int N) {
         String query = String.format("SELECT reviewID FROM Review " +
                             "WHERE userID = %d " +
-                            "ORDER BY datetime DESC " +
-                            "LIMIT %d",
-                            userID, N);
-
-        ResultSet resultSet = null;
-        try {
-            resultSet = Driver.queryDatabase(query);
-            if (!resultSet.isBeforeFirst())
-                return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Review[] reviews = new Review[N];
-        try {
-            int reviewCount = 0;
-            while (resultSet.next()) {
-                reviews[reviewCount] = new Review(resultSet.getInt("reviewID"));
-                reviewCount++;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return reviews;
+                            "ORDER BY datetime DESC",
+                            userID);
+        if (N != -1)
+            query += " LIMIT " + N;
+        return Database.getDBObjects(query, Review.class, N);
     }
 
     /** Return all reviews from the user. */
-    public static Review[] getUserReviews(int userID) {
+    public static StoredDB[] getUserReviews(int userID) {
+        return getUserReviews(userID, -1);
+    }
+
+    /** Return the N recent reviews of the product. */
+    public static StoredDB[] getProductReviews(int productID, int N) {
         String query = String.format("SELECT reviewID FROM Review " +
-                        "WHERE userID = %d " +
-                        "ORDER BY datetime DESC ",
-                        userID);
+                        "WHERE productID = %d " +
+                        "ORDER BY datetime DESC",
+                        productID);
+        if (N != -1)
+            query += " LIMIT " + N;
+        return Database.getDBObjects(query, Review.class, N);
+    }
 
-        ResultSet resultSet = null;
-        try {
-            resultSet = Driver.queryDatabase(query);
-            if (!resultSet.isBeforeFirst())
-                return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            // Initialize the array with number of results.
-            resultSet.last();
-            Review[] reviews = new Review[resultSet.getRow()];
-            resultSet.beforeFirst();
-
-            int reviewCount = 0;
-            while (resultSet.next()) {
-                reviews[reviewCount] = new Review(resultSet.getInt("reviewID"));
-                reviewCount++;
-            }
-            return reviews;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    /** Return all reviews of the product. */
+    public static StoredDB[] getProductReviews(int productID) {
+        return getProductReviews(productID, -1);
     }
 
     @Override
@@ -222,34 +143,47 @@ public class Review {
                 ", subject='" + subject + '\'' +
                 ", description='" + description + '\'' +
                 ", sellerComment='" + sellerComment + '\'' +
-                ", inDatabase=" + inDatabase +
+                ", inDatabase=" + inDatabase() +
                 '}';
     }
 
     public static void main(String[] args) {
-        Timestamp sqlTime = new Timestamp(Instant.now().toEpochMilli());
+//        Timestamp sqlTime =
+//        StoredDB[] reviews = Database.generateObjects(Review.class, new int[]{9,10,11});
+        StoredDB[] reviews = getUserReviews(3);
+        for (StoredDB i : getProductReviews(3))
+            System.out.println(i);
+//        review1.userID = 2;
+//        review1.datetime = new Timestamp(Instant.now().toEpochMilli());
+//        review1.rating = 4;
+//        review1.inDatabase = false;
 //
-//        Review review = new Review(1, 3, sqlTime, 5.0, "Yahoo", "Google");
-//        try {
-//            review.addToDatabase();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println(review.datetime);
-//
-        Review review1 = new Review(3);
-        System.out.println(review1);
-//        for (Review r : Review.getUserReviews(1))
-//            System.out.println(r);
+//        Database.add(review1);
+    }
 
-        review1.setComment("Very good!", sqlTime);
-        try {
-            review1.updateDatabase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println(review1);
+    public static String getPrimaryKey() {
+        return "reviewID";
+    }
 
+    @Override
+    public String insertQuery() {
+        return String.format("INSERT INTO " +
+                "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
+                "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
+                userID, productID, datetime, rating, subject, description, sellerComment);
+    }
+
+    @Override
+    public String updateQuery() {
+        return String.format("UPDATE Review " +
+                "SET datetime = '%s', rating = %f, subject = '%s', description = '%s', sellerComment = '%s' " +
+                "WHERE reviewID = %d",
+                datetime, rating, subject, description, sellerComment, reviewID);
+    }
+
+    @Override
+    public String deleteQuery() {
+        return "DELETE FROM Review " +
+               "WHERE reviewID = " + reviewID;
     }
 }
