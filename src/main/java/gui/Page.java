@@ -2,7 +2,8 @@ package main.java.gui;
 
 public enum Page {
     LOGIN ("Login"),
-    PROFILE ("Profile");
+    PROFILE ("Profile"),
+    PRODUCT ("Product");
 
     private final String filename;
 

@@ -10,10 +10,12 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 
 public class MainGUI extends Application {
 
-    private static Stage stage;
+    public static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -25,6 +27,7 @@ public class MainGUI extends Application {
         stage.show();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void loadScene(Page page) {
         String filename = page.getFilename();
         try {
@@ -42,15 +45,21 @@ public class MainGUI extends Application {
     @SuppressWarnings("ConstantConditions")
     public static void loadAllFonts() {
         File directory = new File("src/main/resources/fonts/");
-        for (File file : directory.listFiles())
-            Font.loadFont(MainGUI.class.getClassLoader().getResourceAsStream("main/resources/fonts/" + file.getName()), 12);
+        try {
+            for (File file : directory.listFiles())
+                Font.loadFont(file.toURL().toString(), 12);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initStage();
-        MainGUI.loadScene(Page.PROFILE);
+//        MainGUI.loadScene(Page.PROFILE);
+        ProductController.setProductID(3);
+        MainGUI.loadScene(Page.PRODUCT);
     }
 }
