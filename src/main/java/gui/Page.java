@@ -13,5 +13,4 @@ public enum Page {
     public String getFilename() {
         return filename;
     }
-    // e
 }

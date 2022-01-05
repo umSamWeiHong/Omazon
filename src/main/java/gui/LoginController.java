@@ -12,6 +12,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
+
 public class LoginController {
 
     @FXML private StackPane stackPane;
@@ -30,7 +32,10 @@ public class LoginController {
         dropShadow2.setOffsetY(4.0);
 
         rect.setEffect(dropShadow2);
-        button.setOnAction(e -> printText());
+        button.setOnAction(e -> {
+            printText();
+            MainGUI.loadScene(Page.PROFILE);
+        });
     }
 
     public void printText() {

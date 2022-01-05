@@ -4,9 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -15,14 +13,30 @@ import java.io.IOException;
 
 public class MainGUI extends Application {
 
+    private static Stage stage;
+
     public static void main(String[] args) {
         launch(args);
     }
 
-    public static void initStage(Stage stage) {
+    public static void initStage() {
         stage.setTitle("Omazon");
         stage.getIcons().add(new Image("main/resources/img/icon.png"));
         stage.show();
+    }
+
+    public static void loadScene(Page page) {
+        String filename = page.getFilename();
+        try {
+            Parent root = FXMLLoader.load(MainGUI.class.getResource(filename + ".fxml"));
+            Scene scene = new Scene(root);
+            // Add the respective css file if it exists.
+            if (new File("src/main/java/gui/" + filename + ".css").exists())
+                scene.getStylesheets().add(MainGUI.class.getResource(filename + ".css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -32,30 +46,11 @@ public class MainGUI extends Application {
             Font.loadFont(MainGUI.class.getClassLoader().getResourceAsStream("main/resources/fonts/" + file.getName()), 12);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public void loginScene(Stage stage) throws IOException {
-
-        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-        Scene loginPage = new Scene(root);
-
-        stage.setScene(loginPage);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public void profileScene(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("Profile.fxml"));
-        String css = this.getClass().getResource("Profile.css").toExternalForm();
-        Scene profilePage = new Scene(root);
-
-        profilePage.getStylesheets().add(css);
-
-        stage.setScene(profilePage);
-    }
-
     @Override
     public void start(Stage stage) throws Exception {
+        MainGUI.stage = stage;
         MainGUI.loadAllFonts();
-        MainGUI.initStage(stage);
-        profileScene(stage);
+        MainGUI.initStage();
+        MainGUI.loadScene(Page.PROFILE);
     }
 }

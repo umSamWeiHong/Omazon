@@ -8,16 +8,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import main.java.Review;
 
+import java.io.IOException;
+
 public class ProfileController {
 
     @FXML VBox reviewBox;
     @FXML ScrollPane reviewScroll;
     @FXML GridPane gridPane;
+    @FXML Button logout;
 
     @FXML
     public void initialize() {
 //        Review review = new Review(3);
 //        System.out.println(review);
+
+        logout.setOnAction(e -> {
+            MainGUI.loadScene(Page.LOGIN);
+        });
 
         for (Review review : Review.getUserReviews(1))
             reviewBox.getChildren().add(setButton(review));
