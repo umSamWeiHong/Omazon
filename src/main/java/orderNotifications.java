@@ -63,6 +63,7 @@ public class orderNotifications extends StoredDB{
         try {
             resultSet.next();
             this.sellerID = resultSet.getInt("sellerID");
+            orderID = resultSet.getInt("orderID");
             userID = resultSet.getInt("userID");
             productID = resultSet.getInt("productID");
             orderQuantity = resultSet.getInt("orderQuantity");
