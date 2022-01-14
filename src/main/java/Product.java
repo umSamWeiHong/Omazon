@@ -178,8 +178,20 @@ public class Product extends StoredDB {
         StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
         for (StoredDB i : getProductsByCategory(Category.FASHION_ACCESSORIES))
             System.out.println(i);
+        
+         //  StoredDB[] products = getProductsListBySellerID(3);  
+ //     for (StoredDB i : getProductsListBySellerID(3))
+     //  System.out.println(i);
 
     }
+    
+    public static StoredDB[] getProductsListBySellerID(int sellerID) {
+           String query = String.format("SELECT * FROM Product " +
+                        "WHERE sellerID = '%d'",
+                         sellerID);
+           
+            return Database.getDBObjects(query, Product.class, -1);
+        }
 
     public static String getPrimaryKey() { return "productID"; }
 
