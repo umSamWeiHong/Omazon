@@ -39,9 +39,14 @@ public class MainGUI extends Application {
         stage.show();
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static void loadScene(Page page) {
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+        @SuppressWarnings("ConstantConditions")
         Scene scene = new Scene(getParentNode(page.getFilename()));
+        stage.setWidth(width);
+        stage.setHeight(height);
         stage.setScene(scene);
     }
 
