@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import main.java.gui.Controller.ProductController;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,24 +20,29 @@ public class MainGUI extends Application {
         launch(args);
     }
 
+    public static Parent getParentNode(String filename) {
+        try {
+            Parent root = FXMLLoader.load(new File("src/main/resources/layout/" + filename + ".fxml").toURI().toURL());
+            // Add the respective css file if it exists.
+            if (new File("src/main/resources/css/" + filename + ".css").exists())
+                root.getStylesheets().add(new File("src/main/resources/css/" + filename + ".css").toURI().toString());
+            return root;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void initStage() {
         stage.setTitle("Omazon");
         stage.getIcons().add(new Image("main/resources/img/icon.png"));
         stage.show();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void loadScene(Page page) {
-        String filename = page.getFilename();
-        try {
-            Parent root = FXMLLoader.load(new File("src/main/resources/layout/" + filename + ".fxml").toURI().toURL());
-            Scene scene = new Scene(root);
-            // Add the respective css file if it exists.
-            if (new File("src/main/resources/css/" + filename + ".css").exists())
-                scene.getStylesheets().add(new File("src/main/resources/css/" + filename + ".css").toURI().toURL().toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scene scene = new Scene(getParentNode(page.getFilename()));
+        stage.setScene(scene);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -51,6 +57,7 @@ public class MainGUI extends Application {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initStage();
-        MainGUI.loadScene(Page.LOGIN);
+        ProductController.setProductID(5);
+        MainGUI.loadScene(Page.PRODUCT);
     }
 }

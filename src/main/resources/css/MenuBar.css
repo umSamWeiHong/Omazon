@@ -1,0 +1,9 @@
+* {
+    -background: rgb(253, 166, 93);
+    -menu: rgb(255, 130, 67);
+}
+
+#menuBar {
+    -fx-background-color: -menu;
+    -fx-border-color: black;
+}

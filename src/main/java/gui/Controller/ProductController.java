@@ -2,6 +2,7 @@ package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import main.java.Product;
@@ -12,6 +13,7 @@ public class ProductController {
 
     private static int productID;
 
+    @FXML BorderPane borderPane;
     @FXML VBox vBox;
     @FXML
     private Label name, seller, rating, reviewCount, price, sales, stock,
@@ -19,6 +21,8 @@ public class ProductController {
 
     @FXML
     public void initialize() {
+
+        borderPane.setTop(MainGUI.getParentNode("MenuBar"));
         setProductInformation(productID);
 
 //        for (StoredDB r : Review.getProductReviews(productID, 5)) {
