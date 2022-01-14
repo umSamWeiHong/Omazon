@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 
 public class MainGUI extends Application {
 
@@ -27,15 +25,14 @@ public class MainGUI extends Application {
         stage.show();
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static void loadScene(Page page) {
         String filename = page.getFilename();
         try {
-            Parent root = FXMLLoader.load(MainGUI.class.getResource(filename + ".fxml"));
+            Parent root = FXMLLoader.load(new File("src/main/resources/layout/" + filename + ".fxml").toURI().toURL());
             Scene scene = new Scene(root);
             // Add the respective css file if it exists.
-            if (new File("src/main/java/gui/" + filename + ".css").exists())
-                scene.getStylesheets().add(MainGUI.class.getResource(filename + ".css").toExternalForm());
+            if (new File("src/main/resources/css/" + filename + ".css").exists())
+                scene.getStylesheets().add(new File("src/main/resources/css/" + filename + ".css").toURI().toURL().toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,13 +41,9 @@ public class MainGUI extends Application {
 
     @SuppressWarnings("ConstantConditions")
     public static void loadAllFonts() {
-        File directory = new File("src/main/resources/fonts/");
-        try {
-            for (File file : directory.listFiles())
-                Font.loadFont(file.toURL().toString(), 12);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        File directory = new File("src/main/resources/font/");
+        for (File file : directory.listFiles())
+            Font.loadFont(file.toURI().toString(), 12);
     }
 
     @Override
@@ -58,8 +51,6 @@ public class MainGUI extends Application {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initStage();
-//        MainGUI.loadScene(Page.PROFILE);
-        ProductController.setProductID(3);
-        MainGUI.loadScene(Page.PRODUCT);
+        MainGUI.loadScene(Page.LOGIN);
     }
 }

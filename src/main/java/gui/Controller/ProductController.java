@@ -1,14 +1,12 @@
-package main.java.gui;
+package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import main.java.Main;
 import main.java.Product;
 import main.java.Review;
-import main.java.StoredDB;
+import main.java.gui.MainGUI;
 
 public class ProductController {
 
@@ -22,9 +20,10 @@ public class ProductController {
     @FXML
     public void initialize() {
         setProductInformation(productID);
-        for (StoredDB r : Review.getProductReviews(productID, 5)) {
-            vBox.getChildren().add(setLabel((Review) r));
-        }
+
+//        for (StoredDB r : Review.getProductReviews(productID, 5)) {
+//            vBox.getChildren().add(setLabel((Review) r));
+//        }
     }
 
     // TODO Waiting for methods

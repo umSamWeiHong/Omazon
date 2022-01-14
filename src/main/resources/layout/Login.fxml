@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.LoginController">
+<StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.LoginController">
    <children>
       <Rectangle fx:id="rect" arcHeight="5.0" arcWidth="5.0" fill="#ffd07f" height="350.0" stroke="BLACK" strokeType="INSIDE" width="285.0" />
       <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="588.0" spacing="2.0">
          <children>
             <ImageView id="logo" fitHeight="82.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/img/logo_full.png" />
+                  <Image url="@../img/logo_full.png" />
                </image>
                <VBox.margin>
                   <Insets bottom="15.0" top="25.0" />

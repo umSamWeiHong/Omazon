@@ -1,4 +1,4 @@
-package main.java.gui;
+package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -11,6 +11,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import main.java.gui.Colors;
+import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
 import java.io.IOException;
 

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.ProfileController">
+<BorderPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.ProfileController">
    <top>
       <HBox fx:id="topMenu" prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -27,7 +27,7 @@
             <Region prefHeight="36.0" prefWidth="315.0" HBox.hgrow="ALWAYS" />
             <ImageView fitHeight="32.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/img/logo_full.png" />
+                  <Image url="@../img/logo_full.png" />
                </image>
                <HBox.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
