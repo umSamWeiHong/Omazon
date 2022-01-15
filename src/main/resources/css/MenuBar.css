@@ -1,0 +1,16 @@
+* {
+    -menu: rgb(255, 130, 67);
+}
+
+.button {
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: yellow;
+}
+
+#menuBar {
+    -fx-background-color: -menu;
+    -fx-border-color: black;
+}
