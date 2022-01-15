@@ -11,7 +11,7 @@
     -fx-font-size: 20;
 }
 
-#sidebar > .button {
+#sideMenu > .button {
     -fx-font-family: 'Open Sans Semibold';
     -fx-font-size: 14;
 }
@@ -20,14 +20,14 @@
     -fx-cursor: hand;
 }
 
-#menuBar > .button, #sidebar > .button {
+#menuBar > .button, #sideMenu > .button {
     -fx-border-color: -border;
     -fx-border-width: 1.1;
     -fx-border-radius: 3;
     -fx-background-color: -button-gradient;
 }
 
-#menuBar > .button:hover, #sidebar > .button:hover {
+#menuBar > .button:hover, #sideMenu > .button:hover {
     -fx-background-color: -button-hover;
 }
 
@@ -36,6 +36,6 @@
     -fx-border-color: -border;
 }
 
-#sidebar {
+#sideMenu {
     -fx-background-color: #FFD54F;
 }

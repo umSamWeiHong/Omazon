@@ -1,13 +1,10 @@
 package main.java.gui.Controller;
 
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.util.Duration;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
@@ -15,9 +12,9 @@ import java.io.File;
 
 public class MenuBarController {
 
-    @FXML HBox menuBar;
-    @FXML Button exploreButton, notificationButton, logoutButton, menuButton;
-    @FXML ImageView explore, notification, logout;
+    @FXML private HBox menuBar;
+    @FXML private Button exploreButton, notificationButton, logoutButton, menuButton;
+    @FXML private ImageView logo, explore, notification, logout;
 
     private static Image exploreStatic, exploreAnimation,
                          logoutStatic, logoutAnimation,
@@ -31,6 +28,11 @@ public class MenuBarController {
 
     @FXML
     public void initialize() {
+        setMenuButtonImage();
+        setOnClickAction();
+    }
+
+    private void setMenuButtonImage() {
         exploreStatic = new Image(new File("src/main/resources/img/menubar/explore_static.png").toURI().toString());
         exploreAnimation = new Image(new File("src/main/resources/img/menubar/explore_anim.gif").toURI().toString());
         logoutStatic = new Image(new File("src/main/resources/img/menubar/logout_static.png").toURI().toString());
@@ -44,9 +46,11 @@ public class MenuBarController {
         logoutButton.setOnMouseExited(e -> logout.setImage(logoutStatic));
         notificationButton.setOnMouseEntered(e -> notification.setImage(notificationAnimation));
         notificationButton.setOnMouseExited(e -> notification.setImage(notificationStatic));
+    }
 
+    private void setOnClickAction() {
+        logo.setOnMouseClicked(e -> MainGUI.loadScene(Page.HOME));
         logoutButton.setOnMouseClicked(e -> MainGUI.loadScene(Page.LOGIN));
-
         menuButton.setOnMouseClicked(e -> slideMenuController.slide());
     }
 }

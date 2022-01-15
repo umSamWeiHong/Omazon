@@ -40,7 +40,7 @@
       </VBox>
    </center>
    <left>
-      <VBox fx:id="sidebar" prefHeight="340.0" prefWidth="150.0" spacing="3.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="sideMenu" prefHeight="340.0" prefWidth="150.0" spacing="3.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="profile" mnemonicParsing="false" prefHeight="55.0">
                <graphic>
