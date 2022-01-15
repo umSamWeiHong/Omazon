@@ -3,7 +3,8 @@ package main.java.gui;
 public enum Page {
     LOGIN ("Login"),
     PROFILE ("Profile"),
-    PRODUCT ("Product");
+    PRODUCT ("Product"),
+    STORE ("Store");
 
     private final String filename;
 
