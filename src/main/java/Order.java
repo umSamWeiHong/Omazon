@@ -65,7 +65,7 @@ public class Order extends StoredDB {
                 "\nOrder ID:" + orderID +
                 "\nProduct ID: " + productID +
                 "\nCustomer ID: " + customerID +
-                "Seller ID: " + sellerID +
+                "\nSeller ID: " + sellerID +
                 "\nShipping Address:'" + shippingAddress +
                 "\n";
     }
