@@ -84,7 +84,7 @@ public class MainGUI extends Application {
         MainGUI.loadAllFonts();
         MainGUI.initializeStage();
         ProductController.setProductID(5);
-        MainGUI.loadScene(Page.STORE);
+        MainGUI.loadScene(Page.SEARCH);
     }
 
     public static void main(String[] args) {

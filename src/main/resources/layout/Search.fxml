@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="400.0" prefWidth="175.0" spacing="2.0" HBox.hgrow="NEVER">
+               <children>
+                  <Label text="Sort by:" />
+                  <RadioButton mnemonicParsing="false" text="Relevance">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="sort" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="Latest" toggleGroup="$sort" />
+                  <RadioButton mnemonicParsing="false" text="Top Sales" toggleGroup="$sort" />
+                  <RadioButton mnemonicParsing="false" text="Price" toggleGroup="$sort" />
+                  <Label text="Category">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <MenuButton minWidth="80.0" mnemonicParsing="false" text="All">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <Label text="Rating">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <RadioButton mnemonicParsing="false" text="5 stars">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="review" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="4 stars &amp; above" toggleGroup="$review" />
+                  <RadioButton mnemonicParsing="false" text="3 stars &amp; above" toggleGroup="$review" />
+                  <RadioButton mnemonicParsing="false" text="2 stars &amp; above" toggleGroup="$review" />
+                  <RadioButton mnemonicParsing="false" text="1 star &amp; above" toggleGroup="$review" />
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="30.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="400.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <TextField prefWidth="376.0">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <ListView prefWidth="386.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ListView>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="30.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+   </center>
+</BorderPane>
