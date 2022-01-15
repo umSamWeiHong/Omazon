@@ -1,0 +1,41 @@
+* {
+    -menu: rgb(255, 130, 67);
+    -border: #A46F5F;
+    -button-gradient: linear-gradient(to bottom, #ffd07f, #ffc566, #ffba4d, #ffae30, #ffa100);
+    -button-hover: #ffd07f;
+}
+
+#username {
+    -fx-font-family: 'Montserrat';
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+#sidebar > .button {
+    -fx-font-family: 'Open Sans Semibold';
+    -fx-font-size: 14;
+}
+
+#logo, .button {
+    -fx-cursor: hand;
+}
+
+#menuBar > .button, #sidebar > .button {
+    -fx-border-color: -border;
+    -fx-border-width: 1.1;
+    -fx-border-radius: 3;
+    -fx-background-color: -button-gradient;
+}
+
+#menuBar > .button:hover, #sidebar > .button:hover {
+    -fx-background-color: -button-hover;
+}
+
+#menuBar {
+    -fx-background-color: -menu;
+    -fx-border-color: -border;
+}
+
+#sidebar {
+    -fx-background-color: #FFD54F;
+}

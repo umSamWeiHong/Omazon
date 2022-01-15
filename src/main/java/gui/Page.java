@@ -2,6 +2,7 @@ package main.java.gui;
 
 public enum Page {
     LOGIN ("Login"),
+    HOME ("Home"),
     PROFILE ("Profile"),
     PRODUCT ("Product"),
     STORE ("Store"),

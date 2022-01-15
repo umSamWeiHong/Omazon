@@ -37,7 +37,7 @@ public class LoginController {
         rect.setEffect(dropShadow2);
         button.setOnAction(e -> {
             printText();
-            MainGUI.loadScene(Page.PRODUCT);
+            MainGUI.loadScene(Page.HOME);
         });
     }
 
