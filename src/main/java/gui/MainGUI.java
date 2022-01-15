@@ -7,7 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import main.java.gui.Controller.MenuBarController;
 import main.java.gui.Controller.ProductController;
+import main.java.gui.Controller.SlideMenuController;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,25 +17,44 @@ import java.io.IOException;
 public class MainGUI extends Application {
 
     public static Stage stage;
+    private static final FXMLLoader menuBarLoader, slideMenuLoader;
 
-    public static void main(String[] args) {
-        launch(args);
+    static {
+        menuBarLoader = getLoaderWithNode("MenuBar");
+        slideMenuLoader = getLoaderWithNode("SlideMenu");
+
+        @SuppressWarnings("ConstantConditions")
+        MenuBarController menuBarController = menuBarLoader.getController();
+        @SuppressWarnings("ConstantConditions")
+        SlideMenuController slideMenuController = slideMenuLoader.getController();
+
+        menuBarController.setSlideMenuController(slideMenuController);
     }
 
-    public static Parent getParentNode(String filename) {
+    public static FXMLLoader getMenuBarLoader() {
+        return menuBarLoader;
+    }
+
+    public static FXMLLoader getSlideMenuLoader() {
+        return slideMenuLoader;
+    }
+
+    public static FXMLLoader getLoaderWithNode(String filename) {
         try {
-            Parent root = FXMLLoader.load(new File("src/main/resources/layout/" + filename + ".fxml").toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(new File(
+                    "src/main/resources/layout/" + filename + ".fxml").toURI().toURL());
+            Parent root = loader.load();
             // Add the respective css file if it exists.
             if (new File("src/main/resources/css/" + filename + ".css").exists())
                 root.getStylesheets().add(new File("src/main/resources/css/" + filename + ".css").toURI().toString());
-            return root;
+            return loader;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static void initStage() {
+    public static void initializeStage() {
         stage.setTitle("Omazon");
         stage.getIcons().add(new Image("main/resources/img/icon.png"));
         stage.show();
@@ -44,7 +65,7 @@ public class MainGUI extends Application {
         double height = stage.getHeight();
 
         @SuppressWarnings("ConstantConditions")
-        Scene scene = new Scene(getParentNode(page.getFilename()));
+        Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
         stage.setWidth(width);
         stage.setHeight(height);
         stage.setScene(scene);
@@ -61,8 +82,12 @@ public class MainGUI extends Application {
     public void start(Stage stage) {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
-        MainGUI.initStage();
+        MainGUI.initializeStage();
         ProductController.setProductID(5);
         MainGUI.loadScene(Page.PRODUCT);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

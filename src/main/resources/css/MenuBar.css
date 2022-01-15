@@ -6,6 +6,10 @@
     -fx-cursor: hand;
 }
 
+.button:hover {
+    -fx-background-color: yellow;
+}
+
 #menuBar {
     -fx-background-color: -menu;
     -fx-border-color: black;

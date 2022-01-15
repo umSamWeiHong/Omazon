@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import main.java.Product;
 import main.java.Review;
+import main.java.StoredDB;
 import main.java.gui.MainGUI;
 
 public class ProductController {
@@ -22,12 +23,14 @@ public class ProductController {
     @FXML
     public void initialize() {
 
-        borderPane.setTop(MainGUI.getParentNode("MenuBar"));
+        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
+        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
+
         setProductInformation(productID);
 
-//        for (StoredDB r : Review.getProductReviews(productID, 5)) {
-//            vBox.getChildren().add(setLabel((Review) r));
-//        }
+        for (StoredDB r : Review.getProductReviews(3, 5)) {
+            vBox.getChildren().add(setLabel((Review) r));
+        }
     }
 
     // TODO Waiting for methods
