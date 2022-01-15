@@ -4,14 +4,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import main.java.Review;
+import main.java.gui.MainGUI;
 
 import java.io.IOException;
 
 public class ProfileController {
 
+    @FXML private BorderPane borderPane;
     @FXML VBox reviewBox;
     @FXML ScrollPane reviewScroll;
     @FXML GridPane gridPane;
@@ -19,6 +22,9 @@ public class ProfileController {
 
     @FXML
     public void initialize() {
+
+        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
+        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 //        Review review = new Review(3);
 //        System.out.println(review);
 

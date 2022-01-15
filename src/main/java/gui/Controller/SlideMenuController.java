@@ -18,6 +18,7 @@ import java.io.File;
 
 public class SlideMenuController {
 
+    // TODO Use vbox instead of list
     @FXML
     public ListView<HBox> list;
     private Timeline openMenu, closeMenu;

@@ -3,78 +3,114 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.ProfileController">
-   <top>
-      <HBox fx:id="topMenu" prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0">
-               <HBox.margin>
-                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-               </HBox.margin>
-            </Button>
-            <Region prefHeight="36.0" prefWidth="315.0" HBox.hgrow="ALWAYS" />
-            <ImageView fitHeight="32.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/logo_full.png" />
-               </image>
-               <HBox.margin>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </HBox.margin>
-            </ImageView>
-            <Region minHeight="0.0" minWidth="0.0" prefHeight="36.0" prefWidth="248.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0">
-               <HBox.margin>
-                  <Insets bottom="1.0" left="1.0" top="1.0" />
-               </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0">
-               <HBox.margin>
-                  <Insets bottom="1.0" left="1.0" top="1.0" />
-               </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0">
-               <HBox.margin>
-                  <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-   </top>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.ProfileController">
+   <padding>
+      <Insets bottom="3.0" left="3.0" right="3.0" />
+   </padding>
    <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.33331298828125" minWidth="10.0" prefWidth="165.3333282470703" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="634.6666717529297" minWidth="10.0" prefWidth="634.6666717529297" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="76.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="194.0" minHeight="0.0" prefHeight="57.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="34.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="233.0" minHeight="7.0" prefHeight="16.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="26.0" vgrow="NEVER" />
+            <RowConstraints prefHeight="156.0" valignment="CENTER" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <VBox prefHeight="446.0" prefWidth="373.0" GridPane.rowSpan="2">
+            <ImageView fitHeight="122.0" fitWidth="600.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowSpan="3" GridPane.valignment="BASELINE">
+               <image>
+                  <Image url="@../../../../../../../Pictures/壁纸/003.jpg" />
+               </image>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@../../../../../../../Pictures/Pic.jpg" />
+               </image>
+            </ImageView>
+            <Label text="USERNAME" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="198.0" spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Label prefHeight="33.0" prefWidth="87.0" text="Recent Reviews" />
-                  <ScrollPane prefHeight="419.0" prefWidth="322.0">
-                     <content>
-                        <VBox fx:id="reviewBox" prefHeight="115.0" prefWidth="159.0" />
-                     </content>
-                  </ScrollPane>
+                  <Button mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/slidemenu/store.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/slidemenu/cart.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/slidemenu/favourite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
-            </VBox>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="158.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
+               <children>
+                  <Label prefHeight="28.0" prefWidth="252.0" text="Account Balance:" />
+                  <Button mnemonicParsing="false" text="Top Up" />
+               </children>
+            </HBox>
+            <ListView prefHeight="200.0" prefWidth="136.0" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS">
+               <GridPane.margin>
+                  <Insets left="8.0" right="8.0" />
+               </GridPane.margin>
+            </ListView>
+            <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="8.0" right="8.0" />
+               </GridPane.margin>
+            </ListView>
+            <Label text="Recent Reviews" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Notifications" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Label text="Recent Orders" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="8.0" right="8.0" />
+               </GridPane.margin>
+            </ListView>
+            <Button mnemonicParsing="false" text="Settings" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets top="3.0" />
+               </GridPane.margin>
+            </Button>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="3.0" left="3.0" right="3.0" />
+         </BorderPane.margin>
       </GridPane>
    </center>
 </BorderPane>
