@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Product extends StoredDB {
 
-    private int productID, stock, sales;
+    private int productID, stock, sales, sellerID;
     private String productName, description;
     private double price, productRatings;
     private Category category;
@@ -41,6 +41,7 @@ public class Product extends StoredDB {
             productRatings = resultSet.getDouble("productRatings");
             description = resultSet.getString("description");
             category = Category.valueOf(Category.getEnum(resultSet.getString("category")));
+            sellerID = resultSet.getInt("sellerID");
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -49,7 +50,7 @@ public class Product extends StoredDB {
     }
 
     /** Create a new Product object with all parameters */
-    public Product(int productID, String productName, Double price, int stock, int sales, Double productRatings, String description, String category) {
+    public Product(int productID, String productName, Double price, int stock, int sales, Double productRatings, String description, String category, int sellerID) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
@@ -58,9 +59,11 @@ public class Product extends StoredDB {
         this.productRatings = productRatings;
         this.description = description;
         this.category = Category.valueOf(category);
+        this.sellerID = sellerID;
+
     }
 
-    public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category) {
+    public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category, int sellerID) {
         this.productName = productName;
         this.description = description;
         this.price = price;
@@ -68,6 +71,7 @@ public class Product extends StoredDB {
         this.sales = sales;
         this.reviews = reviews;
         this.category = Category.valueOf(category);
+        this.sellerID = sellerID;
     }
 
     // Accessor
@@ -102,6 +106,9 @@ public class Product extends StoredDB {
     public Category getCategory() {
         return category;
     }
+    public int getSellerID() {
+        return sellerID;
+    }
 
     public boolean isBestSelling() {
         return bestSelling;
@@ -124,6 +131,9 @@ public class Product extends StoredDB {
     }
     public void setReviews(String[] reviews) {
         this.reviews = reviews;
+    }
+    public void setSellerID(int sellerID) {
+        this.sellerID = sellerID;
     }
 
     @Override
@@ -165,6 +175,15 @@ public class Product extends StoredDB {
         return Database.getDBObjects(query, Product.class, -1);
     }
 
+    /** Method to get products based on sellerID */
+    public static StoredDB[] getProductsBySellerId(int sellerID) {
+        String query = String.format("SELECT * FROM Product " +
+                        "WHERE sellerID = %d  ",
+                sellerID);
+
+        return Database.getDBObjects(query, Product.class, -1);
+    }
+
     public static void main(String[] args) {
 
         /*StoredDB[] products = getBestSelling();
@@ -175,8 +194,12 @@ public class Product extends StoredDB {
         for (StoredDB i : getProductsByTitle("toothpaste"))
             System.out.println(i); */
 
-        StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
+        /*StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
         for (StoredDB i : getProductsByCategory(Category.FASHION_ACCESSORIES))
+            System.out.println(i); */
+
+        StoredDB[] products = getProductsBySellerId(1);
+        for (StoredDB i : getProductsBySellerId(1))
             System.out.println(i);
 
     }
@@ -186,17 +209,17 @@ public class Product extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                        "Product (productName, price, stock, sales, description, category) " +
-                        "VALUES ('%s', %f, %d, %d, '%s', '%s')",
-                productName, price, stock, sales, description, category);
+                        "Product (productName, price, stock, sales, description, category, sellerID) " +
+                        "VALUES ('%s', %f, %d, %d, '%s', '%s', %d)",
+                productName, price, stock, sales, description, category, sellerID);
     }
 
     @Override
     public String updateQuery() {
         return String.format("UPDATE Product " +
-                        "SET productName = '%s', price = %f, stock = %d, sales = %d, description = '%s', category = '%s'" +
+                        "SET productName = '%s', price = %f, stock = %d, sales = %d, description = '%s', category = '%s', sellerID = %d " +
                         "WHERE productID = %d",
-                productName, price, stock, sales, description, category);
+                productName, price, stock, sales, description, category, sellerID);
     }
 
     @Override
