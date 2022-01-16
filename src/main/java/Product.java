@@ -49,7 +49,7 @@ public class Product extends StoredDB {
             sales = resultSet.getInt("sales");
             productRatings = resultSet.getDouble("productRatings");
             description = resultSet.getString("description");
-            category = Category.valueOf(Category.getEnum(resultSet.getString("category")));
+            category = Category.valueOf(resultSet.getString("category"));
             sellerID = resultSet.getInt("sellerID");
             image = resultSet.getString("image");
 
@@ -260,10 +260,10 @@ public class Product extends StoredDB {
         for (StoredDB i : getProductsByTitle("toothpaste"))
             System.out.println(i); */
 
-        /*
-        StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
-        for (StoredDB i : getProductsByCategory(Category.FASHION_ACCESSORIES))
-            System.out.println(i); */
+
+        StoredDB[] products = getProductsByCategory(Category.valueOf("FASHION_ACCESSORIES"));
+        for (StoredDB i : getProductsByCategory(Category.valueOf("FASHION_ACCESSORIES")))
+            System.out.println(i);
 
 
         /*
