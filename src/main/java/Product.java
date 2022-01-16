@@ -2,11 +2,19 @@ package main.java;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Base64;
+import javax.imageio.ImageIO;
 
 public class Product extends StoredDB {
 
-    private int productID, stock, sales;
-    private String productName, description;
+    private int productID, stock, sales, sellerID;
+    private String productName, description, image;
     private double price, productRatings;
     private Category category;
     private String[] reviews;
@@ -20,6 +28,7 @@ public class Product extends StoredDB {
         productRatings = 0.0;
         description = "";
         category = Category.valueOf("");
+        image = "";
         reviews = new String[10];
     }
 
@@ -41,6 +50,9 @@ public class Product extends StoredDB {
             productRatings = resultSet.getDouble("productRatings");
             description = resultSet.getString("description");
             category = Category.valueOf(Category.getEnum(resultSet.getString("category")));
+            sellerID = resultSet.getInt("sellerID");
+            image = resultSet.getString("image");
+
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -49,7 +61,7 @@ public class Product extends StoredDB {
     }
 
     /** Create a new Product object with all parameters */
-    public Product(int productID, String productName, Double price, int stock, int sales, Double productRatings, String description, String category) {
+    public Product(int productID, String productName, Double price, int stock, int sales, Double productRatings, String description, String category, int sellerID, String base64String) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
@@ -58,9 +70,12 @@ public class Product extends StoredDB {
         this.productRatings = productRatings;
         this.description = description;
         this.category = Category.valueOf(category);
+        this.sellerID = sellerID;
+        this.image = base64String;
+
     }
 
-    public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category) {
+    public Product(String productName, String description, double price, int stock, int sales, String[] reviews, String category, int sellerID, String base64String) {
         this.productName = productName;
         this.description = description;
         this.price = price;
@@ -68,6 +83,8 @@ public class Product extends StoredDB {
         this.sales = sales;
         this.reviews = reviews;
         this.category = Category.valueOf(category);
+        this.sellerID = sellerID;
+        this.image = base64String;
     }
 
     /** Add product from GUI */
@@ -107,6 +124,12 @@ public class Product extends StoredDB {
     public Category getCategory() {
         return category;
     }
+    public int getSellerID() {
+        return sellerID;
+    }
+    public String getBase64String() {
+        return image;
+    }
 
     public boolean isBestSelling() {
         return bestSelling;
@@ -129,6 +152,12 @@ public class Product extends StoredDB {
     }
     public void setReviews(String[] reviews) {
         this.reviews = reviews;
+    }
+    public void setSellerID(int sellerID) {
+        this.sellerID = sellerID;
+    }
+    public void setImage(String base64String) {
+        this.image = base64String;
     }
 
     @Override
@@ -197,7 +226,63 @@ public class Product extends StoredDB {
         return Database.getDBObjects(query, Product.class, -1);
     }
 
-    public static void main(String[] args) {
+    /** Method to get products based on sellerID */
+    public static StoredDB[] getProductsBySellerId(int sellerID) {
+        String query = String.format("SELECT * FROM Product " +
+                        "WHERE sellerID = %d  ",
+                sellerID);
+
+        return Database.getDBObjects(query, Product.class, -1);
+    }
+
+    /** Method to resize image */
+    public static void resize(String inputImagePath, String outputImagePath) throws IOException {
+        // Reads input image
+        File inputFile = new File(inputImagePath);
+        BufferedImage inputImage = ImageIO.read(inputFile);
+
+        // Creates output image
+        BufferedImage outputImage = new BufferedImage(300,
+                300, inputImage.getType());
+
+        // Scales the input image to the output image
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(inputImage, 0, 0, 300, 300, null);
+        g2d.dispose();
+
+        // Extracts extension of output file
+        String formatName = outputImagePath.substring(outputImagePath
+                .lastIndexOf(".") + 1);
+
+        // Writes to output file
+        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+    }
+    /** Method to convert image into Base64 string*/
+    public static String imgToBase64String(String path) throws FileNotFoundException, IOException {
+        File img = new File(path);
+        FileInputStream input = new FileInputStream(img);
+        byte[] bytes = new byte[(int) img.length()];
+        input.read(bytes);
+        return new String(Base64.getEncoder().encode(bytes));
+    }
+
+    /** Method to convert Base64 string to image*/
+    public static byte[] base64StringToImage(String base64){
+        byte[] data = Base64.getDecoder().decode(base64);
+        return data;
+        /*
+        //IF Write to destination path
+        try ( OutputStream stream = new FileOutputStream("C:/Users/kelee/Documents/ImageProduct/image_destination.jpg")) {
+            stream.write(data);
+
+        } catch (Exception e) {
+            System.out.println("Couldn't write to file");
+
+        }
+         */
+    }
+
+    public static void main(String[] args) throws IOException  {
 
         /*StoredDB[] products = getBestSelling();
         for (StoredDB i : getBestSelling())
@@ -207,9 +292,34 @@ public class Product extends StoredDB {
         for (StoredDB i : getProductsByTitle("toothpaste"))
             System.out.println(i); */
 
+        /*
         StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
         for (StoredDB i : getProductsByCategory(Category.FASHION_ACCESSORIES))
-            System.out.println(i);
+            System.out.println(i); */
+
+
+        /*
+        StoredDB[] products = getProductsBySellerId(1);
+        for (StoredDB i : getProductsBySellerId(1))
+            System.out.println(i); */
+
+        /*
+        String inputImagePath = "C:/Users/kelee/Documents/ImageProduct/17.jpg";
+        String outputImagePath1 = "C:/Users/kelee/Documents/ImageProduct/17_Fixed.jpg";
+
+        try {
+            // resize to a fixed height and width(300x300)
+            Product.resize(inputImagePath, outputImagePath1);
+
+        } catch (IOException ex) {
+            System.out.println("Error resizing the image.");
+            ex.printStackTrace();
+        }*/
+
+        //String base64String = imgToBase64String("C:\\Users\\kelee\\Documents\\ImageProduct\\image.jpg");
+        //System.out.println(base64String);
+        //base64StringToImage(base64String);
+
 
     }
 
@@ -218,17 +328,17 @@ public class Product extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                        "Product (productName, price, stock, sales, description, category) " +
-                        "VALUES ('%s', %f, %d, %d, '%s', '%s')",
-                productName, price, stock, sales, description, category);
+                        "Product (productName, price, stock, sales, description, category, sellerID, image) " +
+                        "VALUES ('%s', %f, %d, %d, '%s', '%s', %d, '%s')",
+                productName, price, stock, sales, description, category, sellerID, image);
     }
 
     @Override
     public String updateQuery() {
         return String.format("UPDATE Product " +
-                        "SET productName = '%s', price = %f, stock = %d, sales = %d, description = '%s', category = '%s'" +
+                        "SET productName = '%s', price = %f, stock = %d, sales = %d, description = '%s', category = '%s', sellerID = %d, image = '%s' " +
                         "WHERE productID = %d",
-                productName, price, stock, sales, description, category);
+                productName, price, stock, sales, description, category, sellerID, image);
     }
 
     @Override
