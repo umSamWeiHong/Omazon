@@ -137,9 +137,8 @@ public class DBNode {
         GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
         GridPane.setValignment(imageView, VPos.CENTER);
         GridPane.setValignment(rating, VPos.TOP);
+        GridPane.setValignment(description, VPos.TOP);
         description.setPrefHeight(100);
-
-        description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vehicula pellentesque nisl non vehicula. Morbi imperdiet tempus sagittis. Donec aliquet sapien ultricies pulvinar dapibus. Quisque ornare congue mollis. Donec molestie at ligula ut egestas. Proin dictum iaculis convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse sagittis congue rhoncus. Vestibulum ac tempor metus. Donec ut auctor felis. Nunc hendrerit elementum nisi sit amet porttitor. Quisque vestibulum est nisl, ac luctus urna placerat sit amet.");
 
         rating.setStyle("-fx-text-fill: orange;");
         subject.setWrapText(true);

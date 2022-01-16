@@ -3,6 +3,7 @@ package main.java.gui.Controller;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -11,6 +12,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import main.java.Login;
+import main.java.Main;
 import main.java.gui.Colors;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
@@ -21,9 +24,10 @@ public class LoginController {
 
     @FXML private StackPane stackPane;
     @FXML private Rectangle rect;
-    @FXML private TextField username;
-    @FXML private PasswordField password;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
     @FXML private Button button;
+    @FXML private Label message;
 
     @FXML
     public void initialize() {
@@ -35,14 +39,20 @@ public class LoginController {
         dropShadow2.setOffsetY(4.0);
 
         rect.setEffect(dropShadow2);
-        button.setOnAction(e -> {
-            printText();
-            MainGUI.loadScene(Page.HOME);
-        });
+        button.setOnAction(e -> login());
     }
 
-    public void printText() {
-        System.out.println(username.getText());
-        System.out.println(password.getText());
+    public void login() {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+
+        int userID = Login.validate(email, password);
+        if (userID == 0)
+            message.setText("The email or password is invalid.");
+        else {
+            message.setText("");
+            Main.setUser(userID);
+            MainGUI.loadScene(Page.HOME);
+        }
     }
 }

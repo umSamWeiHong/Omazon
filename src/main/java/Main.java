@@ -1,24 +1,18 @@
 package main.java;
 
-import main.java.gui.Page;
-
 public class Main {
+
+    private static User user;
 
     public static void main(String[] args) {
         System.out.println("Hello Omazon!");
+    }
 
-        for (Page page : Page.values()) {
-            String s = page.toString();
-            System.out.println(s);
-            System.out.println(page.getFilename());
-        }
+    public static User getUser() {
+        return user;
+    }
 
-        Page page1 = Page.valueOf("LOGIN");
-        System.out.println(page1);
-
-        Page page = Page.valueOf("Login");
-        System.out.println(page);
-
-
+    public static void setUser(int userID) {
+        user = new User(userID);
     }
 }

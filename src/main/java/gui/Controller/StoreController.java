@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import main.java.Product;
 import main.java.Review;
@@ -16,12 +17,16 @@ import main.java.gui.MainGUI;
 
 public class StoreController {
 
+    @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
     @FXML private Button button;
 
 
     @FXML
     public void initialize() {
+
+        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
+        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
         productPane.setVgap(10);
         productPane.getChildren().add(DBNode.productButton(3));
