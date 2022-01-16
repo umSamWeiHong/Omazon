@@ -7,16 +7,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.layout.FlowPane;
 import main.java.Product;
+import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
 public class StoreController {
 
+    @FXML private FlowPane productPane;
     @FXML private Button button;
+
 
     @FXML
     public void initialize() {
 
+        productPane.setVgap(10);
+        productPane.getChildren().add(DBNode.productButton(18));
         button.setOnMouseClicked(e -> invokeAddProductDialog());
 
     }

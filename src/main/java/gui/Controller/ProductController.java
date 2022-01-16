@@ -2,6 +2,8 @@ package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -19,6 +21,7 @@ public class ProductController {
     @FXML
     private Label name, seller, rating, reviewCount, price, sales, stock,
             bestSelling, shippingFee, totalPrice, description;
+    @FXML private ImageView imageView;
 
     @FXML
     public void initialize() {
@@ -28,9 +31,9 @@ public class ProductController {
 
         setProductInformation(productID);
 
-        for (StoredDB r : Review.getProductReviews(3, 5)) {
-            vBox.getChildren().add(setLabel((Review) r));
-        }
+//        for (StoredDB r : Review.getProductReviews(productID, 5)) {
+//            vBox.getChildren().add(setLabel((Review) r));
+//        }
     }
 
     // TODO Waiting for methods
@@ -46,6 +49,11 @@ public class ProductController {
         sales.setText("Sales: " + product.getSales());
         stock.setText("Stock: " + product.getStock());
         description.setText(product.getDescription());
+
+        Image image = MainGUI.decode(product.getBase64String());
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(200);
+        imageView.setImage(image);
 
         name.setWrapText(true);
         description.setWrapText(true);

@@ -1,6 +1,7 @@
 package main.java.gui;
 
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,8 +12,12 @@ import main.java.gui.Controller.MenuBarController;
 import main.java.gui.Controller.ProductController;
 import main.java.gui.Controller.SlideMenuController;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 
 public class MainGUI extends Application {
 
@@ -66,7 +71,7 @@ public class MainGUI extends Application {
 
         @SuppressWarnings("ConstantConditions")
         Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
-        scene = new Scene(getLoaderWithNode("ProductButton").getRoot());
+//        scene = new Scene(getLoaderWithNode("ProductButton").getRoot());
         stage.setWidth(width);
         stage.setHeight(height);
         stage.setScene(scene);
@@ -77,6 +82,19 @@ public class MainGUI extends Application {
         File directory = new File("src/main/resources/font/");
         for (File file : directory.listFiles())
             Font.loadFont(file.toURI().toString(), 12);
+    }
+
+    public static Image decode(String base64) {
+        try {
+            byte[] imageByte = Base64.getDecoder().decode(base64);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            BufferedImage image = ImageIO.read(bis);
+            bis.close();
+            return SwingFXUtils.toFXImage(image, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

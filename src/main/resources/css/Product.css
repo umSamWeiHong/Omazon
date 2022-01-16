@@ -1,3 +1,7 @@
+#scrollPane, #vBox {
+    -fx-background-color: #FFEACF;
+}
+
 .label {
     -fx-font-size: 14;
 }

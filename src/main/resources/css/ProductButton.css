@@ -1,10 +1,16 @@
-.label {
-    -fx-font-family: 'Open Sans Semibold';
-    -fx-font-size: 14;
+.button {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-cursor: hand;
 }
 
-#name {
-    -fx-font-family: 'Montserrat';
-    -fx-font-weight: bold;
-    -fx-font-size: 20;
+.button:hover {
+    -fx-background-color: white;
+}
+
+.label {
+    -fx-font-family: 'Open Sans';
+    -fx-font-size: 14;
 }

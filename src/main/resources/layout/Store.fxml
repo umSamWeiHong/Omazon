@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -94,11 +95,14 @@
                   <Insets top="3.0" />
                </GridPane.margin>
             </Button>
-            <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="136.0" prefWidth="588.0" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
+               <content>
+                  <FlowPane fx:id="productPane" hgap="10.0" vgap="10.0" />
+               </content>
                <GridPane.margin>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="10.0" />
                </GridPane.margin>
-            </FlowPane>
+            </ScrollPane>
          </children>
          <BorderPane.margin>
             <Insets bottom="3.0" left="3.0" right="3.0" />

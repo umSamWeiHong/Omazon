@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 
@@ -52,6 +53,7 @@ public class Product extends StoredDB {
             category = Category.valueOf(Category.getEnum(resultSet.getString("category")));
             sellerID = resultSet.getInt("sellerID");
             image = resultSet.getString("image");
+            System.out.println(Arrays.toString(new String[] {image}));
 
             setInDatabase(true);
 
@@ -89,7 +91,7 @@ public class Product extends StoredDB {
 
     /** Add product from GUI */
     public Product(String productName, String description, double price, int stock, String category) {
-        this(productName, description, price, stock, 0, null, category);
+        this(productName, description, price, stock, 0, null, category, 0, null);
     }
 
     // Accessor
@@ -268,6 +270,7 @@ public class Product extends StoredDB {
 
     /** Method to convert Base64 string to image*/
     public static byte[] base64StringToImage(String base64){
+        System.out.println(base64);
         byte[] data = Base64.getDecoder().decode(base64);
         return data;
         /*
