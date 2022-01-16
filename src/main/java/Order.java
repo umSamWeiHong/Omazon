@@ -54,7 +54,7 @@ public class Order extends StoredDB{
         
         /** Create a orderNotifications object with data from database. */
     public Order(int sellerID) {
-        String query = "SELECT * FROM `Order` WHERE sellerID = " + sellerID;
+        String query = "SELECT * FROM Orders WHERE sellerID = " + sellerID;
         ResultSet resultSet = Database.queryDatabase(query);
         // Throw exception when sellerID is not found.
         if (resultSet == null)
@@ -76,39 +76,40 @@ public class Order extends StoredDB{
     }
         
         public static StoredDB[] getOrderBySellerID(int sellerID) {
-           String query = String.format("SELECT * FROM `Order` " +
+           String query = String.format("SELECT * FROM Orders " +
                         "WHERE sellerID = '%d'",
                          sellerID);
            
             return Database.getDBObjects(query, Order.class, -1);
         }
         
+        
         public static String getPrimaryKey() {
-        return "orderID";
+        return "sellerID";
     }
 
         @Override
         public String insertQuery() {
-            return String.format("INSERT INTO " + " `Order` (orderID, orderID, productID, orderQuantity, shippingAddress)" + 
+            return String.format("INSERT INTO " + " Orders (orderID, orderID, productID, orderQuantity, shippingAddress)" + 
                                  "VALUES ('%d', '%d','%d','%d', '%s)", orderID, userID, productID, orderQuantity, shippingAddress);
         }
 
         @Override
         public String updateQuery() {
-            return String.format("UPDATE `Order` " + "SET orderID ='%d', orderID='%d', productID = '%d', orderQuantity = '%d', shippingAddress = '%s'" +
+            return String.format("UPDATE Orders " + "SET orderID ='%d', orderID='%d', productID = '%d', orderQuantity = '%d', shippingAddress = '%s'" +
                                 "WHERE sellerID = %d", orderID, orderID, productID, orderQuantity, shippingAddress);
         }
 
         @Override
         public String deleteQuery() {
-            return "DELETE FROM `Order` " + "WHERE sellerID = "+ sellerID;
+            return "DELETE FROM Orders " + "WHERE sellerID = "+ sellerID;
         }
         
         public static void main(String[] args) {
 
       
-  StoredDB[] Order = getOrderBySellerID(3);  
-   for (StoredDB i : getOrderBySellerID(3))
+  StoredDB[] Order = getOrderBySellerID(4);  
+   for (StoredDB i : getOrderBySellerID(4))
    System.out.println(i);
 }
         
