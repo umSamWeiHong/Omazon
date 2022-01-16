@@ -12,10 +12,6 @@ public abstract class StoredDB {
         return inDatabase;
     }
 
-    protected static String getPrimaryKey() {
-        return null;
-    }
-
     public abstract String insertQuery();
     public abstract String updateQuery();
     public abstract String deleteQuery();

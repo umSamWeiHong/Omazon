@@ -19,7 +19,7 @@ public class Order extends StoredDB {
 
     /** Create an Order object with data from database. */
     public Order(int orderID) {
-        String query = "SELECT * FROM Order WHERE orderID = " + orderID;
+        String query = "SELECT * FROM `Order` WHERE orderID = " + orderID;
         ResultSet resultSet = Database.queryDatabase(query);
         // Throw exception when orderID is not found.
         if (resultSet == null)
@@ -67,7 +67,7 @@ public class Order extends StoredDB {
 
     /** Return the N recent orders from the user. */
     public static StoredDB[] getUserOrders(int userID, int N) {
-        String query = String.format("SELECT orderID FROM Order " +
+        String query = String.format("SELECT orderID FROM `Order` " +
                         "WHERE userID = %d " +
                         "ORDER BY orderTime DESC",
                 userID);
@@ -84,7 +84,7 @@ public class Order extends StoredDB {
 
     /** Return the order quantity for specific product from the user. */
     public static StoredDB[] getUserOrderQuantity(int userID, int productID) {
-        String query = String.format("SELECT orderQuantity FROM Order " +
+        String query = String.format("SELECT orderQuantity FROM `Order` " +
                         "WHERE userID = %d AND productID = %d ",
                 userID, productID);
 
@@ -93,7 +93,7 @@ public class Order extends StoredDB {
 
     /** Return the order quantity from the user. */
     public static StoredDB[] getUserOrderQuantity(int userID) {
-        String query = String.format("SELECT orderQuantity FROM Order " +
+        String query = String.format("SELECT orderQuantity FROM `Order` " +
                         "WHERE userID = %d  ",
                 userID);
 

@@ -50,11 +50,9 @@ public class Product extends StoredDB {
             sales = resultSet.getInt("sales");
             productRatings = resultSet.getDouble("productRatings");
             description = resultSet.getString("description");
-            category = Category.valueOf(Category.getEnum(resultSet.getString("category")));
+            category = Category.valueOf(resultSet.getString("category"));
             sellerID = resultSet.getInt("sellerID");
             image = resultSet.getString("image");
-            System.out.println(Arrays.toString(new String[] {image}));
-
             setInDatabase(true);
 
         } catch (SQLException e) {

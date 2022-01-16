@@ -17,8 +17,8 @@ public class AddProductDialogController {
     public void initialize() {
 
         for (Category c : Category.values()) {
-            MenuItem item = new MenuItem(c.toString());
-            item.setOnAction(e -> setSelectedCategory(c.toString()));
+            MenuItem item = new MenuItem(c.getDisplayName());
+            item.setOnAction(e -> setSelectedCategory(c.getDisplayName()));
             category.getItems().add(item);
         }
     }

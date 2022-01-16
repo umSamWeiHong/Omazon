@@ -9,6 +9,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.FlowPane;
 import main.java.Product;
+import main.java.Review;
+import main.java.StoredDB;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
@@ -22,7 +24,14 @@ public class StoreController {
     public void initialize() {
 
         productPane.setVgap(10);
-        productPane.getChildren().add(DBNode.productButton(18));
+        productPane.getChildren().add(DBNode.productButton(3));
+        productPane.getChildren().add(DBNode.orderLabel(3));
+        productPane.getChildren().add(DBNode.productButton(4));
+        productPane.getChildren().add(DBNode.reviewLabel(8));
+
+        for (StoredDB r : Review.getProductReviews(3))
+            productPane.getChildren().add(DBNode.reviewLabel(((Review) r).getReviewID()));
+
         button.setOnMouseClicked(e -> invokeAddProductDialog());
 
     }
