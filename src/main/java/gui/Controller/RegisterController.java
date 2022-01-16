@@ -15,17 +15,15 @@ import main.java.gui.Colors;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
-import java.io.IOException;
+public class RegisterController {
 
-public class LoginController {
-
-    @FXML private StackPane stackPane;
+    @FXML
+    private StackPane stackPane;
     @FXML private Rectangle rect;
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
-    @FXML private Button button;
+    @FXML private TextField usernameField, emailField;
+    @FXML private PasswordField passwordField, confirmPasswordField;
+    @FXML private Button register, back;
     @FXML private Label message;
-    @FXML private Hyperlink register;
 
     @FXML
     public void initialize() {
@@ -37,21 +35,24 @@ public class LoginController {
         dropShadow2.setOffsetY(4.0);
 
         rect.setEffect(dropShadow2);
-        button.setOnAction(e -> login());
-        register.setOnAction(e -> MainGUI.loadScene(Page.REGISTER));
+
+        register.setOnAction(e -> register());
+        back.setOnAction(e -> MainGUI.loadScene(Page.LOGIN));
     }
 
-    public void login() {
+    public void register() {
+        String username = usernameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
-        int userID = Login.validate(email, password);
-        if (userID == 0)
-            message.setText("The email or password is invalid.");
+        if (!password.equals(confirmPassword))
+            message.setText("The passwords are different.");
+        else if (Login.emailExists(email))
+            message.setText("This email already exists.");
         else {
-            message.setText("");
-            Main.setUser(userID);
-            MainGUI.loadScene(Page.HOME);
+            Login.addNewUser(username, email, password);
+            MainGUI.loadScene(Page.LOGIN);
         }
     }
 }

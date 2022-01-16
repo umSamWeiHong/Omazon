@@ -140,14 +140,14 @@ public class User extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                        "User (userID, username, password, email, create_time) " +
-                        "VALUES (%d, '%s', '%s', '%s', '%s')",
-                        userID, username, password, email, dateCreated);
+                        "`User` (username, email, password) " +
+                        "VALUES ('%s', '%s', '%s')",
+                        username, email, password);
     }
 
     @Override
     public String updateQuery() {
-        return String.format("UPDATE User " +
+        return String.format("UPDATE `User` " +
                         "SET create_time = '%s', username = '%s', password = '%s', email = '%s' " +
                         "WHERE userID = %d",
                         dateCreated, username, password, email, userID);
@@ -155,7 +155,7 @@ public class User extends StoredDB {
 
     @Override
     public String deleteQuery() {
-        return "DELETE FROM User " +
+        return "DELETE FROM `User` " +
                "WHERE userID = " + userID;
     }
 }

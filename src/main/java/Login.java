@@ -32,6 +32,7 @@ public class Login {
     }
 
     public static void addNewUser(String username, String email, String password) {
+        System.out.println(new User(username, email, password));
         Database.add(new User(username, email, password));
     }
 }
