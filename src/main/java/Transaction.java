@@ -34,7 +34,8 @@ public class Transaction extends StoredDB{
     
      @Override
         public String toString() {
-            String details = "\nTransactions History for Seller ID : " + sellerID;
+            String details = "\nTransactions History : ~ " ;
+            details = details + "\nSeller ID : " + sellerID;
             details = details + "\nUser ID : " + userID;
             details = details + "\nOrder ID :  " + orderID;
             details = details + "\nAmount : " + amount;
@@ -62,11 +63,32 @@ public class Transaction extends StoredDB{
             e.printStackTrace();
         }
     }
-        
+    
+    
+    
+    
+        // get transactions by seller ID  
         public static StoredDB[] getTransactionBySellerID(int sellerID) {
            String query = String.format("SELECT * FROM TransactionsHistory " +
                         "WHERE sellerID = '%d'",
                          sellerID);
+           
+            return Database.getDBObjects(query, Transaction.class, -1); 
+        }
+        //get transactions based on orderID 
+        public static StoredDB[] getTransactionByOrderID(int orderID) {
+           String query = String.format("SELECT * FROM TransactionsHistory " +
+                        "WHERE orderID = '%d'",
+                         orderID);
+           
+            return Database.getDBObjects(query, Transaction.class, -1); 
+        }
+        
+        //get transactions based on userID
+         public static StoredDB[] getTransactionByUserID(int userID) {
+           String query = String.format("SELECT * FROM TransactionsHistory " +
+                        "WHERE userID = '%d'",
+                         userID);
            
             return Database.getDBObjects(query, Transaction.class, -1); 
         }
@@ -94,9 +116,22 @@ public class Transaction extends StoredDB{
         }
         
         public static void main(String[] args) {
-            StoredDB[] Transaction = getTransactionBySellerID(1);
-      for (StoredDB i : getTransactionBySellerID(1))
-    System.out.println(i);
+            
+     // StoredDB[] Transaction = getTransactionBySellerID(1);
+     //  for (StoredDB i : getTransactionBySellerID(1))
+     //  System.out.println(i);
+       
+       //StoredDB[] Transaction = getTransactionByOrderID(1);
+       //for (StoredDB i : getTransactionByOrderID(1))
+      // System.out.println(i);
+      
+       StoredDB[] Transaction = getTransactionByUserID(3);
+       for (StoredDB i : getTransactionByUserID(3))
+       System.out.println(i);
+      
+      
+      
+      
         }
     
 }
