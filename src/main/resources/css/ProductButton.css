@@ -1,0 +1,10 @@
+.label {
+    -fx-font-family: 'Open Sans Semibold';
+    -fx-font-size: 14;
+}
+
+#name {
+    -fx-font-family: 'Montserrat';
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}

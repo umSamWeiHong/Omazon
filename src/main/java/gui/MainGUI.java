@@ -66,6 +66,7 @@ public class MainGUI extends Application {
 
         @SuppressWarnings("ConstantConditions")
         Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
+        scene = new Scene(getLoaderWithNode("ProductButton").getRoot());
         stage.setWidth(width);
         stage.setHeight(height);
         stage.setScene(scene);
