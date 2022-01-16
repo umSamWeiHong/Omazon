@@ -1,0 +1,23 @@
+* {
+    -background: rgb(253, 166, 93);
+    -menu: rgb(255, 130, 67);
+}
+
+#window {
+    -fx-background-color: -background;
+}
+
+#topMenu {
+    -fx-background-color: -menu;
+    -fx-border-color: black;
+}
+
+#topMenu > .button:hover {
+    -fx-background-color: -menu;
+    -fx-border-color: black;
+}
+
+.button .label {
+
+    -fx-text-fill: red;
+}

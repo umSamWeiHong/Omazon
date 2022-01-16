@@ -1,4 +1,4 @@
-package main.java.gui;
+package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,11 +8,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import main.java.Review;
 
+import java.io.IOException;
+
 public class ProfileController {
 
     @FXML VBox reviewBox;
     @FXML ScrollPane reviewScroll;
     @FXML GridPane gridPane;
+    @FXML Button logout;
 
     @FXML
     public void initialize() {
