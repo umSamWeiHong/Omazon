@@ -4,17 +4,29 @@ package main.java;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Transactions extends StoredDB{
+public class Transaction extends StoredDB{
     
-    private int sellerID,userID,orderID;
+    private int sellerID,userID,orderID, transactionsID;
     private double amount;
     
-    public Transactions() {
+    public Transaction() {
         sellerID = 0;
         userID = 0;
         orderID = 0;
         amount = 0.0;
+        transactionsID = 0;
     }
+    
+    
+    public Transaction(int transactionsID, int sellerID, int orderID, int userID, double amount) {
+        this.transactionsID = transactionsID;
+        this.sellerID = sellerID;
+        this.orderID = orderID;
+        this.userID = userID;
+        this.amount = amount;
+
+    }
+    
     
      public int getSellerID() {
             return sellerID;
@@ -30,6 +42,10 @@ public class Transactions extends StoredDB{
 
         public double getAmount() {
             return amount;
+        }
+        
+        public int getTransactionsID() {
+            return transactionsID;
         }
 
     public void setSellerID(int sellerID) {
@@ -47,22 +63,27 @@ public class Transactions extends StoredDB{
     public void setAmount(double amount) {
         this.amount = amount;
     }
+    
+    public void setTransactionsID(int transactionsID) {
+        this.transactionsID = transactionsID;
+    }
         
         
     
      @Override
         public String toString() {
             String details = "\nTransactions History : ~ " ;
+            details = details + "\nTransactionsID : " + transactionsID;
+            details = details + "\nOrder ID :  " + orderID;
             details = details + "\nSeller ID : " + sellerID;
             details = details + "\nUser ID : " + userID;
-            details = details + "\nOrder ID :  " + orderID;
             details = details + "\nAmount : " + amount;
         return details;
              
         }
         
       /** Create a Transaction object with data from database. */
-    public Transactions(int sellerID) {
+    public Transaction(int sellerID) {
         String query = "SELECT * FROM TransactionsHistory WHERE sellerID = " + sellerID;
         ResultSet resultSet = Database.queryDatabase(query);
         // Throw exception when sellerID is not found.
@@ -72,6 +93,7 @@ public class Transactions extends StoredDB{
         try {
             resultSet.next();
             this.sellerID = resultSet.getInt("sellerID");
+            this.transactionsID = resultSet.getInt("transactionsID");
             userID = resultSet.getInt("userID");
             orderID = resultSet.getInt("orderID");
             amount = resultSet.getDouble("amount");
@@ -81,16 +103,8 @@ public class Transactions extends StoredDB{
             e.printStackTrace();
         }
     }
-    
-     /** Create a new Order object with all parameters */
-    public Transactions(int sellerID, int orderID, int userID, double amount) {
-        this.sellerID = sellerID;
-        this.orderID = orderID;
-        this.userID = userID;
-        this.amount = amount;
 
-    }
-    
+       
     /** Return the N recent transactions history from the user. */
     public static StoredDB[] getUserTransactionsHistory(int userID, int N) {
         String query = String.format("SELECT orderID FROM TransactionsHistory " +
@@ -99,7 +113,7 @@ public class Transactions extends StoredDB{
 
         if (N != -1)
             query += " LIMIT " + N;
-        return Database.getDBObjects(query, Transactions.class, N);
+        return Database.getDBObjects(query, Transaction.class, N);
     }
     
     /** Return all transactions from the user. */
@@ -121,7 +135,7 @@ public class Transactions extends StoredDB{
                         "WHERE orderID = '%d'",
                          orderID);
            
-            return Database.getDBObjects(query, Transactions.class, -1); 
+            return Database.getDBObjects(query, Transaction.class, -1); 
         }
         
         //get transactions based on userID
@@ -130,7 +144,7 @@ public class Transactions extends StoredDB{
                         "WHERE userID = '%d'",
                          userID);
            
-            return Database.getDBObjects(query, Transactions.class, -1); 
+            return Database.getDBObjects(query, Transaction.class, -1); 
         }
          
          /** Return the amount from a specific userID. */
@@ -139,8 +153,17 @@ public class Transactions extends StoredDB{
                         "WHERE userID = %d  ",
                 userID);
 
-        return Database.getDBObjects(query, Transactions.class, -1);
-    }
+        return Database.getDBObjects(query, Transaction.class, -1);
+        }
+        
+         //get transactions based on transactionsID
+         public static StoredDB[] getTransactionByTransactionsID(int transactionsID) {
+           String query = String.format("SELECT * FROM TransactionsHistory " +
+                        "WHERE transactionsID = '%d'",
+                         transactionsID);
+           
+            return Database.getDBObjects(query, Transaction.class, -1); 
+        }
          
         
         public static String getPrimaryKey() {
@@ -166,22 +189,25 @@ public class Transactions extends StoredDB{
         
         public static void main(String[] args) {
             
-     // StoredDB[] Transactions = getTransactionsByOrderID(1);
+     // StoredDB[] Transaction = getTransactionsByOrderID(1);
      //for (StoredDB i : getTransactionsByOrderID(1))
      // System.out.println(i);
        
-       StoredDB[] Transactions = getTransactionByUserID(1);
-       for (StoredDB i : getTransactionByUserID(1))
-       System.out.println(i);
+     //  StoredDB[] Transaction = getTransactionByUserID(1);
+    //   for (StoredDB i : getTransactionByUserID(1))
+     //  System.out.println(i);
       
-      // StoredDB[] Transactions = getTransactionsBySellerID(3);
+      // StoredDB[] Transaction = getTransactionsBySellerID(3);
      // for (StoredDB i : getTransactionsBySellerID(3))
      //  System.out.println(i);
       
-     //  StoredDB[] Transactions = getUserTransactionsHistory(3);
+     //  StoredDB[] Transaction = getUserTransactionsHistory(3);
      //  for (StoredDB i : getUserTransactionsHistory(3))
      //  System.out.println(i);
      
-      
+       StoredDB[] Transaction = getTransactionByTransactionsID(1);
+       for (StoredDB i : getTransactionByTransactionsID(1))
+       System.out.println(i);
+  
         }
 }
