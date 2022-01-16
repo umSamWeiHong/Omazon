@@ -70,6 +70,11 @@ public class Product extends StoredDB {
         this.category = Category.valueOf(category);
     }
 
+    /** Add product from GUI */
+    public Product(String productName, String description, double price, int stock, String category) {
+        this(productName, description, price, stock, 0, null, category);
+    }
+
     // Accessor
     public String getDescription() {
         return description;
@@ -137,6 +142,33 @@ public class Product extends StoredDB {
         details = details + "\nProduct reviews: " + reviews;
 
         return details;
+    }
+
+    public static String validateProductInformation(String productName, String price, String stock) {
+
+        if (productName.equals(""))
+            return "Product name cannot be empty.";
+        if (price.equals(""))
+            return "Price cannot be empty.";
+
+        try {
+            if (Double.parseDouble(price) < 0)
+                return "Price cannot be a negative number";
+        } catch (NumberFormatException e) {
+            return "Please enter a valid number for price.";
+        }
+
+        if (stock.equals(""))
+            return "Stock cannot be empty.";
+
+        try {
+            if (Integer.parseInt(stock) < 0)
+                return "Stock cannot be a negative number";
+        } catch (NumberFormatException e) {
+            return "Please enter a valid number for stock.";
+        }
+
+        return "OK";
     }
 
     /** Method to get 3 best-selling products based on salescount */
