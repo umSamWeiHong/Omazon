@@ -12,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class StoreController extends Controller {
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
-    @FXML private Button button;
+    @FXML private Button addProductButton;
 
     private static final HashMap<Integer, Button> map = new HashMap<>();
 
@@ -31,7 +32,7 @@ public class StoreController extends Controller {
     public void initialize() {
         productPane.setVgap(10);
 
-        button.setOnMouseClicked(e -> invokeAddProductDialog());
+        addProductButton.setOnMouseClicked(e -> invokeAddProductDialog());
     }
 
     @Override
@@ -110,9 +111,10 @@ public class StoreController extends Controller {
                         Double.parseDouble(controller.getPrice()),
                         Integer.parseInt(controller.getStock()),
                         Category.valueOf(controller.getSelectedCategory().toUpperCase().replace(" ", "_")),
+                        MainGUI.encode(controller.getImage()),
                         Main.getUser().getUserID());
-                System.out.println(product);
                 Database.updateDatabase(product.insertQuery());
+                MainGUI.loadScene(Page.STORE);
             }
         });
     }

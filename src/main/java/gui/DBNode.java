@@ -126,6 +126,8 @@ public class DBNode {
 
         button.setOnMouseClicked(e -> {
             ProductController.setProduct(product);
+            ProductController.setProductNameLabel(name);
+            ProductController.setProductPriceLabel(price);
             MainGUI.loadScene(Page.PRODUCT);
         });
 

@@ -14,17 +14,16 @@ import main.java.gui.Controller.MenuBarController;
 import main.java.gui.Controller.SlideMenuController;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 import java.util.EnumMap;
 
 public class MainGUI extends Application {
 
-    public static Stage stage;
-    private static EnumMap<Page, FXMLLoader> sceneMap;
+    private static Stage stage;
+    private static final EnumMap<Page, FXMLLoader> sceneMap;
     private static final FXMLLoader menuBarLoader, slideMenuLoader;
 
     static {
@@ -99,6 +98,45 @@ public class MainGUI extends Application {
             Font.loadFont(file.toURI().toString(), 12);
     }
 
+    /** Method to resize image */
+    public static void resize(String inputImagePath, String outputImagePath) throws IOException {
+        // Reads input image
+        File inputFile = new File(inputImagePath);
+        BufferedImage inputImage = ImageIO.read(inputFile);
+
+        // Creates output image
+        BufferedImage outputImage = new BufferedImage(300,
+                300, inputImage.getType());
+
+        // Scales the input image to the output image
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(inputImage, 0, 0, 300, 300, null);
+        g2d.dispose();
+
+        // Extracts extension of output file
+        String formatName = outputImagePath.substring(outputImagePath
+                .lastIndexOf(".") + 1);
+
+        // Writes to output file
+        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+    }
+
+    /** Method to convert image into Base64 string. */
+    public static String encode(File img) {
+        if (img != null) {
+            try {
+                FileInputStream input = new FileInputStream(img);
+                byte[] bytes = new byte[(int) img.length()];
+                input.read(bytes);
+                return new String(Base64.getEncoder().encode(bytes));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /** Method to convert Base64 string into JavaFX image. */
     public static Image decode(String base64) {
         try {
             byte[] imageByte = Base64.getDecoder().decode(base64);
@@ -124,5 +162,9 @@ public class MainGUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static Stage getStage() {
+        return stage;
     }
 }

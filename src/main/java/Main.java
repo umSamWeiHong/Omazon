@@ -1,6 +1,12 @@
 package main.java;
 
+import main.java.gui.MainGUI;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class Main {
 

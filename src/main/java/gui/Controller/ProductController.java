@@ -28,6 +28,8 @@ public class ProductController extends Controller {
     @FXML private Text description;
     @FXML private ImageView imageView;
 
+    private static Label productNameLabel, productPriceLabel;
+
     @Override
     public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
@@ -228,16 +230,20 @@ public class ProductController extends Controller {
 
         dialog.showAndWait().ifPresent(response -> {
             if (response == ADD) {
-                product.setProductName(controller.getName());
+                String name = controller.getName();
+                double price = Double.parseDouble(controller.getPrice());
+
+                product.setProductName(name);
                 product.setCategory(Category.valueOf(controller.getSelectedCategory().toUpperCase().replace(" ", "_")));
                 product.setDecsription(controller.getDescription());
-                product.setPrice(Double.parseDouble(controller.getPrice()));
+                product.setPrice(price);
                 product.setStock(Integer.parseInt(controller.getStock()));
-                System.out.println(product);
+
+                productNameLabel.setText(name);
+                productPriceLabel.setText(price + "");
                 setProductInformation(product);
-                // TODO change product to indatabase
                 Database.updateDatabase(product.updateQuery());
-                System.out.println("Done");
+                System.out.println("Product edited.");
             }
         });
     }
@@ -281,5 +287,13 @@ public class ProductController extends Controller {
     public static void setProduct(Product product) {
         ProductController.product = product;
         productID = product.getProductID();
+    }
+
+    public static void setProductNameLabel(Label productNameLabel) {
+        ProductController.productNameLabel = productNameLabel;
+    }
+
+    public static void setProductPriceLabel(Label productPriceLabel) {
+        ProductController.productPriceLabel = productPriceLabel;
     }
 }
