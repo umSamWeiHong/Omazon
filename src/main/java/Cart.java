@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 public class Cart extends StoredDB{
 
-    private int cartID, userID, productID;
+    private int cartID, userID, productID, quantity;
     private Timestamp dateAdded;
 
     /** Create a Cart object with data from database. */
@@ -21,6 +21,7 @@ public class Cart extends StoredDB{
             this.cartID = resultSet.getInt("cartID");
             userID = resultSet.getInt("userID");
             productID = resultSet.getInt("productID");
+            quantity = resultSet.getInt("quantity");
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -28,10 +29,15 @@ public class Cart extends StoredDB{
         }
     }
 
-    /** Create a new Cart object with all parameters (except reviewID). */
     public Cart(int userID, int productID) {
+        this(userID, productID, 1);
+    }
+
+    /** Create a new Cart object with all parameters (except reviewID). */
+    public Cart(int userID, int productID, int quantity) {
         this.userID = userID;
         this.productID = productID;
+        this.quantity = quantity;
     }
 
     public int getCartID() {
@@ -44,6 +50,10 @@ public class Cart extends StoredDB{
 
     public int getProductID() {
         return productID;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     /** Return the N recent cart items from the user. */
@@ -81,6 +91,24 @@ public class Cart extends StoredDB{
         return getCartItems(userID, -1);
     }
 
+    public static double getTotalAmount(int userID) {
+        String query = String.format("""
+                SELECT ROUND(SUM(Cart.quantity * Product.price), 2) AS totalPrice
+                 FROM Cart
+                 LEFT JOIN Product ON Cart.productID=Product.productID
+                 WHERE userID = %d""", userID);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet != null) {
+            try {
+                resultSet.next();
+                return resultSet.getDouble("totalPrice");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
     @Override
     public String toString() {
         return "Cart{" +
@@ -115,9 +143,9 @@ public class Cart extends StoredDB{
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                "Cart (userID, productID) " +
-                "VALUES (%d, %d)",
-                userID, productID);
+                "Cart (userID, productID, quantity) " +
+                "VALUES (%d, %d, %d)",
+                userID, productID, quantity);
     }
 
     @Override
@@ -127,7 +155,7 @@ public class Cart extends StoredDB{
 
     @Override
     public String deleteQuery() {
-        return "DELETE FROM Favourite " +
+        return "DELETE FROM Cart " +
                "WHERE cartID = " + cartID;
     }
 }

@@ -5,12 +5,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import main.java.Main;
+import main.java.User;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
 import java.io.File;
 
-public class HomeController {
+public class HomeController extends Controller {
+
+    private static User user;
 
     @FXML Button exploreButton, notificationButton, logoutButton;
     @FXML Button profile, store, cart, order, favourite, settings;
@@ -24,10 +28,18 @@ public class HomeController {
 
     @FXML
     public void initialize() {
+
+        user = Main.getUser();
+
         setMenuBarButtonImage();
         setOnClickAction();
 
-        username.setText("Sam Wei Hong".toUpperCase() + "!");
+        username.setText(user.getUsername().toUpperCase() + "!");
+    }
+
+    @Override
+    public void update() {
+
     }
 
     private void setMenuBarButtonImage() {

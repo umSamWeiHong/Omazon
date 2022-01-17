@@ -87,8 +87,8 @@ public class Product extends StoredDB {
     }
 
     /** Add product from GUI */
-    public Product(String productName, String description, double price, int stock, Category category, int sellerID) {
-        this(productName, description, price, stock, 0, null, category, sellerID, null);
+    public Product(String productName, String description, double price, int stock, Category category, String imgBase64String, int sellerID) {
+        this(productName, description, price, stock, 0, null, category, sellerID, imgBase64String);
     }
 
     // Accessor
@@ -270,95 +270,6 @@ public class Product extends StoredDB {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /** Method to resize image */
-    public static void resize(String inputImagePath, String outputImagePath) throws IOException {
-        // Reads input image
-        File inputFile = new File(inputImagePath);
-        BufferedImage inputImage = ImageIO.read(inputFile);
-
-        // Creates output image
-        BufferedImage outputImage = new BufferedImage(300,
-                300, inputImage.getType());
-
-        // Scales the input image to the output image
-        Graphics2D g2d = outputImage.createGraphics();
-        g2d.drawImage(inputImage, 0, 0, 300, 300, null);
-        g2d.dispose();
-
-        // Extracts extension of output file
-        String formatName = outputImagePath.substring(outputImagePath
-                .lastIndexOf(".") + 1);
-
-        // Writes to output file
-        ImageIO.write(outputImage, formatName, new File(outputImagePath));
-    }
-    /** Method to convert image into Base64 string*/
-    public static String imgToBase64String(String path) throws FileNotFoundException, IOException {
-        File img = new File(path);
-        FileInputStream input = new FileInputStream(img);
-        byte[] bytes = new byte[(int) img.length()];
-        input.read(bytes);
-        return new String(Base64.getEncoder().encode(bytes));
-    }
-
-    /** Method to convert Base64 string to image*/
-    public static byte[] base64StringToImage(String base64){
-        System.out.println(base64);
-        byte[] data = Base64.getDecoder().decode(base64);
-        return data;
-        /*
-        //IF Write to destination path
-        try ( OutputStream stream = new FileOutputStream("C:/Users/kelee/Documents/ImageProduct/image_destination.jpg")) {
-            stream.write(data);
-
-        } catch (Exception e) {
-            System.out.println("Couldn't write to file");
-
-        }
-         */
-    }
-
-    public static void main(String[] args) throws IOException  {
-
-        /*StoredDB[] products = getBestSelling();
-        for (StoredDB i : getBestSelling())
-            System.out.println(i); */
-
-        /*StoredDB[] products = getProductsByTitle("toothpaste");
-        for (StoredDB i : getProductsByTitle("toothpaste"))
-            System.out.println(i); */
-
-        /*
-        StoredDB[] products = getProductsByCategory(Category.FASHION_ACCESSORIES);
-        for (StoredDB i : getProductsByCategory(Category.FASHION_ACCESSORIES))
-            System.out.println(i); */
-
-
-        /*
-        StoredDB[] products = getProductsBySellerId(1);
-        for (StoredDB i : getProductsBySellerId(1))
-            System.out.println(i); */
-
-        /*
-        String inputImagePath = "C:/Users/kelee/Documents/ImageProduct/17.jpg";
-        String outputImagePath1 = "C:/Users/kelee/Documents/ImageProduct/17_Fixed.jpg";
-
-        try {
-            // resize to a fixed height and width(300x300)
-            Product.resize(inputImagePath, outputImagePath1);
-
-        } catch (IOException ex) {
-            System.out.println("Error resizing the image.");
-            ex.printStackTrace();
-        }*/
-
-        //String base64String = imgToBase64String("C:\\Users\\kelee\\Documents\\ImageProduct\\image.jpg");
-        //System.out.println(base64String);
-        //base64StringToImage(base64String);
-
-
     }
 
     public static String getPrimaryKey() { return "productID"; }

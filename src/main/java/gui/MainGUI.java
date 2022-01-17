@@ -3,25 +3,27 @@ package main.java.gui;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import main.java.gui.Controller.Controller;
 import main.java.gui.Controller.MenuBarController;
-import main.java.gui.Controller.ProductController;
 import main.java.gui.Controller.SlideMenuController;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
+import java.util.EnumMap;
 
 public class MainGUI extends Application {
 
-    public static Stage stage;
+    private static Stage stage;
+    private static final EnumMap<Page, FXMLLoader> sceneMap;
     private static final FXMLLoader menuBarLoader, slideMenuLoader;
 
     static {
@@ -32,6 +34,18 @@ public class MainGUI extends Application {
         MenuBarController menuBarController = menuBarLoader.getController();
         @SuppressWarnings("ConstantConditions")
         SlideMenuController slideMenuController = slideMenuLoader.getController();
+
+        sceneMap = new EnumMap<>(Page.class);
+        sceneMap.put(Page.LOGIN, getLoaderWithNode(Page.LOGIN.getFilename()));
+        sceneMap.put(Page.REGISTER, getLoaderWithNode(Page.REGISTER.getFilename()));
+        sceneMap.put(Page.HOME, getLoaderWithNode(Page.HOME.getFilename()));
+        sceneMap.put(Page.PROFILE, getLoaderWithNode(Page.PROFILE.getFilename()));
+        sceneMap.put(Page.STORE, getLoaderWithNode(Page.STORE.getFilename()));
+        sceneMap.put(Page.CART, getLoaderWithNode(Page.CART.getFilename()));
+        sceneMap.put(Page.ORDER, getLoaderWithNode(Page.ORDER.getFilename()));
+        sceneMap.put(Page.FAVOURITE, getLoaderWithNode(Page.FAVOURITE.getFilename()));
+        sceneMap.put(Page.SETTINGS, getLoaderWithNode(Page.SETTINGS.getFilename()));
+        sceneMap.put(Page.PRODUCT, getLoaderWithNode(Page.PRODUCT.getFilename()));
 
         menuBarController.setSlideMenuController(slideMenuController);
     }
@@ -62,6 +76,7 @@ public class MainGUI extends Application {
     public static void initializeStage() {
         stage.setTitle("Omazon");
         stage.getIcons().add(new Image("main/resources/img/icon.png"));
+        stage.setScene(new Scene(new Group()));
         stage.show();
     }
 
@@ -69,12 +84,11 @@ public class MainGUI extends Application {
         double width = stage.getWidth();
         double height = stage.getHeight();
 
-        @SuppressWarnings("ConstantConditions")
-        Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
-//        scene = new Scene(getLoaderWithNode("Settings").getRoot());
+        FXMLLoader loader = sceneMap.get(page);
+        stage.getScene().setRoot(loader.getRoot());
+        ((Controller) loader.getController()).update();
         stage.setWidth(width);
         stage.setHeight(height);
-        stage.setScene(scene);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -84,12 +98,53 @@ public class MainGUI extends Application {
             Font.loadFont(file.toURI().toString(), 12);
     }
 
+    /** Method to resize image */
+    public static void resize(String inputImagePath, String outputImagePath) throws IOException {
+        // Reads input image
+        File inputFile = new File(inputImagePath);
+        BufferedImage inputImage = ImageIO.read(inputFile);
+
+        // Creates output image
+        BufferedImage outputImage = new BufferedImage(300,
+                300, inputImage.getType());
+
+        // Scales the input image to the output image
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(inputImage, 0, 0, 300, 300, null);
+        g2d.dispose();
+
+        // Extracts extension of output file
+        String formatName = outputImagePath.substring(outputImagePath
+                .lastIndexOf(".") + 1);
+
+        // Writes to output file
+        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+    }
+
+    /** Method to convert image into Base64 string. */
+    public static String encode(File img) {
+        if (img != null) {
+            try {
+                FileInputStream input = new FileInputStream(img);
+                byte[] bytes = new byte[(int) img.length()];
+                input.read(bytes);
+                return new String(Base64.getEncoder().encode(bytes));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /** Method to convert Base64 string into JavaFX image. */
     public static Image decode(String base64) {
         try {
             byte[] imageByte = Base64.getDecoder().decode(base64);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
             BufferedImage image = ImageIO.read(bis);
             bis.close();
+            if (image == null)
+                return null;
             return SwingFXUtils.toFXImage(image, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,5 +162,9 @@ public class MainGUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static Stage getStage() {
+        return stage;
     }
 }

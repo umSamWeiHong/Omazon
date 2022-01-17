@@ -15,7 +15,7 @@ import main.java.gui.Colors;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
-public class RegisterController {
+public class RegisterController extends Controller {
 
     @FXML
     private StackPane stackPane;
@@ -40,13 +40,22 @@ public class RegisterController {
         back.setOnAction(e -> MainGUI.loadScene(Page.LOGIN));
     }
 
+    @Override
+    public void update() {
+
+    }
+
     public void register() {
         String username = usernameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        if (!password.equals(confirmPassword))
+        if (email.equals(""))
+            message.setText("Email cannot be empty.");
+        else if (password.equals(""))
+            message.setText("Password cannot be empty");
+        else if (!password.equals(confirmPassword))
             message.setText("The passwords are different.");
         else if (Login.emailExists(email))
             message.setText("This email already exists.");

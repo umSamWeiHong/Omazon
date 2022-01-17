@@ -17,7 +17,7 @@ import main.java.Main;
 import main.java.User;
 import main.java.gui.MainGUI;
 
-public class SettingsController {
+public class SettingsController extends Controller {
 
     private static User user;
 
@@ -33,14 +33,18 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        user = Main.getUser();
+        setButtonOnAction();
+        setFadeTextTransition();
+    }
 
+    @Override
+    public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
+        user = Main.getUser();
+
         setInitialText();
-        setButtonOnAction();
-        setFadeTextTransition();
     }
 
     private void setInitialText() {
@@ -118,6 +122,10 @@ public class SettingsController {
                 message.setText("Invalid old password.");
                 event.consume();
             }
+            if (newPasswordText.equals("")) {
+                message.setText("Password cannot be empty");
+                event.consume();
+            }
             if (!newPasswordText.equals(confirmPasswordText)) {
                 message.setText("The passwords are different.");
                 event.consume();
@@ -182,6 +190,10 @@ public class SettingsController {
 
             if (!oldPasswordText.equals(user.getPaymentPassword())) {
                 message.setText("Invalid old password.");
+                event.consume();
+            }
+            if (newPasswordText.equals("")) {
+                message.setText("Password cannot be empty");
                 event.consume();
             }
             if (!newPasswordText.equals(confirmPasswordText)) {

@@ -17,7 +17,7 @@ import main.java.gui.Page;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController extends Controller {
 
     @FXML private StackPane stackPane;
     @FXML private Rectangle rect;
@@ -39,6 +39,11 @@ public class LoginController {
         rect.setEffect(dropShadow2);
         button.setOnAction(e -> login());
         register.setOnAction(e -> MainGUI.loadScene(Page.REGISTER));
+    }
+
+    @Override
+    public void update() {
+
     }
 
     public void login() {

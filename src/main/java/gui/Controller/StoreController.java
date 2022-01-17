@@ -12,35 +12,62 @@ import javafx.scene.layout.FlowPane;
 import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class StoreController {
+
+public class StoreController extends Controller {
 
     private static User user;
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
-    @FXML private Button button;
+    @FXML private Button addProductButton;
 
+    private static final HashMap<Integer, Button> map = new HashMap<>();
 
     @FXML
     public void initialize() {
+        productPane.setVgap(10);
 
-        user = Main.getUser();
+        addProductButton.setOnMouseClicked(e -> invokeAddProductDialog());
+    }
 
+    @Override
+    public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        productPane.setVgap(10);
+        user = Main.getUser();
+        user.updateProductIDs();
+        int[] ids = user.getProductIDs();
+        updateMap(ids);
+    }
 
-        StoredDB[] products = Product.getProductsBySellerId(user.getUserID());
+    private void updateMap(int[] ids) {
 
-        for (StoredDB p : products) {
-            Product product = (Product) p;
-            productPane.getChildren().add(DBNode.productButton(product));
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        for (int i : map.keySet())
+            if (!Main.linearSearch(ids, i))
+                toRemove.add(i);
+
+        for (int i : toRemove) {
+            productPane.getChildren().remove(map.get(i));
+            map.remove(i);
         }
-        button.setOnMouseClicked(e -> invokeAddProductDialog());
+
+        for (int id : ids)
+            if (!map.containsKey(id)) {
+                try {
+                    Button button = DBNode.productButton(id);
+                    productPane.getChildren().add(button);
+                    map.put(id, button);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("StoreController: ProductID not found.");
+                }
+            }
     }
 
     private void invokeAddProductDialog() {
@@ -62,6 +89,12 @@ public class StoreController {
 
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(ADD);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
+
+            if (controller.getSelectedCategory() == null) {
+                controller.setMessageText("Please select a category.");
+                event.consume();
+            }
+
             String message = Product.validateProductInformation(controller.getName(), controller.getPrice(), controller.getStock());
 
             if (!message.equals("OK")) {
@@ -78,9 +111,10 @@ public class StoreController {
                         Double.parseDouble(controller.getPrice()),
                         Integer.parseInt(controller.getStock()),
                         Category.valueOf(controller.getSelectedCategory().toUpperCase().replace(" ", "_")),
+                        MainGUI.encode(controller.getImage()),
                         Main.getUser().getUserID());
-                System.out.println(product);
-                Database.add(product);
+                Database.updateDatabase(product.insertQuery());
+                MainGUI.loadScene(Page.STORE);
             }
         });
     }
