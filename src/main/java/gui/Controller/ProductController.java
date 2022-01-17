@@ -3,6 +3,7 @@ package main.java.gui.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,7 @@ public class ProductController {
 
     private static Product product;
     private static User user;
-    private int productID, cartID, favouriteID;
+    private static int productID, cartID, favouriteID;
 
     @FXML BorderPane borderPane;
     @FXML VBox vBox;
@@ -58,7 +59,8 @@ public class ProductController {
     private void cartButtonAction() {
         cartID = Cart.cartExists(user.getUserID(), productID);
         if (cartID == 0) {
-            Main.getUser().addToCart(productID);
+            invokeAddCartDialog();
+//            Main.getUser().addToCart(productID);
             cartButton.setText("Remove from Cart");
         } else {
             String query = "DELETE FROM Cart WHERE cartID = " + cartID;
@@ -138,6 +140,57 @@ public class ProductController {
 //        labelPane.add(datetime, 1, 3);
 
         return label;
+    }
+
+    private void invokeAddCartDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add to Cart");
+        dialog.setResizable(true);
+
+        ButtonType ADD = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(ADD);
+        dialog.getDialogPane().getButtonTypes().add(CANCEL);
+
+        GridPane gridPane = new GridPane();
+        Text text = new Text("Enter the quantity: ");
+        TextField quantityField = new TextField("1");
+        Label message = new Label();
+
+        gridPane.add(text, 0, 0);
+        gridPane.add(quantityField, 1, 0);
+        gridPane.add(message, 0, 1, 2, 1);
+
+        gridPane.setHgap(5);
+        gridPane.setVgap(20);
+        GridPane.setHalignment(message, HPos.CENTER);
+        dialog.getDialogPane().setContent(gridPane);
+
+        final Button changeButton = (Button) dialog.getDialogPane().lookupButton(ADD);
+        changeButton.addEventFilter(ActionEvent.ACTION, event -> {
+
+            int quantity = 0;
+            try {
+                quantity = Integer.parseInt(quantityField.getText());
+            } catch (NumberFormatException e) {
+                message.setText("Please enter a valid number for quantity.");
+                event.consume();
+            }
+
+            if (quantity < 1) {
+                message.setText("Quantity cannot be less than 1.");
+                event.consume();
+            }
+        });
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ADD) {
+                int quantity = Integer.parseInt(quantityField.getText());
+                Cart cart = new Cart(user.getUserID(), productID, quantity);
+                Database.updateDatabase(cart.insertQuery());
+                System.out.println("Done");
+            }
+        });
     }
 
     private void invokeEditProductDialog() {
@@ -221,5 +274,6 @@ public class ProductController {
 
     public static void setProduct(Product product) {
         ProductController.product = product;
+        productID = product.getProductID();
     }
 }

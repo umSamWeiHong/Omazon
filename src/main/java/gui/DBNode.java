@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import main.java.Cart;
 import main.java.Order;
 import main.java.Product;
 import main.java.Review;
@@ -19,6 +20,54 @@ import java.io.File;
 public class DBNode {
 
     // TODO CSS get
+
+    public static Button cartButton(Cart cart, Product product) {
+        Button button = new Button();
+        button.setPrefWidth(250);
+        button.setPrefHeight(100);
+        button.setMaxHeight(150);
+        button.getStylesheets().add(new File("src/main/resources/css/ProductButton.css").toURI().toString());
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER_LEFT);
+        Label name = new Label("NAME");
+        Label quantity = new Label("QUANTITY");
+        Label totalPrice = new Label("TOTAL_PRICE");
+
+        name.setText(product.getProductName());
+        quantity.setText(cart.getQuantity() + "x");
+        totalPrice.setText(String.format("RM %.2f", cart.getQuantity() * product.getPrice()));
+
+        button.setGraphic(gridPane);
+
+        if (product.getBase64String() != null) {
+            ImageView imageView = getImageView(product);
+            gridPane.add(imageView, 0, 0, 1, 2);
+            GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
+            GridPane.setValignment(imageView, VPos.CENTER);
+        }
+        gridPane.add(name, 1, 0, 2, 1);
+        gridPane.add(quantity, 1, 1);
+        gridPane.add(totalPrice, 2, 1);
+        GridPane.setMargin(quantity, new Insets(5, 0, 0, 0));
+        GridPane.setMargin(totalPrice, new Insets(5, 0, 0, 0));
+        GridPane.setHalignment(totalPrice, HPos.RIGHT);
+        GridPane.setValignment(quantity, VPos.BOTTOM);
+        GridPane.setValignment(totalPrice, VPos.BOTTOM);
+
+        name.setWrapText(true);
+        name.setStyle("""
+                -fx-font-family: 'Montserrat';
+                -fx-font-weight: bold;
+                -fx-font-size: 14;""");
+
+        button.setOnMouseClicked(e -> {
+            ProductController.setProduct(product);
+            MainGUI.loadScene(Page.PRODUCT);
+        });
+
+        return button;
+    }
 
     public static Button productButton(int productID) {
         return productButton(new Product(productID));

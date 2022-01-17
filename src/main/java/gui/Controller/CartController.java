@@ -27,20 +27,18 @@ public class CartController {
         if (cartItems != null) {
             int N = cartItems.length;
             int[] productIDs = new int[N];
-            for (int i = 0; i < N; i++)
-                productIDs[i] = ((Cart) cartItems[i]).getProductID();
-            Product[] products = Product.getProductsByProductIDs(productIDs);
-
-            for (Product product : products) {
-                if (product == null)
-                    continue;
+            for (StoredDB cartItem : cartItems) {
+                int productID = ((Cart) cartItem).getProductID();
+                Product product;
                 try {
-                    Button button = DBNode.productButton(product);
-                    list.getChildren().add(button);
+                    product = new Product(productID);
                 } catch (IllegalArgumentException e) {
                     continue;
                 }
+                Button button = DBNode.cartButton((Cart) cartItem, product);
+                list.getChildren().add(button);
             }
+//            Product[] products = Product.getProductsByProductIDs(productIDs);
         }
     }
 }
