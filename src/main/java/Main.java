@@ -9,12 +9,14 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello Omazon!");
 
-        user.updateCartIDs();
+//        user.updateCartIDs();
         user.updateFavouriteIDs();
-        user.updateOrderIDs();
-        System.out.println(Arrays.toString(user.getCartIDs()));
-        System.out.println(Arrays.toString(user.getOrderIDs()));
+//        user.updateOrderIDs();
+//        System.out.println(Arrays.toString(user.getCartIDs()));
+//        System.out.println(Arrays.toString(user.getOrderIDs()));
         System.out.println(Arrays.toString(user.getFavouriteIDs()));
+//        Cart cart = new Cart(1);
+        System.out.println(Cart.getTotalAmount(1));
     }
 
     public static boolean linearSearch(int[] array, int i) {

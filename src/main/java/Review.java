@@ -100,7 +100,7 @@ public class Review extends StoredDB {
     }
 
     /** For seller to comment */
-    public void setComment(String comment, Timestamp datetime) {
+    public void setComment(String comment) {
         sellerComment = comment;
         commentDatetime = datetime;
     }

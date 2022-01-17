@@ -51,7 +51,7 @@ public class ProductController extends Controller {
             return;
         for (StoredDB s : reviews) {
             Review r = (Review) s;
-            vBox.getChildren().add(setLabel(r));
+            vBox.getChildren().add(setReviewLabel(r));
         }
     }
 
@@ -96,13 +96,6 @@ public class ProductController extends Controller {
         stock.setText("Stock: " + product.getStock());
 
         description.setText(product.getDescription());
-//        description.setMinHeight(70);
-//        description.setOnMouseClicked(e -> {
-//            if (description.getHeight() < 200)
-//                description.setMinHeight(200);
-//            else
-//                description.setMinHeight(70);
-//        });
 
         Image image = MainGUI.decode(product.getBase64String());
         imageView.setPreserveRatio(true);
@@ -113,7 +106,7 @@ public class ProductController extends Controller {
 //        description.setWrapText(true);
     }
 
-    public Label setLabel(Review review) {
+    public Label setReviewLabel(Review review) {
         Label label = new Label();
         GridPane labelPane = new GridPane();
         label.setMinWidth(vBox.getWidth());
@@ -121,22 +114,34 @@ public class ProductController extends Controller {
         label.setMaxWidth(Double.MAX_VALUE);
         label.setGraphic(labelPane);
 
-        Label rating = new Label("" + review.getRating());
+        Label rating = new Label("" + review.getRatingStars());
         Label subject = new Label(review.getSubject());
         Label description = new Label(review.getDescription());
+        Label sellerComment = new Label();
+
+        String commentText = review.getSellerComment();
+        if (commentText != null && !commentText.equals(""))
+            sellerComment.setText("Seller commented: " + commentText);
 //        Label datetime = new Label(review.getDatetime().toString());
+
+        rating.setStyle("-fx-text-fill: orange;");
 
         label.setStyle("""
                 -fx-background-color: #FFF2E0;
                 -fx-border-color: black;
                 -fx-border-width: 1;
                 -fx-border-radius: 3;""");
-        label.setOnMouseClicked(e -> invokeAddCommentDialog());
+        // TODO Check if it is seller.
+        label.setOnMouseClicked(e -> {
+            String text = review.getSellerComment();
+            if (text == null || text.equals(""))
+                invokeAddCommentDialog(review, sellerComment);
+        });
 
         labelPane.add(rating, 1, 0);
         labelPane.add(subject, 1, 1);
         labelPane.add(description, 1, 2);
-//        labelPane.add(datetime, 1, 3);
+        labelPane.add(sellerComment, 1, 3);
 
         return label;
     }
@@ -237,7 +242,7 @@ public class ProductController extends Controller {
         });
     }
 
-    private void invokeAddCommentDialog() {
+    private void invokeAddCommentDialog(Review review, Label commentLabel) {
 
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Add Comment");
@@ -255,8 +260,6 @@ public class ProductController extends Controller {
         box.getChildren().add(commentArea);
         dialog.getDialogPane().setContent(box);
 
-
-
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(ADD);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
             String comment = commentArea.getText();
@@ -266,7 +269,11 @@ public class ProductController extends Controller {
 
         dialog.showAndWait().ifPresent(response -> {
             if (response == ADD) {
-                System.out.println("Done");
+                String sellerComment = commentArea.getText();
+                review.setComment(sellerComment);
+                commentLabel.setText("Seller commented: " + sellerComment);
+                Database.updateDatabase(review.updateQuery());
+                System.out.println("Review updated.");
             }
         });
     }

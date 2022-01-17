@@ -67,7 +67,7 @@ public class OrderController extends Controller {
             if (!map.containsKey(id)) {
                 try {
                     Label label = DBNode.orderLabel(new Order(id).getOrderID());
-                    list.getChildren().add(label);
+                    list.getChildren().add(0, label);
                     map.put(id, label);
                 } catch (IllegalArgumentException e) {
                     System.out.println("OrderController: ProductID not found.");

@@ -91,13 +91,22 @@ public class Cart extends StoredDB{
         return getCartItems(userID, -1);
     }
 
-    public static double getTotalAmount(StoredDB[] cartItems) {
-        double amount = 0;
-        for (StoredDB item : cartItems) {
-            Cart cart = (Cart) item;
-            amount += cart.getQuantity() * new Product(cart.getProductID()).getPrice();
+    public static double getTotalAmount(int userID) {
+        String query = String.format("""
+                SELECT ROUND(SUM(Cart.quantity * Product.price), 2) AS totalPrice
+                 FROM Cart
+                 LEFT JOIN Product ON Cart.productID=Product.productID
+                 WHERE userID = %d""", userID);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet != null) {
+            try {
+                resultSet.next();
+                return resultSet.getDouble("totalPrice");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return amount;
+        return 0;
     }
 
     @Override

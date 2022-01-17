@@ -21,37 +21,16 @@ public class CartController extends Controller {
     @FXML private VBox vBox;
     @FXML private FlowPane list;
 
+    private Label totalPrice;
+
     private static double amount;
     private static User user;
-    private static StoredDB[] cartItems;
 
     private static HashMap<Integer, Button> map = new HashMap<>();
 
     @FXML
     public void initialize() {
-
-//        user = Main.getUser();
-
-//        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
-//        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
-//
-//        cartItems = Cart.getCartItems(user.getUserID());
-//        if (cartItems == null)
-//            return;
-//
-//        for (StoredDB cartItem : cartItems) {
-//            Cart cart = (Cart) cartItem;
-//            int productID = cart.getProductID();
-//            Product product;
-//            try {
-//                product = new Product(productID);
-//            } catch (IllegalArgumentException e) {
-//                System.out.println(e.getMessage());
-//                continue;
-//            }
-//            Button button = DBNode.cartButton(cart, product);
-//            list.getChildren().add(button);
-//        }
+        vBox.getChildren().add(setCheckoutBar());
     }
 
     @Override
@@ -64,11 +43,15 @@ public class CartController extends Controller {
         int[] ids = user.getCartIDs();
         updateMap(ids);
 
-        //amount = Cart.getTotalAmount(map.values());
-        vBox.getChildren().add(setCheckoutBar());
+        amount = Cart.getTotalAmount(user.getUserID());
+        totalPrice.setText(String.format("%.2f", amount));
     }
 
     private void updateMap(int[] ids) {
+
+        if (ids == null)
+            return;
+
         ArrayList<Integer> toRemove = new ArrayList<>();
         for (int i : map.keySet())
             if (!Main.linearSearch(ids, i))
@@ -83,7 +66,7 @@ public class CartController extends Controller {
             if (!map.containsKey(id)) {
                 try {
                     Button button = DBNode.cartButton(id);
-                    list.getChildren().add(button);
+                    list.getChildren().add(0, button);
                     map.put(id, button);
                 } catch (IllegalArgumentException e) {
                     System.out.println("CartController: ProductID not found.");
@@ -95,11 +78,10 @@ public class CartController extends Controller {
         HBox box = new HBox();
         box.setAlignment(Pos.CENTER);
         Text text = new Text("Total price: RM ");
-        Label totalPrice = new Label();
+        totalPrice = new Label();
         Button button = new Button("Checkout");
 
         totalPrice.setPrefWidth(400);
-        totalPrice.setText(String.format("%.2f", amount));
 
         box.getChildren().add(text);
         box.getChildren().add(totalPrice);
@@ -111,13 +93,17 @@ public class CartController extends Controller {
     }
 
     private void checkout() {
+
+        if (amount == 0)
+            return;
+
         if (user.getBalance() < amount) {
             invokeTopUpDialog();
             return;
         }
 
-        for (StoredDB item : cartItems) {
-            Cart cart = (Cart) item;
+        for (int cartID : map.keySet()) {
+            Cart cart = new Cart(cartID);
             Product product = new Product(cart.getProductID());
             Order order = new Order(cart.getProductID(), user.getUserID(), product.getSellerID(), user.getShippingAddress(), cart.getQuantity());
             product.setStock(product.getStock() - order.getOrderQuantity());
@@ -125,7 +111,7 @@ public class CartController extends Controller {
             Database.updateDatabase(order.insertQuery());
         }
         user.setBalance(user.getBalance() - amount);
-        vBox.getChildren().clear();
+        list.getChildren().clear();
         amount = 0;
     }
 
