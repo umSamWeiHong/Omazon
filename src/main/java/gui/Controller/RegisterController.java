@@ -46,7 +46,11 @@ public class RegisterController {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        if (!password.equals(confirmPassword))
+        if (email.equals(""))
+            message.setText("Email cannot be empty.");
+        else if (password.equals(""))
+            message.setText("Password cannot be empty");
+        else if (!password.equals(confirmPassword))
             message.setText("The passwords are different.");
         else if (Login.emailExists(email))
             message.setText("This email already exists.");

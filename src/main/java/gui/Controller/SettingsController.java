@@ -118,6 +118,10 @@ public class SettingsController {
                 message.setText("Invalid old password.");
                 event.consume();
             }
+            if (newPasswordText.equals("")) {
+                message.setText("Password cannot be empty");
+                event.consume();
+            }
             if (!newPasswordText.equals(confirmPasswordText)) {
                 message.setText("The passwords are different.");
                 event.consume();
@@ -182,6 +186,10 @@ public class SettingsController {
 
             if (!oldPasswordText.equals(user.getPaymentPassword())) {
                 message.setText("Invalid old password.");
+                event.consume();
+            }
+            if (newPasswordText.equals("")) {
+                message.setText("Password cannot be empty");
                 event.consume();
             }
             if (!newPasswordText.equals(confirmPasswordText)) {
