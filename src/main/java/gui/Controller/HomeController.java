@@ -49,7 +49,11 @@ public class HomeController {
     private void setOnClickAction() {
         logo.setOnMouseClicked(e -> MainGUI.loadScene(Page.HOME));
         logoutButton.setOnMouseClicked(e -> MainGUI.loadScene(Page.LOGIN));
-        profile.setOnMouseClicked(e -> MainGUI.loadScene(Page.PROFILE));
-        store.setOnMouseClicked(e -> MainGUI.loadScene(Page.STORE));
+        profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
+        store.setOnAction(e -> MainGUI.loadScene(Page.STORE));
+        cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
+        order.setOnAction(e -> MainGUI.loadScene(Page.ORDER));
+        favourite.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));
+        settings.setOnAction(e -> MainGUI.loadScene(Page.SETTINGS));
     }
 }

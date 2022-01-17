@@ -2,7 +2,7 @@
     -fx-background-color: #FFEACF;
 }
 
-.label {
+.label, #description {
     -fx-font-size: 14;
 }
 
@@ -12,9 +12,9 @@
 }
 
 #name {
-    -fx-font-size: 20;
+    -fx-font-size: 22;
 }
 
 #descriptionLabel, #reviewsLabel {
-    -fx-font-size: 16;
+    -fx-font-size: 18;
 }

@@ -10,7 +10,8 @@ public enum Page {
     CART ("Cart"),
     ORDER ("Order"),
     FAVOURITE ("Favourite"),
-    SEARCH ("Search");
+    SEARCH ("Search"),
+    SETTINGS ("Settings");
 
     private final String filename;
 

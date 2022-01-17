@@ -15,7 +15,7 @@ public class User extends StoredDB {
     private double balance;
     private Product[] cartProduct;
     private String[] orderHistory;
-    private String paymentPassword;
+    private String paymentPassword, shippingAddress;
 
     // Seller
     private double profit;
@@ -40,6 +40,8 @@ public class User extends StoredDB {
             password = resultSet.getString("password");
             balance = resultSet.getDouble("balance");
             profit = resultSet.getDouble("profit");
+            paymentPassword = resultSet.getString("paymentPassword");
+            shippingAddress = resultSet.getString("shippingAddress");
             dateCreated = resultSet.getTimestamp("dateCreated");
             setInDatabase(true);
 
@@ -104,12 +106,36 @@ public class User extends StoredDB {
         return transactionsHistory;
     }
 
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
     public String[] getOrderNotifications() {
         return orderNotifications;
     }
 
     public Timestamp getDateCreated() {
         return dateCreated;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPaymentPassword(String paymentPassword) {
+        this.paymentPassword = paymentPassword;
     }
 
     /** Edit the user details. */
@@ -162,10 +188,12 @@ public class User extends StoredDB {
 
     @Override
     public String updateQuery() {
-        return String.format("UPDATE `User` " +
-                        "SET balance = %.2f" +
-                        "WHERE userID = %d",
-                        balance, userID);
+        return String.format("""
+                        UPDATE `User`
+                         SET username = '%s', email = '%s', password = '%s', balance = %.2f, shippingAddress = '%s',
+                         paymentPassword = '%s'
+                         WHERE userID = %d""",
+                        username, email, password, balance, shippingAddress, paymentPassword, userID);
     }
 
     @Override

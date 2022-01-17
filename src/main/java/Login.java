@@ -13,6 +13,16 @@ public class Login {
         return Database.queryDatabase(query) != null;
     }
 
+    public static boolean validate(int userID, String password) {
+        String query = String.format("""
+                                     SELECT userID FROM User
+                                     WHERE userID = '%s' AND password = '%s'""",
+                                     userID, password);
+        ResultSet resultSet = Database.queryDatabase(query);
+
+        return resultSet != null;
+    }
+
     /** Return the userID with the given email and password, return 0 if not found. */
     public static int validate(String email, String password) {
         String query = String.format("""

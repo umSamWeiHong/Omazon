@@ -71,7 +71,7 @@ public class MainGUI extends Application {
 
         @SuppressWarnings("ConstantConditions")
         Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
-//        scene = new Scene(getLoaderWithNode("ProductButton").getRoot());
+//        scene = new Scene(getLoaderWithNode("Settings").getRoot());
         stage.setWidth(width);
         stage.setHeight(height);
         stage.setScene(scene);
@@ -102,7 +102,7 @@ public class MainGUI extends Application {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initializeStage();
-        MainGUI.loadScene(Page.FAVOURITE);
+        MainGUI.loadScene(Page.HOME);
     }
 
     public static void main(String[] args) {

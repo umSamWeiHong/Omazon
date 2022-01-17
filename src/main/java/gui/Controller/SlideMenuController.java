@@ -30,6 +30,7 @@ public class SlideMenuController {
         cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
         order.setOnAction(e -> MainGUI.loadScene(Page.ORDER));
         favourite.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));
+        settings.setOnAction(e -> MainGUI.loadScene(Page.SETTINGS));
     }
 
     public void setSlideTransition() {

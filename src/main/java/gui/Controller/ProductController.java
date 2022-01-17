@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.MainGUI;
 
@@ -22,7 +23,8 @@ public class ProductController {
     @FXML VBox vBox;
     @FXML private Button cartButton, buyNow, favouriteButton, editButton;
     @FXML private Label name, seller, rating, reviewCount, price, sales, stock,
-            bestSelling, shippingFee, totalPrice, description;
+            bestSelling, shippingFee, totalPrice;
+    @FXML private Text description;
     @FXML private ImageView imageView;
 
     @FXML
@@ -91,7 +93,15 @@ public class ProductController {
         totalPrice.setText("Total Price: RM" + product.getPrice());
         sales.setText("Sales: " + product.getSales());
         stock.setText("Stock: " + product.getStock());
+
         description.setText(product.getDescription());
+//        description.setMinHeight(70);
+//        description.setOnMouseClicked(e -> {
+//            if (description.getHeight() < 200)
+//                description.setMinHeight(200);
+//            else
+//                description.setMinHeight(70);
+//        });
 
         Image image = MainGUI.decode(product.getBase64String());
         imageView.setPreserveRatio(true);
@@ -99,30 +109,33 @@ public class ProductController {
         imageView.setImage(image);
 
         name.setWrapText(true);
-        description.setWrapText(true);
-
-        MainGUI.stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            name.setPrefWidth(MainGUI.stage.getWidth() - 20);
-            description.setPrefWidth(MainGUI.stage.getWidth() - 20);
-        });
+//        description.setWrapText(true);
     }
 
     public Label setLabel(Review review) {
         Label label = new Label();
         GridPane labelPane = new GridPane();
-        label.setMinWidth(vBox.getPrefWidth());
+        label.setMinWidth(vBox.getWidth());
         label.setMinHeight(100);
+        label.setMaxWidth(Double.MAX_VALUE);
         label.setGraphic(labelPane);
 
         Label rating = new Label("" + review.getRating());
         Label subject = new Label(review.getSubject());
         Label description = new Label(review.getDescription());
-        Label datetime = new Label(review.getDatetime().toString());
+//        Label datetime = new Label(review.getDatetime().toString());
+
+        label.setStyle("""
+                -fx-background-color: #FFF2E0;
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 3;""");
+        label.setOnMouseClicked(e -> invokeAddCommentDialog());
 
         labelPane.add(rating, 1, 0);
         labelPane.add(subject, 1, 1);
         labelPane.add(description, 1, 2);
-        labelPane.add(datetime, 1, 3);
+//        labelPane.add(datetime, 1, 3);
 
         return label;
     }
@@ -167,6 +180,40 @@ public class ProductController {
                 setProductInformation(product);
                 // TODO change product to indatabase
                 Database.updateDatabase(product.updateQuery());
+                System.out.println("Done");
+            }
+        });
+    }
+
+    private void invokeAddCommentDialog() {
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add Comment");
+        dialog.setResizable(true);
+
+        ButtonType ADD = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(ADD);
+        dialog.getDialogPane().getButtonTypes().add(CANCEL);
+
+        VBox box = new VBox();
+        Label label = new Label("Add comment:");
+        TextArea commentArea = new TextArea();
+        box.getChildren().add(label);
+        box.getChildren().add(commentArea);
+        dialog.getDialogPane().setContent(box);
+
+
+
+        final Button addButton = (Button) dialog.getDialogPane().lookupButton(ADD);
+        addButton.addEventFilter(ActionEvent.ACTION, event -> {
+            String comment = commentArea.getText();
+            if (comment.equals(""))
+                event.consume();
+        });
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ADD) {
                 System.out.println("Done");
             }
         });
