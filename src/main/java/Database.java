@@ -84,6 +84,33 @@ public class Database {
         }
     }
 
+    /** Get all ids in the primaryKey column based on the query. */
+    public static int[] getIDs(String query, String primaryKey) {
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return null;
+
+        int N = 0;
+        try {
+            resultSet.last();
+            N = resultSet.getRow();
+            resultSet.beforeFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            int i = 0;
+            int[] ids = new int[N];
+            while (resultSet.next())
+                ids[i++] = resultSet.getInt(primaryKey);
+            return ids;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /** Add this object to database. */
     public static boolean add(StoredDB dbObject) {
         // Return false if the object is already in database.

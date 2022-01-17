@@ -3,13 +3,14 @@ package main.java.gui;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import main.java.gui.Controller.Controller;
 import main.java.gui.Controller.MenuBarController;
-import main.java.gui.Controller.ProductController;
 import main.java.gui.Controller.SlideMenuController;
 
 import javax.imageio.ImageIO;
@@ -18,10 +19,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.EnumMap;
 
 public class MainGUI extends Application {
 
     public static Stage stage;
+    private static EnumMap<Page, FXMLLoader> sceneMap;
     private static final FXMLLoader menuBarLoader, slideMenuLoader;
 
     static {
@@ -32,6 +35,18 @@ public class MainGUI extends Application {
         MenuBarController menuBarController = menuBarLoader.getController();
         @SuppressWarnings("ConstantConditions")
         SlideMenuController slideMenuController = slideMenuLoader.getController();
+
+        sceneMap = new EnumMap<>(Page.class);
+        sceneMap.put(Page.LOGIN, getLoaderWithNode(Page.LOGIN.getFilename()));
+        sceneMap.put(Page.REGISTER, getLoaderWithNode(Page.REGISTER.getFilename()));
+        sceneMap.put(Page.HOME, getLoaderWithNode(Page.HOME.getFilename()));
+        sceneMap.put(Page.PROFILE, getLoaderWithNode(Page.PROFILE.getFilename()));
+        sceneMap.put(Page.STORE, getLoaderWithNode(Page.STORE.getFilename()));
+        sceneMap.put(Page.CART, getLoaderWithNode(Page.CART.getFilename()));
+        sceneMap.put(Page.ORDER, getLoaderWithNode(Page.ORDER.getFilename()));
+        sceneMap.put(Page.FAVOURITE, getLoaderWithNode(Page.FAVOURITE.getFilename()));
+        sceneMap.put(Page.SETTINGS, getLoaderWithNode(Page.SETTINGS.getFilename()));
+        sceneMap.put(Page.PRODUCT, getLoaderWithNode(Page.PRODUCT.getFilename()));
 
         menuBarController.setSlideMenuController(slideMenuController);
     }
@@ -62,6 +77,7 @@ public class MainGUI extends Application {
     public static void initializeStage() {
         stage.setTitle("Omazon");
         stage.getIcons().add(new Image("main/resources/img/icon.png"));
+        stage.setScene(new Scene(new Group()));
         stage.show();
     }
 
@@ -69,12 +85,11 @@ public class MainGUI extends Application {
         double width = stage.getWidth();
         double height = stage.getHeight();
 
-        @SuppressWarnings("ConstantConditions")
-        Scene scene = new Scene(getLoaderWithNode(page.getFilename()).getRoot());
-//        scene = new Scene(getLoaderWithNode("Settings").getRoot());
+        FXMLLoader loader = sceneMap.get(page);
+        stage.getScene().setRoot(loader.getRoot());
+        ((Controller) loader.getController()).update();
         stage.setWidth(width);
         stage.setHeight(height);
-        stage.setScene(scene);
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -15,7 +15,7 @@ import main.java.gui.Colors;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
-public class RegisterController {
+public class RegisterController extends Controller {
 
     @FXML
     private StackPane stackPane;
@@ -38,6 +38,11 @@ public class RegisterController {
 
         register.setOnAction(e -> register());
         back.setOnAction(e -> MainGUI.loadScene(Page.LOGIN));
+    }
+
+    @Override
+    public void update() {
+
     }
 
     public void register() {

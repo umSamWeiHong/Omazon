@@ -11,6 +11,8 @@ public class User extends StoredDB {
     private String email;
     private String password;
 
+    private int[] cartIDs, orderIDs, favouriteIDs;
+
     // Customer aspect
     private double balance;
     private Product[] cartProduct;
@@ -60,6 +62,90 @@ public class User extends StoredDB {
         this.email = email;
         this.password = password;
         this.dateCreated = dateCreated;
+    }
+
+    public void updateCartIDs() {
+        String query = String.format("""
+                                SELECT cartID FROM Cart
+                                 WHERE userID = %d
+                                 ORDER BY dateAdded DESC""", userID);
+        cartIDs = Database.getIDs(query, "cartID");
+    }
+
+    public void updateOrderIDs() {
+        String query = String.format("""
+                                SELECT orderID FROM `Order`
+                                 WHERE userID = %d
+                                 ORDER BY orderTime DESC""", userID);
+        orderIDs = Database.getIDs(query, "orderID");
+    }
+
+    public void updateFavouriteIDs() {
+        String query = String.format("""
+                                SELECT favouriteID FROM Favourite
+                                 WHERE userID = %d
+                                 ORDER BY dateAdded DESC""", userID);
+        favouriteIDs = Database.getIDs(query, "favouriteID");
+    }
+
+    /** Edit the user details. */
+    public void editDetails(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "user{" +
+                "userID =" + userID +
+                ", username =" + username +
+                ", password =" + password +
+                ", email =" + email +
+                ", create_time =" + dateCreated +
+                ", inDatabase=" + inDatabase() +
+                '}';
+    }
+
+    public void setBalance(double amount) {
+        balance = amount;
+        Database.update(this);
+    }
+
+    public void addToCart(int productID) {
+        Database.add(new Cart(userID, productID));
+    }
+
+    public void addToFavourites(int productID) {
+        Database.add(new Favourite(userID, productID));
+    }
+
+    public static String getPrimaryKey() {
+        return "userID";
+    }
+
+    @Override
+    public String insertQuery() {
+        return String.format("INSERT INTO " +
+                        "`User` (username, email, password) " +
+                        "VALUES ('%s', '%s', '%s')",
+                        username, email, password);
+    }
+
+    @Override
+    public String updateQuery() {
+        return String.format("""
+                        UPDATE `User`
+                         SET username = '%s', email = '%s', password = '%s', balance = %.2f, shippingAddress = '%s',
+                         paymentPassword = '%s'
+                         WHERE userID = %d""",
+                        username, email, password, balance, shippingAddress, paymentPassword, userID);
+    }
+
+    @Override
+    public String deleteQuery() {
+        return "DELETE FROM `User` " +
+               "WHERE userID = " + userID;
     }
 
     public int getUserID() {
@@ -118,6 +204,18 @@ public class User extends StoredDB {
         return dateCreated;
     }
 
+    public int[] getCartIDs() {
+        return cartIDs;
+    }
+
+    public int[] getOrderIDs() {
+        return orderIDs;
+    }
+
+    public int[] getFavouriteIDs() {
+        return favouriteIDs;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -136,69 +234,5 @@ public class User extends StoredDB {
 
     public void setPaymentPassword(String paymentPassword) {
         this.paymentPassword = paymentPassword;
-    }
-
-    /** Edit the user details. */
-    public void editDetails(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "user{" +
-                "userID =" + userID +
-                ", username =" + username +
-                ", password =" + password +
-                ", email =" + email +
-                ", create_time =" + dateCreated +
-                ", inDatabase=" + inDatabase() +
-                '}';
-    }
-
-    public void topUp(double amount) {
-        balance = amount;
-        Database.update(this);
-    }
-
-    public void addToCart(int productID) {
-        Database.add(new Cart(userID, productID));
-    }
-
-    public void addToFavourites(int productID) {
-        Database.add(new Favourite(userID, productID));
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new User(2));
-    }
-
-    public static String getPrimaryKey() {
-        return "userID";
-    }
-
-    @Override
-    public String insertQuery() {
-        return String.format("INSERT INTO " +
-                        "`User` (username, email, password) " +
-                        "VALUES ('%s', '%s', '%s')",
-                        username, email, password);
-    }
-
-    @Override
-    public String updateQuery() {
-        return String.format("""
-                        UPDATE `User`
-                         SET username = '%s', email = '%s', password = '%s', balance = %.2f, shippingAddress = '%s',
-                         paymentPassword = '%s'
-                         WHERE userID = %d""",
-                        username, email, password, balance, shippingAddress, paymentPassword, userID);
-    }
-
-    @Override
-    public String deleteQuery() {
-        return "DELETE FROM `User` " +
-               "WHERE userID = " + userID;
     }
 }

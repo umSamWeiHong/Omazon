@@ -35,8 +35,7 @@ public class Order extends StoredDB {
     }
 
     /** Create a new Order object with all parameters */
-    public Order(int orderID, int productID, int userID, int sellerID, String shippingAddress, int orderQuantity) {
-        this.orderID = orderID;
+    public Order(int productID, int userID, int sellerID, String shippingAddress, int orderQuantity) {
         this.productID = productID;
         this.userID = userID;
         this.sellerID = sellerID;

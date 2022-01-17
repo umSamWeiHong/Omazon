@@ -13,9 +13,8 @@ import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
-import java.util.Locale;
 
-public class StoreController {
+public class StoreController extends Controller {
 
     private static User user;
 
@@ -23,14 +22,12 @@ public class StoreController {
     @FXML private FlowPane productPane;
     @FXML private Button button;
 
-
-    @FXML
-    public void initialize() {
-
-        user = Main.getUser();
-
+    @Override
+    public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
+
+        user = Main.getUser();
 
         productPane.setVgap(10);
 

@@ -146,7 +146,7 @@ public class Cart extends StoredDB{
 
     @Override
     public String deleteQuery() {
-        return "DELETE FROM Favourite " +
+        return "DELETE FROM Cart " +
                "WHERE cartID = " + cartID;
     }
 }

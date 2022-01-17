@@ -12,7 +12,7 @@ import main.java.gui.Page;
 
 import java.io.File;
 
-public class HomeController {
+public class HomeController extends Controller {
 
     private static User user;
 
@@ -35,6 +35,11 @@ public class HomeController {
         setOnClickAction();
 
         username.setText(user.getUsername().toUpperCase() + "!");
+    }
+
+    @Override
+    public void update() {
+
     }
 
     private void setMenuBarButtonImage() {

@@ -11,30 +11,33 @@ import javafx.scene.layout.VBox;
 import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
 import java.io.IOException;
 
-public class ProfileController {
+public class ProfileController extends Controller {
 
     @FXML private BorderPane borderPane;
     @FXML private ListView<Label> orderList, reviewList;
     @FXML ScrollPane reviewScroll;
     @FXML GridPane gridPane;
-    @FXML private Button logout, topUpButton;
+    @FXML private Button topUpButton;
     @FXML private Label username, balance;
 
     private static User user;
 
     @FXML
     public void initialize() {
+        topUpButton.setOnAction(e -> invokeTopUpDialog());
+    }
 
-        user = Main.getUser();
-        username.setText(user.getUsername());
-
+    @Override
+    public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        topUpButton.setOnAction(e -> invokeTopUpDialog());
+        user = Main.getUser();
+        username.setText(user.getUsername());
         balance.setText(String.format("%.2f", user.getBalance()));
 
         StoredDB[] orders = Order.getUserOrders(user.getUserID());
@@ -84,6 +87,7 @@ public class ProfileController {
             double amount = Double.parseDouble(amountField.getText());
                         
             if (amount < 0) {
+                // TODO negative number
 //                controller.setMessageText(message);
                 event.consume();
             }
@@ -93,7 +97,7 @@ public class ProfileController {
             if (response == TOP_UP) {
                 double sum = Double.parseDouble(balance.getText()) + Double.parseDouble(amountField.getText());
                 balance.setText(String.format("%.2f", sum));
-                user.topUp(sum);
+                user.setBalance(sum);
             }
         });
     }

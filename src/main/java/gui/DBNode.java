@@ -21,6 +21,11 @@ public class DBNode {
 
     private static final String cssPath = new File("src/main/resources/css/ProductButton.css").toURI().toString();
 
+    public static Button cartButton(int cartID) {
+        Cart cart = new Cart(cartID);
+        return cartButton(cart, new Product(cart.getProductID()));
+    }
+
     public static Button cartButton(Cart cart, Product product) {
         Button button = new Button();
         button.setPrefWidth(250);
@@ -67,6 +72,10 @@ public class DBNode {
         });
 
         return button;
+    }
+
+    public static Button productButton(int productID) {
+        return productButton(new Product(productID));
     }
 
     public static Button productButton(Product product) {
@@ -123,12 +132,15 @@ public class DBNode {
         return button;
     }
 
+    public static Label orderLabel(int orderID) {
+        return orderLabel(new Order(orderID));
+    }
+
     public static Label orderLabel(Order order) {
         Label label = getNewLabel();
         Product product = new Product(order.getProductID());
 
         GridPane gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: red;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
         Label name = new Label("NAME");
         Label quantity = new Label("QUANTITY");

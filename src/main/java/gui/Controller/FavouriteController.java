@@ -8,40 +8,55 @@ import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
-public class FavouriteController {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class FavouriteController extends Controller {
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane list;
 
     private static User user;
 
+    private static HashMap<Integer, Button> map = new HashMap<>();
+
     @FXML
     public void initialize() {
 
-        user = Main.getUser();
+    }
 
+    @Override
+    public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        StoredDB[] favourites = Favourite.getUserFavourites(user.getUserID());
-        if (favourites != null) {
-            int N = favourites.length;
-            int[] productIDs = new int[N];
-            for (int i = 0; i < N; i++) {
-                productIDs[i] = ((Favourite) favourites[i]).getProductID();
-            }
-            Product[] products = Product.getProductsByProductIDs(productIDs);
+        user = Main.getUser();
+        user.updateFavouriteIDs();
+        int[] ids = user.getFavouriteIDs();
+        updateMap(ids);
+    }
 
-            for (Product product : products) {
-                if (product == null)
-                    continue;
+    private void updateMap(int[] ids) {
+
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        for (int i : map.keySet())
+            if (!Main.linearSearch(ids, i))
+                toRemove.add(i);
+
+        for (int i : toRemove) {
+            list.getChildren().remove(map.get(i));
+            map.remove(i);
+        }
+
+        for (int id : ids)
+            if (!map.containsKey(id)) {
                 try {
-                    Button button = DBNode.productButton(product);
+                    Button button = DBNode.productButton(new Favourite(id).getProductID());
                     list.getChildren().add(button);
+                    map.put(id, button);
                 } catch (IllegalArgumentException e) {
-                    continue;
+                    System.out.println("FavouriteController: ProductID not found.");
                 }
             }
-        }
     }
 }

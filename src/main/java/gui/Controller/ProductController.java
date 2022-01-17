@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.MainGUI;
 
-public class ProductController {
+public class ProductController extends Controller {
 
     private static Product product;
     private static User user;
@@ -28,14 +28,13 @@ public class ProductController {
     @FXML private Text description;
     @FXML private ImageView imageView;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void update() {
+        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
+        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
         user = Main.getUser();
         productID = product.getProductID();
-
-        borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
-        borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
         cartID = Cart.cartExists(user.getUserID(), productID);
         cartButton.setText(cartID == 0 ? "Add to Cart" : "Remove from Cart");
