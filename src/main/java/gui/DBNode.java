@@ -112,6 +112,7 @@ public class DBNode {
         GridPane.setValignment(price, VPos.BOTTOM);
         GridPane.setValignment(rating, VPos.BOTTOM);
 
+        name.setPrefWidth(250);
         name.setText(product.getProductName());
         price.setText(String.format("RM %.2f", product.getPrice()));
         rating.setText(getRatingStars(product.getProductRatings()));

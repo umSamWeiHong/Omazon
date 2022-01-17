@@ -87,7 +87,13 @@ public class CartController extends Controller {
         box.getChildren().add(totalPrice);
         box.getChildren().add(button);
 
-        button.setOnAction(e -> checkout());
+        button.setOnAction(e -> {
+            if (user.getBalance() < amount) {
+                invokeTopUpDialog();
+                return;
+            }
+            invokeEnterPasswordDialog();
+        });
 
         return box;
     }
@@ -96,11 +102,6 @@ public class CartController extends Controller {
 
         if (amount == 0)
             return;
-
-        if (user.getBalance() < amount) {
-            invokeTopUpDialog();
-            return;
-        }
 
         for (int cartID : map.keySet()) {
             Cart cart = new Cart(cartID);
@@ -130,6 +131,45 @@ public class CartController extends Controller {
         dialog.showAndWait().ifPresent(response -> {
             if (response == TOP_UP) {
                 MainGUI.loadScene(Page.PROFILE);
+            }
+        });
+    }
+
+    private void invokeEnterPasswordDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Enter Payment Password");
+        dialog.setResizable(true);
+
+        ButtonType CONFIRM = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+        ButtonType CLOSE = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(CONFIRM);
+        dialog.getDialogPane().getButtonTypes().add(CLOSE);
+
+        Label label = new Label("Enter payment password: ");
+        TextField passwordField = new TextField();
+        Label message = new Label();
+
+        GridPane gridPane = new GridPane();
+        gridPane.add(label, 0, 0);
+        gridPane.add(passwordField, 1, 0);
+        gridPane.add(message, 0, 1, 2, 1);
+        GridPane.setHalignment(message, HPos.CENTER);
+
+        dialog.getDialogPane().setGraphic(gridPane);
+
+        final Button addButton = (Button) dialog.getDialogPane().lookupButton(CONFIRM);
+        addButton.addEventFilter(ActionEvent.ACTION, event -> {
+            String password = passwordField.getText();
+            if (!password.equals(user.getPaymentPassword())) {
+                message.setText("Invalid password.");
+                event.consume();
+            }
+        });
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == CONFIRM) {
+                System.out.println("Password correct.");
+                checkout();
             }
         });
     }
