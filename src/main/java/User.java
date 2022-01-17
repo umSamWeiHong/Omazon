@@ -11,7 +11,7 @@ public class User extends StoredDB {
     private String email;
     private String password;
 
-    private int[] cartIDs, orderIDs, favouriteIDs;
+    private int[] cartIDs, orderIDs, favouriteIDs, productIDs;
 
     // Customer aspect
     private double balance;
@@ -86,6 +86,14 @@ public class User extends StoredDB {
                                  WHERE userID = %d
                                  ORDER BY dateAdded DESC""", userID);
         favouriteIDs = Database.getIDs(query, "favouriteID");
+    }
+
+    public void updateProductIDs() {
+        String query = String.format("""
+                                SELECT productID FROM Product
+                                 WHERE sellerID = %d
+                                 ORDER BY sales DESC""", userID);
+        productIDs = Database.getIDs(query, "productID");
     }
 
     /** Edit the user details. */
@@ -202,6 +210,10 @@ public class User extends StoredDB {
 
     public Timestamp getDateCreated() {
         return dateCreated;
+    }
+
+    public int[] getProductIDs() {
+        return productIDs;
     }
 
     public int[] getCartIDs() {

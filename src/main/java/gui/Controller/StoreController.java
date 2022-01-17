@@ -13,6 +13,9 @@ import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class StoreController extends Controller {
 
@@ -22,22 +25,48 @@ public class StoreController extends Controller {
     @FXML private FlowPane productPane;
     @FXML private Button button;
 
+    private static final HashMap<Integer, Button> map = new HashMap<>();
+
+    @FXML
+    public void initialize() {
+        productPane.setVgap(10);
+
+        button.setOnMouseClicked(e -> invokeAddProductDialog());
+    }
+
     @Override
     public void update() {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
         user = Main.getUser();
+        user.updateProductIDs();
+        int[] ids = user.getProductIDs();
+        updateMap(ids);
+    }
 
-        productPane.setVgap(10);
+    private void updateMap(int[] ids) {
 
-        StoredDB[] products = Product.getProductsBySellerId(user.getUserID());
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        for (int i : map.keySet())
+            if (!Main.linearSearch(ids, i))
+                toRemove.add(i);
 
-        for (StoredDB p : products) {
-            Product product = (Product) p;
-            productPane.getChildren().add(DBNode.productButton(product));
+        for (int i : toRemove) {
+            productPane.getChildren().remove(map.get(i));
+            map.remove(i);
         }
-        button.setOnMouseClicked(e -> invokeAddProductDialog());
+
+        for (int id : ids)
+            if (!map.containsKey(id)) {
+                try {
+                    Button button = DBNode.productButton(id);
+                    productPane.getChildren().add(button);
+                    map.put(id, button);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("StoreController: ProductID not found.");
+                }
+            }
     }
 
     private void invokeAddProductDialog() {
@@ -59,6 +88,12 @@ public class StoreController extends Controller {
 
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(ADD);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
+
+            if (controller.getSelectedCategory() == null) {
+                controller.setMessageText("Please select a category.");
+                event.consume();
+            }
+
             String message = Product.validateProductInformation(controller.getName(), controller.getPrice(), controller.getStock());
 
             if (!message.equals("OK")) {
@@ -77,7 +112,7 @@ public class StoreController extends Controller {
                         Category.valueOf(controller.getSelectedCategory().toUpperCase().replace(" ", "_")),
                         Main.getUser().getUserID());
                 System.out.println(product);
-                Database.add(product);
+                Database.updateDatabase(product.insertQuery());
             }
         });
     }

@@ -2,7 +2,7 @@ package main.java;
 
 public enum Category {
 
-    NULL(""),
+//    NULL(""),
     HEALTH_AND_BEAUTY("Health and Beauty"),
     TOILETRIES("Toiletries"),
     SPORTS_AND_OUTDOOR("Sports and Outdoor"),

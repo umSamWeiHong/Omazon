@@ -14,7 +14,8 @@ public class Main {
 //        user.updateOrderIDs();
 //        System.out.println(Arrays.toString(user.getCartIDs()));
 //        System.out.println(Arrays.toString(user.getOrderIDs()));
-        System.out.println(Arrays.toString(user.getFavouriteIDs()));
+        user.updateProductIDs();
+        System.out.println(Arrays.toString(user.getProductIDs()));
 //        Cart cart = new Cart(1);
         System.out.println(Cart.getTotalAmount(1));
     }
