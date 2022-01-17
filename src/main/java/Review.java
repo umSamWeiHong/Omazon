@@ -39,10 +39,9 @@ public class Review extends StoredDB {
     }
 
     /** Create a new Review object with all parameters (except reviewID and sellerComment). */
-    public Review(int userID, int productID, Timestamp datetime, double rating, String subject, String description) {
+    public Review(int userID, int productID, double rating, String subject, String description) {
         this.userID = userID;
         this.productID = productID;
-        this.datetime = datetime;
         this.rating = rating;
         this.subject = subject;
         this.description = description;
@@ -173,9 +172,9 @@ public class Review extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                "Review (userID, productID, datetime, rating, subject, description, sellerComment) " +
-                "VALUES (%d, %d, '%s', %f, '%s', '%s', '%s')",
-                userID, productID, datetime, rating, subject, description, sellerComment);
+                "Review (userID, productID, rating, subject, description) " +
+                "VALUES (%d, %d, %.2f, '%s', '%s')",
+                userID, productID, rating, subject, description);
     }
 
     @Override

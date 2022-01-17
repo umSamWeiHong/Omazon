@@ -1,18 +1,16 @@
 package main.java.gui;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import main.java.Cart;
-import main.java.Order;
-import main.java.Product;
-import main.java.Review;
+import javafx.scene.text.Text;
+import main.java.*;
 import main.java.gui.Controller.ProductController;
 
 import java.io.File;
@@ -45,8 +43,8 @@ public class DBNode {
 
         button.setGraphic(gridPane);
 
-        if (product.getBase64String() != null) {
-            ImageView imageView = getImageView(product);
+        ImageView imageView = getImageView(product);
+        if (imageView != null) {
             gridPane.add(imageView, 0, 0, 1, 2);
             GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
             GridPane.setValignment(imageView, VPos.CENTER);
@@ -60,6 +58,7 @@ public class DBNode {
         GridPane.setValignment(quantity, VPos.BOTTOM);
         GridPane.setValignment(totalPrice, VPos.BOTTOM);
 
+        name.setPrefWidth(250);
         name.setWrapText(true);
         name.setStyle("""
                 -fx-font-family: 'Montserrat';
@@ -152,6 +151,15 @@ public class DBNode {
 
         label.setGraphic(gridPane);
 
+        if (!order.isRated()) {
+            label.setStyle("""
+                        -fx-background-color: #dedede;
+                        -fx-border-color: black;
+                        -fx-border-width: 1;
+                        -fx-border-radius: 3""");
+            label.setOnMouseClicked(e -> invokeAddReviewDialog(order, product, label));
+        }
+
         name.setText(product.getProductName());
         quantity.setText(order.getOrderQuantity() + "x");
         totalPrice.setText(String.format("RM %.2f", order.getOrderQuantity() * product.getPrice()));
@@ -222,6 +230,79 @@ public class DBNode {
         description.setStyle("-fx-font-size: 10;");
 
         return label;
+    }
+
+    private static void invokeAddReviewDialog(Order order, Product product, Label label) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add a review");
+        dialog.setResizable(true);
+
+        ButtonType ADD = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(ADD);
+        dialog.getDialogPane().getButtonTypes().add(CANCEL);
+
+        GridPane gridPane = new GridPane();
+        Text text = new Text("Enter your review: ");
+        Text rating = new Text("Rating");
+        Text subject = new Text("Subject");
+        Text description = new Text("Description");
+        TextField ratingField = new TextField();
+        TextField subjectField = new TextField();
+        TextArea descriptionField = new TextArea();
+        Label message = new Label();
+
+        gridPane.add(text, 0, 0);
+        gridPane.add(rating, 0, 1);
+        gridPane.add(subject, 0, 2);
+        gridPane.add(description, 0, 3);
+        for (int i = 1; i < 4; i++)
+            gridPane.add(new Text(""), 1, i);
+        gridPane.add(ratingField, 1, 1);
+        gridPane.add(subjectField, 1, 2);
+        gridPane.add(descriptionField, 1, 3);
+        gridPane.add(message, 0, 4, 2, 1);
+        gridPane.setMinWidth(500);
+        gridPane.setMinHeight(300);
+
+        gridPane.setHgap(5);
+        gridPane.setVgap(20);
+        GridPane.setHalignment(message, HPos.CENTER);
+        dialog.getDialogPane().setContent(gridPane);
+
+        final Button changeButton = (Button) dialog.getDialogPane().lookupButton(ADD);
+        changeButton.addEventFilter(ActionEvent.ACTION, event -> {
+
+            double ratingText = 0.0;
+            try {
+                ratingText = Double.parseDouble(ratingField.getText());
+            } catch (NumberFormatException e) {
+                message.setText("Please enter a valid number for rating.");
+                event.consume();
+            }
+
+            if (ratingText < 1 || ratingText > 5) {
+                message.setText("Rating should be between 1 and 5.");
+                event.consume();
+            }
+        });
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ADD) {
+                double ratingText = Double.parseDouble(ratingField.getText());
+                Review review = new Review(Main.getUser().getUserID(), product.getProductID(), ratingText, subjectField.getText(), descriptionField.getText());
+                order.setRated(true);
+                Database.updateDatabase(review.insertQuery());
+                Database.updateDatabase(order.updateQuery());
+                label.setStyle("""
+                        -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);
+                        -fx-border-color: black;
+                        -fx-border-width: 1;
+                        -fx-border-radius: 3;
+                        """);
+                System.out.println("Review added.");
+            }
+        });
     }
 
     public static String getRatingStars(double rating) {

@@ -10,6 +10,8 @@ public class Order extends StoredDB {
     private String shippingAddress;
     private Timestamp orderTime;
 
+    private boolean rated;
+
     /** Create an Order object with data from database. */
     public Order(int orderID) {
         String query = "SELECT * FROM `Order` WHERE orderID = " + orderID;
@@ -27,6 +29,7 @@ public class Order extends StoredDB {
             shippingAddress = resultSet.getString("shippingAddress");
             orderQuantity = resultSet.getInt("orderQuantity");
             orderTime = resultSet.getTimestamp("orderTime");
+            rated = resultSet.getBoolean("rated");
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -51,6 +54,10 @@ public class Order extends StoredDB {
     public String getShippingAddress() { return shippingAddress; }
     public int getOrderQuantity() { return orderQuantity; }
 
+    public boolean isRated() {
+        return rated;
+    }
+
     public Timestamp getOrderTime() {
         return orderTime;
     }
@@ -62,6 +69,10 @@ public class Order extends StoredDB {
     public void setSellerID(int sellerID) { this.sellerID = sellerID; }
     public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
     public void setOrderQuantity(int orderQuantity) { this.orderQuantity = orderQuantity; }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
+    }
 
     /** Return the N recent orders from the user. */
     public static StoredDB[] getUserOrders(int userID, int N) {
@@ -124,14 +135,14 @@ public class Order extends StoredDB {
     @Override
     public String updateQuery() {
         return String.format("UPDATE `Order` " +
-                        "SET productID = '%d', userID = %d, sellerID = %d, shippingAddress = '%s', orderQuantity = %d" +
+                        "SET productID = '%d', userID = %d, sellerID = %d, shippingAddress = '%s', orderQuantity = %d, rated = %d " +
                         "WHERE orderID = %d",
-                productID, userID, sellerID, shippingAddress, orderQuantity, orderID);
+                productID, userID, sellerID, shippingAddress, orderQuantity, (rated ? 1 : 0), orderID);
     }
 
     @Override
     public String deleteQuery() {
         return "DELETE FROM Order " +
-                "WHERE orderID = " + orderID;
+               "WHERE orderID = " + orderID;
     }
 }

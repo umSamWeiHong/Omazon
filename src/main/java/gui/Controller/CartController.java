@@ -26,7 +26,7 @@ public class CartController extends Controller {
     private static double amount;
     private static User user;
 
-    private static HashMap<Integer, Button> map = new HashMap<>();
+    private static final HashMap<Integer, Button> map = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -114,6 +114,7 @@ public class CartController extends Controller {
         user.setBalance(user.getBalance() - amount);
         list.getChildren().clear();
         amount = 0;
+        totalPrice.setText("0.00");
     }
 
     private void invokeTopUpDialog() {
