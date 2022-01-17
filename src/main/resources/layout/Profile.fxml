@@ -46,7 +46,7 @@
                   <Image url="@../../../../../../../Pictures/Pic.jpg" />
                </image>
             </ImageView>
-            <Label text="USERNAME" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+            <Label fx:id="username" text="USERNAME" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="198.0" spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
                   <Button mnemonicParsing="false">
@@ -80,16 +80,17 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="158.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
                <children>
-                  <Label prefHeight="28.0" prefWidth="252.0" text="Account Balance:" />
-                  <Button mnemonicParsing="false" text="Top Up" />
+                  <Label text="Account Balance: RM " HBox.hgrow="NEVER" />
+                  <Label fx:id="balance" prefWidth="120.0" text="0.00" />
+                  <Button fx:id="topUpButton" mnemonicParsing="false" text="Top Up" />
                </children>
             </HBox>
-            <ListView prefHeight="200.0" prefWidth="136.0" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS">
+            <ListView fx:id="orderList" focusTraversable="false" prefHeight="200.0" prefWidth="136.0" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS">
                <GridPane.margin>
                   <Insets left="8.0" right="8.0" />
                </GridPane.margin>
             </ListView>
-            <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+            <ListView focusTraversable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="8.0" right="8.0" />
                </GridPane.margin>
@@ -97,7 +98,7 @@
             <Label text="Recent Reviews" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Notifications" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Label text="Recent Orders" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <ListView fx:id="reviewList" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="8.0" right="8.0" />
                </GridPane.margin>

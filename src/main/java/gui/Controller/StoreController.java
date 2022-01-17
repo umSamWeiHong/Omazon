@@ -9,13 +9,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import main.java.Product;
-import main.java.Review;
-import main.java.StoredDB;
+import main.java.*;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 
+import java.util.Locale;
+
 public class StoreController {
+
+    private static User user;
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
@@ -25,20 +27,20 @@ public class StoreController {
     @FXML
     public void initialize() {
 
+        user = Main.getUser();
+
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
         productPane.setVgap(10);
-        productPane.getChildren().add(DBNode.productButton(3));
-        productPane.getChildren().add(DBNode.orderLabel(3));
-        productPane.getChildren().add(DBNode.productButton(4));
-        productPane.getChildren().add(DBNode.reviewLabel(8));
 
-        for (StoredDB r : Review.getProductReviews(3))
-            productPane.getChildren().add(DBNode.reviewLabel(((Review) r).getReviewID()));
+        StoredDB[] products = Product.getProductsBySellerId(user.getUserID());
 
+        for (StoredDB p : products) {
+            Product product = (Product) p;
+            productPane.getChildren().add(DBNode.productButton(product));
+        }
         button.setOnMouseClicked(e -> invokeAddProductDialog());
-
     }
 
     private void invokeAddProductDialog() {
@@ -75,8 +77,10 @@ public class StoreController {
                         controller.getDescription(),
                         Double.parseDouble(controller.getPrice()),
                         Integer.parseInt(controller.getStock()),
-                        controller.getSelectedCategory());
+                        Category.valueOf(controller.getSelectedCategory().toUpperCase().replace(" ", "_")),
+                        Main.getUser().getUserID());
                 System.out.println(product);
+                Database.add(product);
             }
         });
     }

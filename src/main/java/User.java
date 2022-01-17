@@ -38,6 +38,8 @@ public class User extends StoredDB {
             username = resultSet.getString("username");
             email = resultSet.getString("email");
             password = resultSet.getString("password");
+            balance = resultSet.getDouble("balance");
+            profit = resultSet.getDouble("profit");
             dateCreated = resultSet.getTimestamp("dateCreated");
             setInDatabase(true);
 
@@ -129,6 +131,19 @@ public class User extends StoredDB {
                 '}';
     }
 
+    public void topUp(double amount) {
+        balance = amount;
+        Database.update(this);
+    }
+
+    public void addToCart(int productID) {
+        Database.add(new Cart(userID, productID));
+    }
+
+    public void addToFavourites(int productID) {
+        Database.add(new Favourite(userID, productID));
+    }
+
     public static void main(String[] args) {
         System.out.println(new User(2));
     }
@@ -148,9 +163,9 @@ public class User extends StoredDB {
     @Override
     public String updateQuery() {
         return String.format("UPDATE `User` " +
-                        "SET create_time = '%s', username = '%s', password = '%s', email = '%s' " +
+                        "SET balance = %.2f" +
                         "WHERE userID = %d",
-                        dateCreated, username, password, email, userID);
+                        balance, userID);
     }
 
     @Override

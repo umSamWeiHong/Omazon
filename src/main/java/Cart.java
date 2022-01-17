@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class Cart extends StoredDB{
-    
+
     private int cartID, userID, productID;
     private Timestamp dateAdded;
 
@@ -29,10 +29,21 @@ public class Cart extends StoredDB{
     }
 
     /** Create a new Cart object with all parameters (except reviewID). */
-    public Cart(int userID, int productID, Timestamp dateAdded) {
+    public Cart(int userID, int productID) {
         this.userID = userID;
         this.productID = productID;
-        this.dateAdded = dateAdded;
+    }
+
+    public int getCartID() {
+        return cartID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public int getProductID() {
+        return productID;
     }
 
     /** Return the N recent cart items from the user. */
@@ -45,6 +56,24 @@ public class Cart extends StoredDB{
         if (N != -1)
             query += " LIMIT " + N;
         return Database.getDBObjects(query, Cart.class, N);
+    }
+
+    public static int cartExists(int userID, int productID) {
+        // TODO static
+        String query = String.format("""
+                                SELECT cartID FROM Cart
+                                WHERE userID = %d AND productID = %d""",
+                                userID, productID);
+
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet != null)
+            try {
+                resultSet.next();
+                return resultSet.getInt("cartID");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return 0;
     }
 
     /** Return all cart items from the user. */
@@ -86,9 +115,9 @@ public class Cart extends StoredDB{
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                "Cart (userID, productID, dateAdded) " +
-                "VALUES (%d, %d, '%s')",
-                userID, productID, dateAdded);
+                "Cart (userID, productID) " +
+                "VALUES (%d, %d)",
+                userID, productID);
     }
 
     @Override

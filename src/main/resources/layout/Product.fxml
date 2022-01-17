@@ -56,8 +56,10 @@
                               <Label fx:id="stock" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="6">
                                  <children>
-                                    <Button fx:id="cart" mnemonicParsing="false" text="Add to Cart" />
+                                    <Button fx:id="cartButton" mnemonicParsing="false" text="Add to Cart" />
                                     <Button fx:id="buyNow" mnemonicParsing="false" text="Buy Now" />
+                                    <Button fx:id="favouriteButton" mnemonicParsing="false" text="Add to Favourites" />
+                                    <Button fx:id="editButton" mnemonicParsing="false" text="Edit" />
                                  </children>
                               </HBox>
                            </children>

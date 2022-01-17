@@ -25,8 +25,11 @@ public class SlideMenuController {
     }
 
     private void setOnClickAction() {
-        profile.setOnMouseClicked(e -> MainGUI.loadScene(Page.PROFILE));
-        store.setOnMouseClicked(e -> MainGUI.loadScene(Page.STORE));
+        profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
+        store.setOnAction(e -> MainGUI.loadScene(Page.STORE));
+        cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
+        order.setOnAction(e -> MainGUI.loadScene(Page.ORDER));
+        favourite.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));
     }
 
     public void setSlideTransition() {

@@ -7,6 +7,9 @@ public enum Page {
     PROFILE ("Profile"),
     PRODUCT ("Product"),
     STORE ("Store"),
+    CART ("Cart"),
+    ORDER ("Order"),
+    FAVOURITE ("Favourite"),
     SEARCH ("Search");
 
     private final String filename;

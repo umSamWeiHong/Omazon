@@ -102,8 +102,7 @@ public class MainGUI extends Application {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initializeStage();
-        ProductController.setProductID(5);
-        MainGUI.loadScene(Page.LOGIN);
+        MainGUI.loadScene(Page.FAVOURITE);
     }
 
     public static void main(String[] args) {

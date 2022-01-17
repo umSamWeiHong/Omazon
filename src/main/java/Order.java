@@ -111,7 +111,7 @@ public class Order extends StoredDB {
                 "\n";
     }
 
-    public String getPrimaryKey() {
+    public static String getPrimaryKey() {
         return "orderID";
     }
 

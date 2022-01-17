@@ -21,6 +21,10 @@ public class DBNode {
     // TODO CSS get
 
     public static Button productButton(int productID) {
+        return productButton(new Product(productID));
+    }
+
+    public static Button productButton(Product product) {
         Button button = new Button();
         button.setPrefWidth(250);
         button.setPrefHeight(100);
@@ -33,21 +37,22 @@ public class DBNode {
         Label price = new Label("PRICE");
         Label rating = new Label("RATING");
 
-        Product product = new Product(productID);
-
         button.setGraphic(gridPane);
 
-        ImageView imageView = getImageView(product);
+        if (product.getBase64String() != null) {
+            ImageView imageView = getImageView(product);
+            gridPane.add(imageView, 0, 0, 1, 2);
+            GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
+            GridPane.setValignment(imageView, VPos.CENTER);
+        }
 
-        gridPane.add(imageView, 0, 0, 1, 2);
         gridPane.add(name, 1, 0, 2, 1);
         gridPane.add(price, 1, 1);
         gridPane.add(rating, 2, 1);
-        GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
         GridPane.setMargin(price, new Insets(5, 0, 0, 0));
         GridPane.setMargin(rating, new Insets(5, 0, 0, 0));
         GridPane.setHalignment(rating, HPos.RIGHT);
-        GridPane.setValignment(imageView, VPos.CENTER);
+
         GridPane.setValignment(price, VPos.BOTTOM);
         GridPane.setValignment(rating, VPos.BOTTOM);
 
@@ -63,7 +68,7 @@ public class DBNode {
                 -fx-font-size: 14;""");
 
         button.setOnMouseClicked(e -> {
-            ProductController.setProductID(productID);
+            ProductController.setProduct(product);
             MainGUI.loadScene(Page.PRODUCT);
         });
 
@@ -71,8 +76,11 @@ public class DBNode {
     }
 
     public static Label orderLabel(int orderID) {
+        return orderLabel(new Order(orderID));
+    }
+
+    public static Label orderLabel(Order order) {
         Label label = getNewLabel();
-        Order order = new Order(orderID);
         Product product = new Product(order.getProductID());
 
         GridPane gridPane = new GridPane();
@@ -87,17 +95,19 @@ public class DBNode {
         quantity.setText(order.getOrderQuantity() + "x");
         totalPrice.setText(String.format("RM %.2f", order.getOrderQuantity() * product.getPrice()));
 
-        ImageView imageView = getImageView(product);
+        if (!product.getBase64String().equals("") && product.getBase64String() != null) {
+            ImageView imageView = getImageView(product);
+            gridPane.add(imageView, 0, 0, 1, 2);
+            GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
+            GridPane.setValignment(imageView, VPos.CENTER);
+        }
 
-        gridPane.add(imageView, 0, 0, 1, 2);
         gridPane.add(name, 1, 0, 2, 1);
         gridPane.add(quantity, 1, 1);
         gridPane.add(totalPrice, 2, 1);
-        GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
         GridPane.setMargin(quantity, new Insets(5, 0, 0, 0));
         GridPane.setMargin(totalPrice, new Insets(5, 0, 0, 0));
         GridPane.setHalignment(totalPrice, HPos.RIGHT);
-        GridPane.setValignment(imageView, VPos.CENTER);
         GridPane.setValignment(quantity, VPos.BOTTOM);
         GridPane.setValignment(totalPrice, VPos.BOTTOM);
 
@@ -111,9 +121,11 @@ public class DBNode {
     }
 
     public static Label reviewLabel(int reviewID) {
+        return reviewLabel(new Review(reviewID));
+    }
 
+    public static Label reviewLabel(Review review) {
         Label label = getNewLabel();
-        Review review = new Review(reviewID);
         Product product = new Product(review.getProductID());
 
         GridPane gridPane = new GridPane();
