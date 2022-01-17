@@ -73,11 +73,13 @@ public class Database {
     /** Return true if the database is updated, false otherwise. */
     // TODO Change to private after all objects are updated.
     public static boolean updateDatabase(String query) {
+        System.out.println(query);
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -94,6 +96,7 @@ public class Database {
 
     /** Update this object in database. */
     public static boolean update(StoredDB dbObject) {
+        System.out.println(dbObject.updateQuery());
         // Return false if the object is not in database.
         if (!dbObject.inDatabase())
             return false;

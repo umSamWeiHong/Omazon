@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 
-<ListView fx:id="list" prefHeight="200.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.SlideMenuController" />
+<VBox fx:id="slideMenu" minWidth="0.0" prefHeight="340.0" prefWidth="150.0" spacing="3.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.SlideMenuController">
+   <children>
+      <Button fx:id="profile" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/account.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="My Profile" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+      <Button fx:id="store" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/store.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="My Store" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+      <Button fx:id="cart" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/cart.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="My Cart" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+      <Button fx:id="order" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/order.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="My Orders" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+      <Button fx:id="favourite" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/favourite.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="Favourites" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+      <Button fx:id="settings" minWidth="0.0" mnemonicParsing="false" prefHeight="55.0">
+         <graphic>
+            <HBox alignment="CENTER_LEFT" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/slidemenu/setting.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" minWidth="0.0" text="Settings" />
+               </children>
+            </HBox>
+         </graphic>
+      </Button>
+   </children>
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
+</VBox>

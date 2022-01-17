@@ -31,10 +31,31 @@ public class Favourite extends StoredDB{
     }
 
     /** Create a new Favourite object with all parameters (except reviewID). */
+    public Favourite(int userID, int productID) {
+        this(userID, productID, null);
+    }
+
+    /** Create a new Favourite object with all parameters (except reviewID). */
     public Favourite(int userID, int productID, Timestamp dateAdded) {
         this.userID = userID;
         this.productID = productID;
         this.dateAdded = dateAdded;
+    }
+
+    public int getFavouriteID() {
+        return favouriteID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public Timestamp getDateAdded() {
+        return dateAdded;
     }
 
     /** Return the N recent favourites from the user. */
@@ -65,20 +86,21 @@ public class Favourite extends StoredDB{
                 '}';
     }
 
-    public static void main(String[] args) {
+    public static int favouriteExists(int userID, int productID) {
+        String query = String.format("""
+                                SELECT favouriteID FROM Favourite
+                                WHERE userID = %d AND productID = %d""",
+                                userID, productID);
 
-//        for (int i = 0; i < 3; i++) {
-//            Favourite favourite1 = new Favourite(2, new Random().nextInt(10), new Timestamp(Instant.now().toEpochMilli()));
-//            Database.add(favourite1);
-//        }
-
-        Favourite toDelete = new Favourite(23);
-        System.out.println(toDelete);
-        Database.delete(toDelete);
-
-        for (StoredDB ff : Favourite.getUserFavourites(2)) {
-            System.out.println(ff);
-        }
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet != null)
+            try {
+                resultSet.next();
+                return resultSet.getInt("favouriteID");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return 0;
     }
 
     public static String getPrimaryKey() {
@@ -88,9 +110,9 @@ public class Favourite extends StoredDB{
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                "Favourite (userID, productID, dateAdded) " +
-                "VALUES (%d, %d, '%s')",
-                userID, productID, dateAdded);
+                "Favourite (userID, productID) " +
+                "VALUES (%d, %d)",
+                userID, productID);
     }
 
     @Override

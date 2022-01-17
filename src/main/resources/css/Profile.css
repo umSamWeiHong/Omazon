@@ -16,8 +16,3 @@
     -fx-background-color: -menu;
     -fx-border-color: black;
 }
-
-.button .label {
-
-    -fx-text-fill: red;
-}

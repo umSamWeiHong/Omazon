@@ -2,6 +2,7 @@ package main.java.gui.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.java.gui.MainGUI;
@@ -9,28 +10,27 @@ import main.java.gui.Page;
 
 import java.io.File;
 
-public class MenuBarController {
+public class HomeController {
 
-    @FXML private Button exploreButton, notificationButton, logoutButton, menuButton;
-    @FXML private ImageView logo, explore, notification, logout;
+    @FXML Button exploreButton, notificationButton, logoutButton;
+    @FXML Button profile, store, cart, order, favourite, settings;
+    @FXML ImageView logo, explore, notification, logout;
+
+    @FXML Label username;
 
     private static Image exploreStatic, exploreAnimation,
-                         logoutStatic, logoutAnimation,
-                         notificationStatic, notificationAnimation;
-
-    private static SlideMenuController slideMenuController;
-
-    public void setSlideMenuController(SlideMenuController slideMenuController) {
-        MenuBarController.slideMenuController = slideMenuController;
-    }
+            logoutStatic, logoutAnimation,
+            notificationStatic, notificationAnimation;
 
     @FXML
     public void initialize() {
-        setMenuButtonImage();
+        setMenuBarButtonImage();
         setOnClickAction();
+
+        username.setText("Sam Wei Hong".toUpperCase() + "!");
     }
 
-    private void setMenuButtonImage() {
+    private void setMenuBarButtonImage() {
         exploreStatic = new Image(new File("src/main/resources/img/menubar/explore_static.png").toURI().toString());
         exploreAnimation = new Image(new File("src/main/resources/img/menubar/explore_anim.gif").toURI().toString());
         logoutStatic = new Image(new File("src/main/resources/img/menubar/logout_static.png").toURI().toString());
@@ -49,6 +49,11 @@ public class MenuBarController {
     private void setOnClickAction() {
         logo.setOnMouseClicked(e -> MainGUI.loadScene(Page.HOME));
         logoutButton.setOnMouseClicked(e -> MainGUI.loadScene(Page.LOGIN));
-        menuButton.setOnMouseClicked(e -> slideMenuController.slide());
+        profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
+        store.setOnAction(e -> MainGUI.loadScene(Page.STORE));
+        cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
+        order.setOnAction(e -> MainGUI.loadScene(Page.ORDER));
+        favourite.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));
+        settings.setOnAction(e -> MainGUI.loadScene(Page.SETTINGS));
     }
 }

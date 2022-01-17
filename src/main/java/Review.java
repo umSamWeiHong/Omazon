@@ -72,6 +72,11 @@ public class Review extends StoredDB {
         return rating;
     }
 
+    public String getRatingStars() {
+        int rating = (int) this.rating;
+        return "★".repeat(rating) + "☆".repeat(5-rating);
+    }
+
     public String getSubject() {
         return subject;
     }

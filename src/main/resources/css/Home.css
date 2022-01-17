@@ -5,13 +5,19 @@
     -button-hover: #ffd07f;
 }
 
-#logo, .button {
-    -fx-cursor: hand;
+#username {
+    -fx-font-family: 'Montserrat';
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
 }
 
-#menuBar {
-    -fx-background-color: -menu;
-    -fx-border-color: -border;
+#sideMenu > .button {
+    -fx-font-family: 'Open Sans Semibold';
+    -fx-font-size: 14;
+}
+
+#logo, .button {
+    -fx-cursor: hand;
 }
 
 #menuBar > .button, #sideMenu > .button {
@@ -23,4 +29,13 @@
 
 #menuBar > .button:hover, #sideMenu > .button:hover {
     -fx-background-color: -button-hover;
+}
+
+#menuBar {
+    -fx-background-color: -menu;
+    -fx-border-color: -border;
+}
+
+#sideMenu {
+    -fx-background-color: #FFD54F;
 }
