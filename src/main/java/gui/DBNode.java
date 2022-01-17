@@ -14,6 +14,8 @@ import main.java.*;
 import main.java.gui.Controller.ProductController;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DBNode {
 
@@ -230,6 +232,47 @@ public class DBNode {
         description.setStyle("-fx-font-size: 10;");
 
         return label;
+    }
+
+    public static Label[] transactionLabel(int sellerID) {
+        String query = String.format("""
+                                SELECT User.username, Product.productName, ROUND(`Order`.orderQuantity*Product.price, 2) AS amount
+                                 FROM Transaction
+                                 LEFT JOIN User ON Transaction.userID=User.userID
+                                 LEFT JOIN `Order` ON Transaction.orderID=`Order`.orderID
+                                 LEFT JOIN `Product` ON `Order`.productID=Product.productID
+                                 WHERE Transaction.sellerID = %d
+                                 LIMIT 50""", sellerID);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return null;
+
+        int N = 0;
+        try {
+            resultSet.last();
+            N = resultSet.getRow();
+            resultSet.beforeFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Label[] labels = new Label[N];
+        int i = 0;
+        try {
+            while (resultSet.next()) {
+                Label label = new Label();
+                double amount = resultSet.getDouble("amount");
+                String username = resultSet.getString("username");
+                String productName = resultSet.getString("productName");
+                String text = String.format("+RM %.2f => %s purchased %s.", amount, username, productName);
+                label.setText(text);
+                labels[i++] = label;
+            }
+            return labels;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static void invokeAddReviewDialog(Order order, Product product, Label label) {

@@ -11,7 +11,6 @@ public class Database {
                                 password = "f798SuFM";
     private static Connection connection = null;
 
-    // TODO Retry Connection if failed
     static {
         try {
             connection = DriverManager.getConnection(url, user, password);

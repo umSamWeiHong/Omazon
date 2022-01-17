@@ -28,7 +28,6 @@
             <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="76.0" vgrow="NEVER" />
             <RowConstraints maxHeight="194.0" minHeight="0.0" prefHeight="57.0" vgrow="NEVER" />
             <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="34.0" vgrow="NEVER" />
             <RowConstraints maxHeight="233.0" minHeight="7.0" prefHeight="16.0" vgrow="NEVER" />
             <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="26.0" vgrow="NEVER" />
             <RowConstraints prefHeight="156.0" valignment="CENTER" vgrow="ALWAYS" />
@@ -47,10 +46,10 @@
                   <Image url="@../../../../../../../Pictures/Pic.jpg" />
                </image>
             </ImageView>
-            <Label text="STORENAME" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+            <Label fx:id="username" text="USERNAME" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="198.0" spacing="3.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="profileButton" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -59,7 +58,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="button" mnemonicParsing="false">
+                  <Button fx:id="transactionButton" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -70,21 +69,16 @@
                   </Button>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="158.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
-               <children>
-                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="412.0" text="Description" textAlignment="JUSTIFY" />
-               </children>
-            </HBox>
-            <Label text="My Products" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+            <Label text="My Products" GridPane.halignment="LEFT" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin></Label>
-            <Button mnemonicParsing="false" text="Settings" GridPane.valignment="TOP">
+            <Button fx:id="settingsButton" mnemonicParsing="false" text="Settings" GridPane.valignment="TOP">
                <GridPane.margin>
                   <Insets top="3.0" />
                </GridPane.margin>
             </Button>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="136.0" prefWidth="588.0" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="136.0" prefWidth="588.0" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
                <content>
                   <FlowPane fx:id="productPane" hgap="10.0" vgap="10.0" />
                </content>
@@ -92,7 +86,7 @@
                   <Insets bottom="5.0" left="20.0" right="20.0" top="10.0" />
                </GridPane.margin>
             </ScrollPane>
-            <Button fx:id="addProductButton" mnemonicParsing="false" text="Add Product" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+            <Button fx:id="addProductButton" mnemonicParsing="false" text="Add Product" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>

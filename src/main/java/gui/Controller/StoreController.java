@@ -3,10 +3,7 @@ package main.java.gui.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import main.java.*;
@@ -15,6 +12,7 @@ import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -24,7 +22,7 @@ public class StoreController extends Controller {
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
-    @FXML private Button addProductButton;
+    @FXML private Button profileButton, transactionButton, settingsButton, addProductButton;
 
     private static final HashMap<Integer, Button> map = new HashMap<>();
 
@@ -32,7 +30,10 @@ public class StoreController extends Controller {
     public void initialize() {
         productPane.setVgap(10);
 
-        addProductButton.setOnMouseClicked(e -> invokeAddProductDialog());
+        addProductButton.setOnAction(e -> invokeAddProductDialog());
+        transactionButton.setOnAction(e -> invokeTransactionHistoryDialog(user.getUserID()));
+        profileButton.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
+        settingsButton.setOnAction(e -> MainGUI.loadScene(Page.SETTINGS));
     }
 
     @Override
@@ -117,5 +118,28 @@ public class StoreController extends Controller {
                 MainGUI.loadScene(Page.STORE);
             }
         });
+    }
+
+    private void invokeTransactionHistoryDialog(int sellerID) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Transaction History");
+
+        ButtonType DONE = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(DONE);
+
+        ListView<Label> list = new ListView<>();
+        Label[] labels = DBNode.transactionLabel(sellerID);
+
+        dialog.getDialogPane().setContent(list);
+        dialog.setResizable(true);
+
+        if (labels == null)
+            return;
+
+        for (Label label : labels) {
+            list.getItems().add(label);
+        }
+
+        dialog.showAndWait();
     }
 }
