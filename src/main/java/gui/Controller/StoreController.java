@@ -41,7 +41,6 @@ public class StoreController extends Controller {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        user = Main.getUser();
         user.updateProductIDs();
         int[] ids = user.getProductIDs();
         updateMap(ids);
@@ -141,5 +140,9 @@ public class StoreController extends Controller {
         }
 
         dialog.showAndWait();
+    }
+
+    public static void setUser(User user) {
+        StoreController.user = user;
     }
 }

@@ -27,7 +27,7 @@ public class MenuBarController {
     @FXML
     public void initialize() {
         setMenuButtonImage();
-        setOnClickAction();
+        setOnAction();
     }
 
     private void setMenuButtonImage() {
@@ -46,9 +46,11 @@ public class MenuBarController {
         notificationButton.setOnMouseExited(e -> notification.setImage(notificationStatic));
     }
 
-    private void setOnClickAction() {
+    private void setOnAction() {
         logo.setOnMouseClicked(e -> MainGUI.loadScene(Page.HOME));
-        logoutButton.setOnMouseClicked(e -> MainGUI.loadScene(Page.LOGIN));
-        menuButton.setOnMouseClicked(e -> slideMenuController.slide());
+        exploreButton.setOnAction(e -> MainGUI.loadScene(Page.EXPLORE));
+        notificationButton.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
+        logoutButton.setOnAction(e -> MainGUI.loadScene(Page.LOGIN));
+        menuButton.setOnAction(e -> slideMenuController.slide());
     }
 }

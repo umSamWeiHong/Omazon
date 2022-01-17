@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import main.java.Main;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
@@ -26,7 +27,10 @@ public class SlideMenuController {
 
     private void setOnClickAction() {
         profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
-        store.setOnAction(e -> MainGUI.loadScene(Page.STORE));
+        store.setOnAction(e -> {
+            StoreController.setUser(Main.getUser());
+            MainGUI.loadScene(Page.STORE);
+        });
         cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
         order.setOnAction(e -> MainGUI.loadScene(Page.ORDER));
         favourite.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));

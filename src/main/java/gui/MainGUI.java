@@ -36,16 +36,8 @@ public class MainGUI extends Application {
         SlideMenuController slideMenuController = slideMenuLoader.getController();
 
         sceneMap = new EnumMap<>(Page.class);
-        sceneMap.put(Page.LOGIN, getLoaderWithNode(Page.LOGIN.getFilename()));
-        sceneMap.put(Page.REGISTER, getLoaderWithNode(Page.REGISTER.getFilename()));
-        sceneMap.put(Page.HOME, getLoaderWithNode(Page.HOME.getFilename()));
-        sceneMap.put(Page.PROFILE, getLoaderWithNode(Page.PROFILE.getFilename()));
-        sceneMap.put(Page.STORE, getLoaderWithNode(Page.STORE.getFilename()));
-        sceneMap.put(Page.CART, getLoaderWithNode(Page.CART.getFilename()));
-        sceneMap.put(Page.ORDER, getLoaderWithNode(Page.ORDER.getFilename()));
-        sceneMap.put(Page.FAVOURITE, getLoaderWithNode(Page.FAVOURITE.getFilename()));
-        sceneMap.put(Page.SETTINGS, getLoaderWithNode(Page.SETTINGS.getFilename()));
-        sceneMap.put(Page.PRODUCT, getLoaderWithNode(Page.PRODUCT.getFilename()));
+        for (Page page : Page.values())
+            sceneMap.put(page, getLoaderWithNode(page.getFilename()));
 
         menuBarController.setSlideMenuController(slideMenuController);
     }

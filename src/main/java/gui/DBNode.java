@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.Controller.ProductController;
+import main.java.gui.Controller.StoreController;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -211,13 +212,16 @@ public class DBNode {
         description.setText(review.getDescription());
 
         ImageView imageView = getImageView(product);
+        if (imageView != null) {
+            gridPane.add(imageView, 0, 0, 1, 3);
+            GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
+            GridPane.setValignment(imageView, VPos.CENTER);
+        }
 
-        gridPane.add(imageView, 0, 0, 1, 3);
         gridPane.add(rating, 1, 0);
         gridPane.add(subject, 1, 1);
         gridPane.add(description, 1, 2);
-        GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
-        GridPane.setValignment(imageView, VPos.CENTER);
+
         GridPane.setValignment(rating, VPos.TOP);
         GridPane.setValignment(description, VPos.TOP);
         description.setPrefHeight(100);
@@ -273,6 +277,40 @@ public class DBNode {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Button sellerButton(int userID) {
+        User seller = new User(userID);
+        Button button = new Button();
+        button.setPrefWidth(175);
+        button.setPrefHeight(100);
+        button.setStyle("""
+                -fx-font-family: 'Montserrat';
+                -fx-font-weight: bold;
+                -fx-font-size: 14;""");
+        button.setText(seller.getUsername());
+        button.setWrapText(true);
+
+        button.setOnAction(e -> {
+            StoreController.setUser(seller);
+            MainGUI.loadScene(Page.STORE);
+        });
+
+        return button;
+    }
+
+    public static Button categoryButton(Category category) {
+        Button button = new Button();
+        button.setPrefWidth(200);
+        button.setPrefHeight(200);
+        button.setStyle("""
+                -fx-font-family: 'Montserrat';
+                -fx-font-weight: bold;
+                -fx-font-size: 14;""");
+        button.setText(category.getDisplayName());
+        button.setWrapText(true);
+
+        return button;
     }
 
     private static void invokeAddReviewDialog(Order order, Product product, Label label) {
