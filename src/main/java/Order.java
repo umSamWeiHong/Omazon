@@ -2,20 +2,13 @@ package main.java;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class Order extends StoredDB {
 
     private int orderID, productID, userID, sellerID, orderQuantity;
     private String shippingAddress;
-
-    public Order() {
-        orderID = 0;
-        productID = 0;
-        userID = 0;
-        sellerID = 0;
-        shippingAddress = "";
-        orderQuantity = 0;
-    }
+    private Timestamp orderTime;
 
     /** Create an Order object with data from database. */
     public Order(int orderID) {
@@ -33,6 +26,7 @@ public class Order extends StoredDB {
             sellerID = resultSet.getInt("sellerID");
             shippingAddress = resultSet.getString("shippingAddress");
             orderQuantity = resultSet.getInt("orderQuantity");
+            orderTime = resultSet.getTimestamp("orderTime");
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -57,6 +51,11 @@ public class Order extends StoredDB {
     public int getSellerID() { return sellerID; }
     public String getShippingAddress() { return shippingAddress; }
     public int getOrderQuantity() { return orderQuantity; }
+
+    public Timestamp getOrderTime() {
+        return orderTime;
+    }
+
     // Mutator
     public void setOrderID(int orderID) { this.orderID = orderID; }
     public void setProductID(int productID) { this.productID = productID; }
@@ -118,17 +117,17 @@ public class Order extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                        "Order (productID, userID, sellerID, shippingAddress, orderQuantity) " +
+                        "`Order` (productID, userID, sellerID, shippingAddress, orderQuantity) " +
                         "VALUES ('%d', %d, %d, '%s', %d)",
                 productID, userID, sellerID, shippingAddress, orderQuantity);
     }
 
     @Override
     public String updateQuery() {
-        return String.format("UPDATE Product " +
+        return String.format("UPDATE `Order` " +
                         "SET productID = '%d', userID = %d, sellerID = %d, shippingAddress = '%s', orderQuantity = %d" +
                         "WHERE orderID = %d",
-                productID, userID, sellerID, shippingAddress, orderQuantity);
+                productID, userID, sellerID, shippingAddress, orderQuantity, orderID);
     }
 
     @Override
@@ -136,5 +135,4 @@ public class Order extends StoredDB {
         return "DELETE FROM Order " +
                 "WHERE orderID = " + orderID;
     }
-
 }

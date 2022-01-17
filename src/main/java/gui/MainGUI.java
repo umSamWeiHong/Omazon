@@ -90,6 +90,8 @@ public class MainGUI extends Application {
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
             BufferedImage image = ImageIO.read(bis);
             bis.close();
+            if (image == null)
+                return null;
             return SwingFXUtils.toFXImage(image, null);
         } catch (Exception e) {
             e.printStackTrace();

@@ -19,14 +19,14 @@ import java.io.File;
 
 public class DBNode {
 
-    // TODO CSS get
+    private static final String cssPath = new File("src/main/resources/css/ProductButton.css").toURI().toString();
 
     public static Button cartButton(Cart cart, Product product) {
         Button button = new Button();
         button.setPrefWidth(250);
         button.setPrefHeight(100);
         button.setMaxHeight(150);
-        button.getStylesheets().add(new File("src/main/resources/css/ProductButton.css").toURI().toString());
+        button.getStylesheets().add(cssPath);
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER_LEFT);
@@ -69,16 +69,12 @@ public class DBNode {
         return button;
     }
 
-    public static Button productButton(int productID) {
-        return productButton(new Product(productID));
-    }
-
     public static Button productButton(Product product) {
         Button button = new Button();
         button.setPrefWidth(250);
         button.setPrefHeight(100);
         button.setMaxHeight(150);
-        button.getStylesheets().add(new File("src/main/resources/css/ProductButton.css").toURI().toString());
+        button.getStylesheets().add(cssPath);
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER_LEFT);
@@ -88,16 +84,18 @@ public class DBNode {
 
         button.setGraphic(gridPane);
 
-        if (product.getBase64String() != null) {
-            ImageView imageView = getImageView(product);
+        int offset = 0;
+        ImageView imageView = getImageView(product);
+        if (imageView != null) {
             gridPane.add(imageView, 0, 0, 1, 2);
             GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
             GridPane.setValignment(imageView, VPos.CENTER);
+            offset = 1;
         }
 
-        gridPane.add(name, 1, 0, 2, 1);
-        gridPane.add(price, 1, 1);
-        gridPane.add(rating, 2, 1);
+        gridPane.add(name, offset, 0, 2, 1);
+        gridPane.add(price, offset, 1);
+        gridPane.add(rating, offset+1, 1);
         GridPane.setMargin(price, new Insets(5, 0, 0, 0));
         GridPane.setMargin(rating, new Insets(5, 0, 0, 0));
         GridPane.setHalignment(rating, HPos.RIGHT);
@@ -107,14 +105,15 @@ public class DBNode {
 
         name.setText(product.getProductName());
         price.setText(String.format("RM %.2f", product.getPrice()));
-        // TODO Change ratings
-        rating.setText("5.00");
+        rating.setText(getRatingStars(product.getProductRatings()));
 
+        name.setPrefWidth(250);
         name.setWrapText(true);
         name.setStyle("""
                 -fx-font-family: 'Montserrat';
                 -fx-font-weight: bold;
                 -fx-font-size: 14;""");
+        rating.setStyle("-fx-text-fill: orange");
 
         button.setOnMouseClicked(e -> {
             ProductController.setProduct(product);
@@ -124,53 +123,50 @@ public class DBNode {
         return button;
     }
 
-    public static Label orderLabel(int orderID) {
-        return orderLabel(new Order(orderID));
-    }
-
     public static Label orderLabel(Order order) {
         Label label = getNewLabel();
         Product product = new Product(order.getProductID());
 
         GridPane gridPane = new GridPane();
+        gridPane.setStyle("-fx-background-color: red;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
         Label name = new Label("NAME");
         Label quantity = new Label("QUANTITY");
         Label totalPrice = new Label("TOTAL_PRICE");
+        Label orderTime = new Label("ORDER_TIME");
 
         label.setGraphic(gridPane);
 
         name.setText(product.getProductName());
         quantity.setText(order.getOrderQuantity() + "x");
         totalPrice.setText(String.format("RM %.2f", order.getOrderQuantity() * product.getPrice()));
+        orderTime.setText(order.getOrderTime().toString());
 
-        if (!product.getBase64String().equals("") && product.getBase64String() != null) {
-            ImageView imageView = getImageView(product);
+        int offset = 0;
+        ImageView imageView = getImageView(product);
+        if (imageView != null) {
             gridPane.add(imageView, 0, 0, 1, 2);
             GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
             GridPane.setValignment(imageView, VPos.CENTER);
+            offset = 1;
         }
 
-        gridPane.add(name, 1, 0, 2, 1);
-        gridPane.add(quantity, 1, 1);
-        gridPane.add(totalPrice, 2, 1);
-        GridPane.setMargin(quantity, new Insets(5, 0, 0, 0));
-        GridPane.setMargin(totalPrice, new Insets(5, 0, 0, 0));
+        gridPane.add(name, offset, 0, 2, 1);
+        gridPane.add(quantity, offset, 1);
+        gridPane.add(totalPrice, offset+1, 1);
+        gridPane.add(orderTime, offset, 2, 2, 1);
+        GridPane.setMargin(orderTime, new Insets(2, 0, 0, 0));
         GridPane.setHalignment(totalPrice, HPos.RIGHT);
-        GridPane.setValignment(quantity, VPos.BOTTOM);
-        GridPane.setValignment(totalPrice, VPos.BOTTOM);
+        GridPane.setValignment(orderTime, VPos.BOTTOM);
 
         name.setWrapText(true);
         name.setStyle("""
                 -fx-font-family: 'Montserrat';
                 -fx-font-weight: bold;
                 -fx-font-size: 14;""");
+        orderTime.setStyle("-fx-font-size: 10;");
 
         return label;
-    }
-
-    public static Label reviewLabel(int reviewID) {
-        return reviewLabel(new Review(reviewID));
     }
 
     public static Label reviewLabel(Review review) {
@@ -213,6 +209,11 @@ public class DBNode {
         return label;
     }
 
+    public static String getRatingStars(double rating) {
+        int r = (int) rating;
+        return "★".repeat(r) + "☆".repeat(5-r);
+    }
+
     private static Label getNewLabel() {
         Label label = new Label();
         label.setPrefWidth(250);
@@ -220,7 +221,7 @@ public class DBNode {
         label.setMaxHeight(150);
         label.setAlignment(Pos.CENTER_LEFT);
         label.setPadding(new Insets(6, 6, 6, 6));
-        label.getStylesheets().add(new File("src/main/resources/css/DBLabel.css").toURI().toString());
+        label.getStylesheets().add(cssPath);
         label.setStyle("""
                 -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);
                 -fx-border-color: black;
@@ -232,6 +233,8 @@ public class DBNode {
 
     private static ImageView getImageView(Product product) {
         Image image = MainGUI.decode(product.getBase64String());
+        if (image == null)
+            return null;
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(75);

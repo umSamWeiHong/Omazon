@@ -91,6 +91,15 @@ public class Cart extends StoredDB{
         return getCartItems(userID, -1);
     }
 
+    public static double getTotalAmount(StoredDB[] cartItems) {
+        double amount = 0;
+        for (StoredDB item : cartItems) {
+            Cart cart = (Cart) item;
+            amount += cart.getQuantity() * new Product(cart.getProductID()).getPrice();
+        }
+        return amount;
+    }
+
     @Override
     public String toString() {
         return "Cart{" +
