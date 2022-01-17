@@ -1,8 +1,14 @@
 package main.java;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import javax.imageio.ImageIO;
+import java.util.Base64;
 
 public class User extends StoredDB {
 
@@ -10,6 +16,7 @@ public class User extends StoredDB {
     private String username;
     private String email;
     private String password;
+    private String image;
 
     // Customer aspect
     private double balance;
@@ -43,6 +50,7 @@ public class User extends StoredDB {
             paymentPassword = resultSet.getString("paymentPassword");
             shippingAddress = resultSet.getString("shippingAddress");
             dateCreated = resultSet.getTimestamp("dateCreated");
+            image = resultSet.getString("image");
             setInDatabase(true);
 
         } catch (SQLException e) {
@@ -50,16 +58,17 @@ public class User extends StoredDB {
         }
     }
 
-    public User(String username, String email, String password) {
-        this(username, email, password, null);
+    public User(String username, String email, String password, String image) {
+        this(username, email, password, image, null);
     }
 
     /** Create a new User object with all parameters (except userID). */
-    public User(String username, String email, String password, Timestamp dateCreated) {
+    public User(String username, String email, String password, Timestamp dateCreated, String image) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.dateCreated = dateCreated;
+        this.image = base64String;
     }
 
     public int getUserID() {
@@ -138,11 +147,20 @@ public class User extends StoredDB {
         this.paymentPassword = paymentPassword;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = base64String;
+    } 
+
     /** Edit the user details. */
-    public void editDetails(String username, String email, String password) {
+    public void editDetails(String username, String email, String password, String image) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.image = base64String;
     }
 
     @Override
@@ -153,6 +171,7 @@ public class User extends StoredDB {
                 ", password =" + password +
                 ", email =" + email +
                 ", create_time =" + dateCreated +
+                ", image =" + image +
                 ", inDatabase=" + inDatabase() +
                 '}';
     }
@@ -168,6 +187,54 @@ public class User extends StoredDB {
 
     public void addToFavourites(int productID) {
         Database.add(new Favourite(userID, productID));
+    }
+    
+     /** Method to resize image */
+    public static void resize(String inputImagePath, String outputImagePath) throws IOException {
+        // Reads input image
+        File inputFile = new File(inputImagePath);
+        BufferedImage inputImage = ImageIO.read(inputFile);
+
+        // Creates output image
+        BufferedImage outputImage = new BufferedImage(300,
+                300, inputImage.getType());
+
+        // Scales the input image to the output image
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(inputImage, 0, 0, 300, 300, null);
+        g2d.dispose();
+
+        // Extracts extension of output file
+        String formatName = outputImagePath.substring(outputImagePath
+                .lastIndexOf(".") + 1);
+
+        // Writes to output file
+        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+    }
+    /** Method to convert image into Base64 string*/
+    public static String imgToBase64String(String path) throws FileNotFoundException, IOException {
+        File img = new File(path);
+        FileInputStream input = new FileInputStream(img);
+        byte[] bytes = new byte[(int) img.length()];
+        input.read(bytes);
+        return new String(Base64.getEncoder().encode(bytes));
+    }
+
+    /** Method to convert Base64 string to image*/
+    public static byte[] base64StringToImage(String base64){
+        System.out.println(base64);
+        byte[] data = Base64.getDecoder().decode(base64);
+        return data;
+        /*
+        //IF Write to destination path
+        try ( OutputStream stream = new FileOutputStream("C:/Users/kelee/Documents/ImageProduct/image_destination.jpg")) {
+            stream.write(data);
+
+        } catch (Exception e) {
+            System.out.println("Couldn't write to file");
+
+        }
+         */
     }
 
     public static void main(String[] args) {
@@ -191,9 +258,9 @@ public class User extends StoredDB {
         return String.format("""
                         UPDATE `User`
                          SET username = '%s', email = '%s', password = '%s', balance = %.2f, shippingAddress = '%s',
-                         paymentPassword = '%s'
+                         paymentPassword = '%s', image = '%s'
                          WHERE userID = %d""",
-                        username, email, password, balance, shippingAddress, paymentPassword, userID);
+                        username, email, password, balance, shippingAddress, paymentPassword, userID,image);
     }
 
     @Override
