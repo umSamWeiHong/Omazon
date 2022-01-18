@@ -120,7 +120,7 @@ public class CartController extends Controller {
             ResultSet resultSet = Database.queryDatabase(query);
 
             User seller = new User(product.getSellerID());
-            seller.setProfit(seller.getProfit() + amount);
+            seller.setProfit(seller.getProfit() + order.getOrderQuantity() * product.getPrice());
             Database.updateDatabase(seller.updateQuery());
 
             try {
