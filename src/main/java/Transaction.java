@@ -31,8 +31,7 @@ public class Transaction extends StoredDB{
         }
     }
 
-    public Transaction(int transactionID, int sellerID, int userID, int orderID, double amount) {
-        this.transactionID = transactionID;
+    public Transaction(int sellerID, int userID, int orderID, double amount) {
         this.sellerID = sellerID;
         this.orderID = orderID;
         this.userID = userID;

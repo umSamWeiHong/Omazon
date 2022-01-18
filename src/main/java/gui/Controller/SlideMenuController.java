@@ -28,7 +28,7 @@ public class SlideMenuController {
     private void setOnClickAction() {
         profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
         store.setOnAction(e -> {
-            StoreController.setUser(Main.getUser());
+            StoreController.setSeller(Main.getUser());
             MainGUI.loadScene(Page.STORE);
         });
         cart.setOnAction(e -> MainGUI.loadScene(Page.CART));

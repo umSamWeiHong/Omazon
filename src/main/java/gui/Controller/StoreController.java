@@ -12,17 +12,17 @@ import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 
 public class StoreController extends Controller {
 
-    private static User user;
+    private static User seller;
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
-    @FXML private Button profileButton, transactionButton, settingsButton, addProductButton;
+    @FXML private Button profileButton, transactionButton, addProductButton;
+    @FXML private Label username, profit;
 
     private static final HashMap<Integer, Button> map = new HashMap<>();
 
@@ -31,9 +31,8 @@ public class StoreController extends Controller {
         productPane.setVgap(10);
 
         addProductButton.setOnAction(e -> invokeAddProductDialog());
-        transactionButton.setOnAction(e -> invokeTransactionHistoryDialog(user.getUserID()));
+        transactionButton.setOnAction(e -> invokeTransactionHistoryDialog(seller.getUserID()));
         profileButton.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
-        settingsButton.setOnAction(e -> MainGUI.loadScene(Page.SETTINGS));
     }
 
     @Override
@@ -41,8 +40,14 @@ public class StoreController extends Controller {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        user.updateProductIDs();
-        int[] ids = user.getProductIDs();
+        username.setText(seller.getUsername());
+
+        if (seller.getUserID() == Main.getUser().getUserID())
+            profit.setText("Profit: " + seller.getProfit());
+        else
+            profit.setText("");
+        seller.updateProductIDs();
+        int[] ids = seller.getProductIDs();
         updateMap(ids);
     }
 
@@ -142,7 +147,7 @@ public class StoreController extends Controller {
         dialog.showAndWait();
     }
 
-    public static void setUser(User user) {
-        StoreController.user = user;
+    public static void setSeller(User seller) {
+        StoreController.seller = seller;
     }
 }

@@ -13,7 +13,7 @@
 
 <StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.gui.Controller.RegisterController">
    <children>
-      <Rectangle fx:id="rect" arcHeight="5.0" arcWidth="5.0" fill="#ffd07f" height="430.0" stroke="BLACK" strokeType="INSIDE" width="285.0" />
+      <Rectangle fx:id="rect" arcHeight="5.0" arcWidth="5.0" fill="#ffd07f" height="484.0" stroke="BLACK" strokeType="INSIDE" width="285.0" />
       <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="588.0" spacing="2.0">
          <children>
             <ImageView id="logo" fitHeight="82.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true">
@@ -37,6 +37,8 @@
                </VBox.margin></PasswordField>
             <Label prefHeight="17.0" prefWidth="250.0" text="Confirm Password" />
             <PasswordField fx:id="confirmPasswordField" alignment="CENTER" prefHeight="25.0" prefWidth="250.0" />
+            <Label prefHeight="17.0" prefWidth="250.0" text="Payment Password" />
+            <PasswordField fx:id="paymentPasswordField" alignment="CENTER" prefHeight="25.0" prefWidth="250.0" />
             <Label fx:id="message">
                <VBox.margin>
                   <Insets bottom="3.0" top="3.0" />

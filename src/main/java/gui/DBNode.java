@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.Controller.ProductController;
+import main.java.gui.Controller.SearchController;
 import main.java.gui.Controller.StoreController;
 
 import java.io.File;
@@ -117,7 +118,7 @@ public class DBNode {
         name.setPrefWidth(250);
         name.setText(product.getProductName());
         price.setText(String.format("RM %.2f", product.getPrice()));
-        rating.setText(getRatingStars(product.getProductRatings()));
+        rating.setText(getRatingStars(product.getRating()));
 
         name.setPrefWidth(250);
         name.setWrapText(true);
@@ -285,6 +286,11 @@ public class DBNode {
         button.setPrefWidth(175);
         button.setPrefHeight(100);
         button.setStyle("""
+                -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);;
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 3;
+                -fx-cursor: hand;
                 -fx-font-family: 'Montserrat';
                 -fx-font-weight: bold;
                 -fx-font-size: 14;""");
@@ -292,7 +298,7 @@ public class DBNode {
         button.setWrapText(true);
 
         button.setOnAction(e -> {
-            StoreController.setUser(seller);
+            StoreController.setSeller(seller);
             MainGUI.loadScene(Page.STORE);
         });
 
@@ -301,14 +307,24 @@ public class DBNode {
 
     public static Button categoryButton(Category category) {
         Button button = new Button();
-        button.setPrefWidth(200);
-        button.setPrefHeight(200);
+        button.setPrefWidth(175);
+        button.setPrefHeight(100);
         button.setStyle("""
+                -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);;
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 3;
+                -fx-cursor: hand;
                 -fx-font-family: 'Montserrat';
                 -fx-font-weight: bold;
                 -fx-font-size: 14;""");
         button.setText(category.getDisplayName());
         button.setWrapText(true);
+
+        button.setOnAction(e -> {
+            SearchController.setCategory(category);
+            MainGUI.loadScene(Page.SEARCH);
+        });
 
         return button;
     }
@@ -409,6 +425,8 @@ public class DBNode {
     }
 
     private static ImageView getImageView(Product product) {
+        if (product == null)
+            return null;
         Image image = MainGUI.decode(product.getBase64String());
         if (image == null)
             return null;

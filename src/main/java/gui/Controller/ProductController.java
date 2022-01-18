@@ -13,18 +13,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
 public class ProductController extends Controller {
 
     private static Product product;
     private static User user;
-    private static int productID, cartID, favouriteID;
+    private static boolean isSeller;
+    private static int productID, sellerID, cartID, favouriteID;
 
     @FXML BorderPane borderPane;
     @FXML VBox vBox;
-    @FXML private Button cartButton, buyNow, favouriteButton, editButton;
-    @FXML private Label name, seller, rating, reviewCount, price, sales, stock,
-            bestSelling, shippingFee, totalPrice;
+    @FXML private Button cartButton, favouriteButton, editButton, removeButton;
+    @FXML private Label name, seller, rating, price, sales, stock,
+            bestSelling;
     @FXML private Text description;
     @FXML private ImageView imageView;
 
@@ -37,16 +39,33 @@ public class ProductController extends Controller {
 
         user = Main.getUser();
         productID = product.getProductID();
+        sellerID = product.getSellerID();
 
         cartID = Cart.cartExists(user.getUserID(), productID);
         cartButton.setText(cartID == 0 ? "Add to Cart" : "Remove from Cart");
         favouriteID = Favourite.favouriteExists(user.getUserID(), productID);
         favouriteButton.setText(favouriteID == 0 ? "Add to Favourites" : "Remove from Favourites");
 
+        seller.setOnMouseClicked(e -> {
+            StoreController.setSeller(new User(sellerID));
+            MainGUI.loadScene(Page.STORE);
+        });
         cartButton.setOnAction(e -> cartButtonAction());
         favouriteButton.setOnAction(e -> favouriteButtonAction());
         editButton.setOnAction(e -> invokeEditProductDialog());
+        removeButton.setOnAction(e -> {
+            Database.updateDatabase(product.deleteQuery());
+            StoreController.setSeller(user);
+            MainGUI.loadScene(Page.STORE);
+        });
         setProductInformation(productID);
+
+        System.out.println(user.getUserID() + " " + sellerID);
+        isSeller = user.getUserID() == sellerID;
+        cartButton.setDisable(isSeller);
+        favouriteButton.setDisable(isSeller);
+        editButton.setVisible(isSeller);
+        removeButton.setVisible(isSeller);
 
         StoredDB[] reviews = Review.getProductReviews(productID);
         if (reviews == null)
@@ -61,8 +80,6 @@ public class ProductController extends Controller {
         cartID = Cart.cartExists(user.getUserID(), productID);
         if (cartID == 0) {
             invokeAddCartDialog();
-//            Main.getUser().addToCart(productID);
-            cartButton.setText("Remove from Cart");
         } else {
             String query = "DELETE FROM Cart WHERE cartID = " + cartID;
             Database.updateDatabase(query);
@@ -89,11 +106,9 @@ public class ProductController extends Controller {
     private void setProductInformation(Product product) {
         bestSelling.setText(product.isBestSelling() ? "Best Selling" : "");
         name.setText(product.getProductName());
-        seller.setText("from " + "SELLER");
-        rating.setText(String.format("Rating: %.2f (%d reviews)", 0.0, 0));
+        seller.setText("from " + new User(sellerID).getUsername());
+        rating.setText(String.format("Rating: %.2f", product.getRating()));
         price.setText(String.format("Price: RM %.2f", product.getPrice()));
-        shippingFee.setText("Shipping Fee: RM " + "0.0");
-        totalPrice.setText("Total Price: RM" + product.getPrice());
         sales.setText("Sales: " + product.getSales());
         stock.setText("Stock: " + product.getStock());
 
@@ -105,7 +120,6 @@ public class ProductController extends Controller {
         imageView.setImage(image);
 
         name.setWrapText(true);
-//        description.setWrapText(true);
     }
 
     public Label setReviewLabel(Review review) {
@@ -124,7 +138,6 @@ public class ProductController extends Controller {
         String commentText = review.getSellerComment();
         if (commentText != null && !commentText.equals(""))
             sellerComment.setText("Seller commented: " + commentText);
-//        Label datetime = new Label(review.getDatetime().toString());
 
         rating.setStyle("-fx-text-fill: orange;");
 
@@ -135,6 +148,8 @@ public class ProductController extends Controller {
                 -fx-border-radius: 3;""");
         // TODO Check if it is seller.
         label.setOnMouseClicked(e -> {
+            if (!isSeller)
+                return;
             String text = review.getSellerComment();
             if (text == null || text.equals(""))
                 invokeAddCommentDialog(review, sellerComment);
@@ -194,6 +209,7 @@ public class ProductController extends Controller {
                 int quantity = Integer.parseInt(quantityField.getText());
                 Cart cart = new Cart(user.getUserID(), productID, quantity);
                 Database.updateDatabase(cart.insertQuery());
+                cartButton.setText("Remove from Cart");
                 System.out.println("Done");
             }
         });

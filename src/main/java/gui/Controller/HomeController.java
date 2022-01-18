@@ -28,7 +28,7 @@ public class HomeController extends Controller {
     @FXML private ImageView logo, explore, notification, logout;
     @FXML private TextField searchStatement;
 
-    @FXML private static FlowPane productPane;
+    @FXML private FlowPane productPane;
 
     @FXML Label username;
 
@@ -47,6 +47,7 @@ public class HomeController extends Controller {
         user = Main.getUser();
         username.setText(user.getUsername().toUpperCase() + "!");
         setBestSellingProducts();
+        setTopSellingProducts();
     }
 
     private void setMenuBarButtonImage() {
@@ -74,6 +75,16 @@ public class HomeController extends Controller {
         }
     }
 
+    private void setTopSellingProducts() {
+        StoredDB[] products = Product.getTopSelling();
+        for (int i = 3; i < products.length; i++) {
+            Product product = (Product) products[i];
+            if (product == null)
+                break;
+            productPane.getChildren().add(DBNode.productButton(product));
+        }
+    }
+
     private void setOnClickAction() {
         logo.setOnMouseClicked(e -> MainGUI.loadScene(Page.HOME));
         exploreButton.setOnAction(e -> MainGUI.loadScene(Page.EXPLORE));
@@ -81,7 +92,7 @@ public class HomeController extends Controller {
         logoutButton.setOnMouseClicked(e -> MainGUI.loadScene(Page.LOGIN));
         profile.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
         store.setOnAction(e -> {
-            StoreController.setUser(Main.getUser());
+            StoreController.setSeller(Main.getUser());
             MainGUI.loadScene(Page.STORE);
         });
         cart.setOnAction(e -> MainGUI.loadScene(Page.CART));
@@ -93,6 +104,7 @@ public class HomeController extends Controller {
             if (statement.equals(""))
                 return;
             SearchController.setSearchStatement(statement);
+            SearchController.setCategory(null);
             MainGUI.loadScene(Page.SEARCH);
         });
     }

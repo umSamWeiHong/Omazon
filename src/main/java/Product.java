@@ -11,29 +11,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
 import javax.imageio.ImageIO;
+import javax.xml.crypto.Data;
 
 public class Product extends StoredDB {
 
     private int productID, stock, sales, sellerID;
     private String productName, description, image;
-    private double price, productRatings;
+    private double price, rating, productRatings;
     private Category category;
     private String[] reviews;
     private boolean bestSelling;
 
-    public Product() {
-        productName = "";
-        price = 0.0;
-        stock = 0;
-        sales = 0;
-        productRatings = 0.0;
-        description = "";
-        category = Category.valueOf("");
-        image = "";
-        reviews = new String[10];
-    }
-
-    /** Create a Product object with data from database. */
+/** Create a Product object with data from database. */
     public Product(int productID) {
         String query = "SELECT * FROM Product WHERE productID = " + productID;
         ResultSet resultSet = Database.queryDatabase(query);
@@ -112,6 +101,23 @@ public class Product extends StoredDB {
         return sales;
     }
 
+    public double getRating() {
+        String query = String.format("""
+                SELECT ROUND(SUM(rating)/COUNT(rating), 2) as average
+                FROM Review
+                where productID = %d""", productID);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return 0;
+        try {
+            resultSet.next();
+            rating = resultSet.getDouble("average");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rating;
+    }
+
     public Double getProductRatings() {
         return productRatings;
     }
@@ -135,8 +141,16 @@ public class Product extends StoredDB {
     }
 
     public boolean isBestSelling() {
+        String query = String.format("""
+                SELECT productID
+                 FROM (SELECT * FROM Product
+                 ORDER BY sales DESC
+                 LIMIT 3) as ProductTable
+                 WHERE productID = %d""", productID);
+        bestSelling = Database.queryDatabase(query) != null;
         return bestSelling;
     }
+
     // Mutator
     public void setProductName(String productName) {
         this.productName = productName;
@@ -205,10 +219,18 @@ public class Product extends StoredDB {
 
     /** Method to get 3 best-selling products based on salescount */
     public static StoredDB[] getBestSelling() {
-        String query = String.format("SELECT * FROM Product " +
+        String query = "SELECT * FROM Product " +
                 "ORDER BY sales DESC " +
-                "LIMIT 3");
+                "LIMIT 3";
         return Database.getDBObjects(query, Product.class, 3);
+    }
+
+    /** Method to get 3 best-selling products based on salescount */
+    public static StoredDB[] getTopSelling() {
+        String query = "SELECT * FROM Product " +
+                "ORDER BY sales DESC " +
+                "LIMIT 50";
+        return Database.getDBObjects(query, Product.class, 50);
     }
 
     /** Method to get products by title */

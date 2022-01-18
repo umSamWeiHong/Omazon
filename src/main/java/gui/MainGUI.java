@@ -149,7 +149,7 @@ public class MainGUI extends Application {
         MainGUI.stage = stage;
         MainGUI.loadAllFonts();
         MainGUI.initializeStage();
-        MainGUI.loadScene(Page.HOME);
+        MainGUI.loadScene(Page.LOGIN);
     }
 
     public static void main(String[] args) {

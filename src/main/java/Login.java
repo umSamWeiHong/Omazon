@@ -41,8 +41,7 @@ public class Login {
         return 0;
     }
 
-    public static void addNewUser(String username, String email, String password) {
-        System.out.println(new User(username, email, password));
-        Database.add(new User(username, email, password));
+    public static void addNewUser(String username, String email, String password, String paymentPassword) {
+        Database.add(new User(username, email, password, paymentPassword));
     }
 }

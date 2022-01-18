@@ -52,16 +52,16 @@ public class User extends StoredDB {
         }
     }
 
-    public User(String username, String email, String password) {
-        this(username, email, password, null);
+    public User(String username, String email, String password, String paymentPassword) {
+        this(username, email, password);
+        this.paymentPassword = paymentPassword;
     }
 
     /** Create a new User object with all parameters (except userID). */
-    public User(String username, String email, String password, Timestamp dateCreated) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.dateCreated = dateCreated;
     }
 
     public void updateCartIDs() {
@@ -135,19 +135,19 @@ public class User extends StoredDB {
     @Override
     public String insertQuery() {
         return String.format("INSERT INTO " +
-                        "`User` (username, email, password) " +
-                        "VALUES ('%s', '%s', '%s')",
-                        username, email, password);
+                        "`User` (username, email, password, paymentPassword) " +
+                        "VALUES ('%s', '%s', '%s', '%s')",
+                        username, email, password, paymentPassword);
     }
 
     @Override
     public String updateQuery() {
         return String.format("""
                         UPDATE `User`
-                         SET username = '%s', email = '%s', password = '%s', balance = %.2f, shippingAddress = '%s',
+                         SET username = '%s', email = '%s', password = '%s', balance = %.2f, profit = %.2f, shippingAddress = '%s',
                          paymentPassword = '%s'
                          WHERE userID = %d""",
-                        username, email, password, balance, shippingAddress, paymentPassword, userID);
+                        username, email, password, balance, profit, shippingAddress, paymentPassword, userID);
     }
 
     @Override
@@ -210,6 +210,10 @@ public class User extends StoredDB {
 
     public Timestamp getDateCreated() {
         return dateCreated;
+    }
+
+    public void setProfit(double profit) {
+        this.profit = profit;
     }
 
     public int[] getProductIDs() {

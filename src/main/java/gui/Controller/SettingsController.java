@@ -16,6 +16,7 @@ import main.java.Login;
 import main.java.Main;
 import main.java.User;
 import main.java.gui.MainGUI;
+import main.java.gui.Page;
 
 public class SettingsController extends Controller {
 
@@ -57,6 +58,7 @@ public class SettingsController extends Controller {
         passwordButton.setOnAction(e -> invokeChangePasswordDialog());
         paymentPasswordButton.setOnAction(e -> invokeChangePaymentPasswordDialog());
         update.setOnAction(e -> updateInformation());
+        delete.setOnAction(e -> deleteAccount());
     }
 
     private void updateInformation() {
@@ -75,6 +77,12 @@ public class SettingsController extends Controller {
         KeyFrame invisibleFrame = new KeyFrame(Duration.seconds(2), invisibleValue);
 
         timeline = new Timeline(invisibleFrame, visibleFrame);
+    }
+
+    private void deleteAccount() {
+        String query = "DELETE FROM User WHERE userID = " + user.getUserID();
+        Database.updateDatabase(query);
+        MainGUI.loadScene(Page.LOGIN);
     }
 
     private void invokeChangePasswordDialog() {

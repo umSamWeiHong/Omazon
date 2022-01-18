@@ -6,6 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import main.java.Category;
 import main.java.Database;
 import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
@@ -18,9 +19,10 @@ public class SearchController extends Controller {
     @FXML private BorderPane borderPane;
     @FXML private TextField searchStatement;
     @FXML private Button searchButton;
-    @FXML private FlowPane list;
+    @FXML private FlowPane productList, sellerList;
 
     private static String statement;
+    private static Category category;
 
     @FXML
     public void initialize() {
@@ -32,7 +34,10 @@ public class SearchController extends Controller {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
         searchStatement.setText(statement);
-        search();
+        if ((category == null))
+            search();
+        else
+            searchCategory();
     }
 
     public static void setSearchStatement(String searchStatement) {
@@ -40,15 +45,15 @@ public class SearchController extends Controller {
     }
 
     private void search() {
-        list.getChildren().clear();
         searchProduct();
         searchSeller();
     }
 
     private void searchProduct() {
+        productList.getChildren().clear();
         String statement = searchStatement.getText();
         String query = String.format("""
-                SELECT productID FROM Product WHERE productName LIKE '%%%s%%' LIMIT 10
+                SELECT productID FROM Product WHERE productName LIKE '%%%s%%' LIMIT 20
                 """, statement);
         ResultSet resultSet = Database.queryDatabase(query);
         if (resultSet == null)
@@ -57,7 +62,7 @@ public class SearchController extends Controller {
         try {
             while (resultSet.next()) {
                 int productID = resultSet.getInt("productID");
-                list.getChildren().add(DBNode.productButton(productID));
+                productList.getChildren().add(DBNode.productButton(productID));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,9 +70,10 @@ public class SearchController extends Controller {
     }
 
     private void searchSeller() {
+        sellerList.getChildren().clear();
         String statement = searchStatement.getText();
         String query = String.format("""
-                SELECT userID FROM User WHERE username LIKE '%%%s%%' LIMIT 10
+                SELECT userID FROM User WHERE username LIKE '%%%s%%' LIMIT 20
                 """, statement);
         ResultSet resultSet = Database.queryDatabase(query);
         if (resultSet == null)
@@ -76,10 +82,34 @@ public class SearchController extends Controller {
         try {
             while (resultSet.next()) {
                 int userID = resultSet.getInt("userID");
-                list.getChildren().add(DBNode.sellerButton(userID));
+                sellerList.getChildren().add(DBNode.sellerButton(userID));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void searchCategory() {
+        productList.getChildren().clear();
+        sellerList.getChildren().clear();
+        String query = String.format("""
+                SELECT productID FROM Product WHERE category = '%s' LIMIT 20
+                """, category);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return;
+
+        try {
+            while (resultSet.next()) {
+                int productID = resultSet.getInt("productID");
+                productList.getChildren().add(DBNode.productButton(productID));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setCategory(Category category) {
+        SearchController.category = category;
     }
 }
