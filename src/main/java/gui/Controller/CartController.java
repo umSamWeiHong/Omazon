@@ -110,6 +110,7 @@ public class CartController extends Controller {
             Product product = new Product(cart.getProductID());
             Order order = new Order(cart.getProductID(), user.getUserID(), product.getSellerID(), user.getShippingAddress(), cart.getQuantity());
             product.setStock(product.getStock() - order.getOrderQuantity());
+            product.setSales(product.getSales() + order.getOrderQuantity());
             Database.updateDatabase(order.insertQuery());
 
             String query = String.format("""

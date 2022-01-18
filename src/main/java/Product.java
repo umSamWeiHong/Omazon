@@ -167,6 +167,9 @@ public class Product extends StoredDB {
     public void setStock(int stock) {
         this.stock = stock;
     }
+    public void setSales(int sales) {
+        this.sales = sales;
+    }
     public void setReviews(String[] reviews) {
         this.reviews = reviews;
     }
