@@ -18,10 +18,8 @@ import java.io.IOException;
 public class ProfileController extends Controller {
 
     @FXML private BorderPane borderPane;
-    @FXML private ListView<Label> orderList, reviewList;
-    @FXML ScrollPane reviewScroll;
-    @FXML GridPane gridPane;
-    @FXML private Button topUpButton;
+    @FXML private ListView<Label> orderList, reviewList, notificationList;
+    @FXML private Button topUpButton, storeButton, cartButton, favouriteButton;
     @FXML private Label username, balance;
 
     private static User user;
@@ -29,6 +27,12 @@ public class ProfileController extends Controller {
     @FXML
     public void initialize() {
         topUpButton.setOnAction(e -> invokeTopUpDialog());
+        storeButton.setOnAction(e -> {
+            StoreController.setSeller(Main.getUser());
+            MainGUI.loadScene(Page.STORE);
+        });
+        cartButton.setOnAction(e -> MainGUI.loadScene(Page.CART));
+        favouriteButton.setOnAction(e -> MainGUI.loadScene(Page.FAVOURITE));
     }
 
     @Override
@@ -41,9 +45,7 @@ public class ProfileController extends Controller {
         balance.setText(String.format("%.2f", user.getBalance()));
 
         StoredDB[] orders = Order.getUserOrders(user.getUserID());
-        if (orders == null)
-            return;
-        else {
+        if (orders != null) {
             for (StoredDB order : orders) {
                 Label label = DBNode.orderLabel((Order) order);
 
@@ -52,14 +54,18 @@ public class ProfileController extends Controller {
         }
 
         StoredDB[] reviews = Review.getUserReviews(user.getUserID());
-        if (reviews == null)
-            return;
-        else {
+        if (reviews != null) {
             for (StoredDB review : reviews) {
                 Label label = DBNode.reviewLabel((Review) review);
 
                 reviewList.getItems().add(label);
             }
+        }
+
+        Label[] transactionLabels = DBNode.transactionLabel(user.getUserID());
+        if (transactionLabels != null) {
+            for (Label label : transactionLabels)
+                notificationList.getItems().add(label);
         }
     }
     
@@ -87,8 +93,6 @@ public class ProfileController extends Controller {
             double amount = Double.parseDouble(amountField.getText());
                         
             if (amount < 0) {
-                // TODO negative number
-//                controller.setMessageText(message);
                 event.consume();
             }
         });

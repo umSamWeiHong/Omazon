@@ -51,16 +51,14 @@
                               <Label fx:id="seller" text="Label" GridPane.rowIndex="2" />
                               <Label fx:id="rating" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label fx:id="sales" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label fx:id="totalPrice" text="Label" GridPane.rowIndex="5" />
-                              <Label fx:id="shippingFee" text="Label" GridPane.rowIndex="4" />
                               <Label fx:id="price" text="Label" GridPane.rowIndex="3" />
                               <Label fx:id="stock" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="6">
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
                                  <children>
                                     <Button fx:id="cartButton" mnemonicParsing="false" text="Add to Cart" />
-                                    <Button fx:id="buyNow" mnemonicParsing="false" text="Buy Now" />
                                     <Button fx:id="favouriteButton" mnemonicParsing="false" text="Add to Favourites" />
                                     <Button fx:id="editButton" mnemonicParsing="false" text="Edit" />
+                                    <Button fx:id="removeButton" mnemonicParsing="false" text="Remove" />
                                  </children>
                               </HBox>
                            </children>

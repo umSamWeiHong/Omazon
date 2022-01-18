@@ -24,6 +24,8 @@ public class Main {
         System.out.println(Arrays.toString(user.getProductIDs()));
 //        Cart cart = new Cart(1);
         System.out.println(Cart.getTotalAmount(1));
+
+        System.out.println(new Transaction(3));
     }
 
     public static boolean linearSearch(int[] array, int i) {

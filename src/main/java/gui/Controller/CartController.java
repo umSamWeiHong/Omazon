@@ -12,6 +12,8 @@ import main.java.gui.DBNode;
 import main.java.gui.MainGUI;
 import main.java.gui.Page;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -108,8 +110,30 @@ public class CartController extends Controller {
             Product product = new Product(cart.getProductID());
             Order order = new Order(cart.getProductID(), user.getUserID(), product.getSellerID(), user.getShippingAddress(), cart.getQuantity());
             product.setStock(product.getStock() - order.getOrderQuantity());
-            Database.updateDatabase(cart.deleteQuery());
             Database.updateDatabase(order.insertQuery());
+
+            String query = String.format("""
+                    SELECT orderID FROM `Order`
+                     WHERE productID = %d AND userID = %d AND sellerID = %d
+                     ORDER BY orderTime DESC LIMIT 1""",
+                    cart.getProductID(), user.getUserID(), product.getSellerID());
+            ResultSet resultSet = Database.queryDatabase(query);
+
+            User seller = new User(product.getSellerID());
+            seller.setProfit(seller.getProfit() + amount);
+            Database.updateDatabase(seller.updateQuery());
+
+            try {
+                resultSet.next();
+                int orderID = resultSet.getInt("orderID");
+                Transaction transaction = new Transaction(product.getSellerID(), user.getUserID(), orderID, order.getOrderQuantity() * product.getPrice());
+                Database.updateDatabase(transaction.insertQuery());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Database.updateDatabase(product.updateQuery());
+            Database.updateDatabase(cart.deleteQuery());
         }
         user.setBalance(user.getBalance() - amount);
         list.getChildren().clear();

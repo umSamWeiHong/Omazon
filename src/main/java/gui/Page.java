@@ -11,7 +11,8 @@ public enum Page {
     ORDER ("Order"),
     FAVOURITE ("Favourite"),
     SEARCH ("Search"),
-    SETTINGS ("Settings");
+    SETTINGS ("Settings"),
+    EXPLORE ("Explore");
 
     private final String filename;
 

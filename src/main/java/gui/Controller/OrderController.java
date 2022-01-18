@@ -19,7 +19,7 @@ public class OrderController extends Controller {
 
     private static User user;
 
-    private static HashMap<Integer, Label> map = new HashMap<>();
+    private static final HashMap<Integer, Label> map = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -67,7 +67,7 @@ public class OrderController extends Controller {
             if (!map.containsKey(id)) {
                 try {
                     Label label = DBNode.orderLabel(new Order(id).getOrderID());
-                    list.getChildren().add(0, label);
+                    list.getChildren().add(label);
                     map.put(id, label);
                 } catch (IllegalArgumentException e) {
                     System.out.println("OrderController: ProductID not found.");

@@ -10,7 +10,7 @@ public class Transaction extends StoredDB{
     private double amount;
 
     /** Create a Transaction object with data from database. */
-    public Transaction(int sellerID) {
+    public Transaction(int transactionID) {
         String query = "SELECT * FROM Transaction WHERE transactionID = " + transactionID;
         ResultSet resultSet = Database.queryDatabase(query);
         // Throw exception when transactionID is not found.
@@ -31,8 +31,7 @@ public class Transaction extends StoredDB{
         }
     }
 
-    public Transaction(int transactionID, int sellerID, int userID, int orderID, double amount) {
-        this.transactionID = transactionID;
+    public Transaction(int sellerID, int userID, int orderID, double amount) {
         this.sellerID = sellerID;
         this.orderID = orderID;
         this.userID = userID;

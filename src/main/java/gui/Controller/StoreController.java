@@ -3,10 +3,7 @@ package main.java.gui.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import main.java.*;
@@ -20,11 +17,12 @@ import java.util.HashMap;
 
 public class StoreController extends Controller {
 
-    private static User user;
+    private static User seller;
 
     @FXML private BorderPane borderPane;
     @FXML private FlowPane productPane;
-    @FXML private Button addProductButton;
+    @FXML private Button profileButton, transactionButton, addProductButton;
+    @FXML private Label username, profit;
 
     private static final HashMap<Integer, Button> map = new HashMap<>();
 
@@ -32,7 +30,9 @@ public class StoreController extends Controller {
     public void initialize() {
         productPane.setVgap(10);
 
-        addProductButton.setOnMouseClicked(e -> invokeAddProductDialog());
+        addProductButton.setOnAction(e -> invokeAddProductDialog());
+        transactionButton.setOnAction(e -> invokeTransactionHistoryDialog(seller.getUserID()));
+        profileButton.setOnAction(e -> MainGUI.loadScene(Page.PROFILE));
     }
 
     @Override
@@ -40,9 +40,14 @@ public class StoreController extends Controller {
         borderPane.setTop(MainGUI.getMenuBarLoader().getRoot());
         borderPane.setLeft(MainGUI.getSlideMenuLoader().getRoot());
 
-        user = Main.getUser();
-        user.updateProductIDs();
-        int[] ids = user.getProductIDs();
+        username.setText(seller.getUsername());
+
+        if (seller.getUserID() == Main.getUser().getUserID())
+            profit.setText("Profit: " + seller.getProfit());
+        else
+            profit.setText("");
+        seller.updateProductIDs();
+        int[] ids = seller.getProductIDs();
         updateMap(ids);
     }
 
@@ -117,5 +122,32 @@ public class StoreController extends Controller {
                 MainGUI.loadScene(Page.STORE);
             }
         });
+    }
+
+    private void invokeTransactionHistoryDialog(int sellerID) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Transaction History");
+
+        ButtonType DONE = new ButtonType("Done", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(DONE);
+
+        ListView<Label> list = new ListView<>();
+        Label[] labels = DBNode.transactionLabel(sellerID);
+
+        dialog.getDialogPane().setContent(list);
+        dialog.setResizable(true);
+
+        if (labels == null)
+            return;
+
+        for (Label label : labels) {
+            list.getItems().add(label);
+        }
+
+        dialog.showAndWait();
+    }
+
+    public static void setSeller(User seller) {
+        StoreController.seller = seller;
     }
 }

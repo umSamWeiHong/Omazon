@@ -12,8 +12,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import main.java.*;
 import main.java.gui.Controller.ProductController;
+import main.java.gui.Controller.SearchController;
+import main.java.gui.Controller.StoreController;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DBNode {
 
@@ -114,7 +118,7 @@ public class DBNode {
         name.setPrefWidth(250);
         name.setText(product.getProductName());
         price.setText(String.format("RM %.2f", product.getPrice()));
-        rating.setText(getRatingStars(product.getProductRatings()));
+        rating.setText(getRatingStars(product.getRating()));
 
         name.setPrefWidth(250);
         name.setWrapText(true);
@@ -209,13 +213,16 @@ public class DBNode {
         description.setText(review.getDescription());
 
         ImageView imageView = getImageView(product);
+        if (imageView != null) {
+            gridPane.add(imageView, 0, 0, 1, 3);
+            GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
+            GridPane.setValignment(imageView, VPos.CENTER);
+        }
 
-        gridPane.add(imageView, 0, 0, 1, 3);
         gridPane.add(rating, 1, 0);
         gridPane.add(subject, 1, 1);
         gridPane.add(description, 1, 2);
-        GridPane.setMargin(imageView, new Insets(0, 5, 0, 0));
-        GridPane.setValignment(imageView, VPos.CENTER);
+
         GridPane.setValignment(rating, VPos.TOP);
         GridPane.setValignment(description, VPos.TOP);
         description.setPrefHeight(100);
@@ -230,6 +237,96 @@ public class DBNode {
         description.setStyle("-fx-font-size: 10;");
 
         return label;
+    }
+
+    public static Label[] transactionLabel(int sellerID) {
+        String query = String.format("""
+                                SELECT User.username, Product.productName, ROUND(`Order`.orderQuantity*Product.price, 2) AS amount
+                                 FROM Transaction
+                                 LEFT JOIN User ON Transaction.userID=User.userID
+                                 LEFT JOIN `Order` ON Transaction.orderID=`Order`.orderID
+                                 LEFT JOIN `Product` ON `Order`.productID=Product.productID
+                                 WHERE Transaction.sellerID = %d
+                                 LIMIT 50""", sellerID);
+        ResultSet resultSet = Database.queryDatabase(query);
+        if (resultSet == null)
+            return null;
+
+        int N = 0;
+        try {
+            resultSet.last();
+            N = resultSet.getRow();
+            resultSet.beforeFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Label[] labels = new Label[N];
+        int i = 0;
+        try {
+            while (resultSet.next()) {
+                Label label = new Label();
+                double amount = resultSet.getDouble("amount");
+                String username = resultSet.getString("username");
+                String productName = resultSet.getString("productName");
+                String text = String.format("+RM %.2f => %s purchased %s.", amount, username, productName);
+                label.setText(text);
+                labels[i++] = label;
+            }
+            return labels;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Button sellerButton(int userID) {
+        User seller = new User(userID);
+        Button button = new Button();
+        button.setPrefWidth(175);
+        button.setPrefHeight(100);
+        button.setStyle("""
+                -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);;
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 3;
+                -fx-cursor: hand;
+                -fx-font-family: 'Montserrat';
+                -fx-font-weight: bold;
+                -fx-font-size: 14;""");
+        button.setText(seller.getUsername());
+        button.setWrapText(true);
+
+        button.setOnAction(e -> {
+            StoreController.setSeller(seller);
+            MainGUI.loadScene(Page.STORE);
+        });
+
+        return button;
+    }
+
+    public static Button categoryButton(Category category) {
+        Button button = new Button();
+        button.setPrefWidth(175);
+        button.setPrefHeight(100);
+        button.setStyle("""
+                -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f7f7, #eeeeee, #e6e6e6, #dedede);;
+                -fx-border-color: black;
+                -fx-border-width: 1;
+                -fx-border-radius: 3;
+                -fx-cursor: hand;
+                -fx-font-family: 'Montserrat';
+                -fx-font-weight: bold;
+                -fx-font-size: 14;""");
+        button.setText(category.getDisplayName());
+        button.setWrapText(true);
+
+        button.setOnAction(e -> {
+            SearchController.setCategory(category);
+            MainGUI.loadScene(Page.SEARCH);
+        });
+
+        return button;
     }
 
     private static void invokeAddReviewDialog(Order order, Product product, Label label) {
@@ -328,6 +425,8 @@ public class DBNode {
     }
 
     private static ImageView getImageView(Product product) {
+        if (product == null)
+            return null;
         Image image = MainGUI.decode(product.getBase64String());
         if (image == null)
             return null;
