@@ -47,7 +47,13 @@ public class ProfileController extends Controller {
         StoredDB[] orders = Order.getUserOrders(user.getUserID());
         if (orders != null) {
             for (StoredDB order : orders) {
-                Label label = DBNode.orderLabel((Order) order);
+
+                Label label = null;
+                try {
+                    label = DBNode.orderLabel((Order) order);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
 
                 orderList.getItems().add(label);
             }
@@ -56,7 +62,12 @@ public class ProfileController extends Controller {
         StoredDB[] reviews = Review.getUserReviews(user.getUserID());
         if (reviews != null) {
             for (StoredDB review : reviews) {
-                Label label = DBNode.reviewLabel((Review) review);
+                Label label = null;
+                try {
+                    label = DBNode.reviewLabel((Review) review);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
 
                 reviewList.getItems().add(label);
             }

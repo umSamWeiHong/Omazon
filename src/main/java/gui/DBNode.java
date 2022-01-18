@@ -144,7 +144,12 @@ public class DBNode {
 
     public static Label orderLabel(Order order) {
         Label label = getNewLabel();
-        Product product = new Product(order.getProductID());
+        Product product;
+        try {
+            product = new Product(order.getProductID());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER_LEFT);
@@ -330,6 +335,10 @@ public class DBNode {
     }
 
     private static void invokeAddReviewDialog(Order order, Product product, Label label) {
+
+        if (order.isRated())
+            return;
+
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Add a review");
         dialog.setResizable(true);
